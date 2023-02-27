@@ -23,13 +23,16 @@ public class GroupActionController {
     for (Person p : group.participants()) {
       if(!p.equals(newUser)){
         group.debts().get(newUser).put(p, Money.of(0, "EUR"));
+        group.debts().get(p).put(newUser, Money.of(0, "EUR"));
       }
     }
+    /*
     for(Person p : group.participants()){
       if(!p.equals(newUser)){
         group.debts().get(p).put(newUser, Money.of(0, "EUR"));
       }
-    }
+    }*/
+
 
   }
  }

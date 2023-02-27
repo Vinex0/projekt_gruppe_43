@@ -28,7 +28,7 @@ public class CalculationHelperTest {
 
   @Test
   void debtDifferenceCalculationTestValid(){
-    Map<Person, Money>
+    //Map<Person, Money>
     Map<Person, Map<Person, Money>> debts;
   }
 
