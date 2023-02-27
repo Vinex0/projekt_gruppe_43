@@ -1,4 +1,5 @@
 import java.security.InvalidParameterException;
+import java.util.Map;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,15 +15,21 @@ public class CalculationHelperTest {
   }
 
   @Test
-  void paymentShareInvalidPeopleCount(){
+  void paymentShareTestInvalidPeopleCount(){
     Money amount = Money.of(12.4, "EUR");
     assertThrows(InvalidParameterException.class, () -> CalculationHelpers.paymentShare(amount, 1));
   }
 
   @Test
-  void paymentShareInvalidAmount(){
+  void paymentShareTestInvalidAmount(){
     Money amount = Money.of(-1, "EUR");
     assertThrows(InvalidParameterException.class, () -> CalculationHelpers.paymentShare(amount, 3));
+  }
+
+  @Test
+  void debtDifferenceCalculationTestValid(){
+    Map<Person, Money>
+    Map<Person, Map<Person, Money>> debts;
   }
 
 
