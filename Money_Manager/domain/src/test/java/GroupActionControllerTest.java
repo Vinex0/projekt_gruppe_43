@@ -47,7 +47,7 @@ public class GroupActionControllerTest {
     Person sus = new Person("Susan");
     GroupActionController groupController = new GroupActionController("test", pet);
     groupController.addUser(sus);
-    assertThat(groupController.getGroup().debts().get(sus).keySet()).containsExactlyElementsOf(
+    assertThat(groupController.getOtherPeople(sus)).containsExactlyElementsOf(
         List.of(pet));
   }
 
@@ -58,9 +58,11 @@ public class GroupActionControllerTest {
     Person sus = new Person("Susan");
     GroupActionController groupController = new GroupActionController("test", pet);
     groupController.addUser(sus);
-    assertThat(groupController.getGroup().debts().get(pet).keySet()).containsExactlyElementsOf(
+    assertThat(groupController.getOtherPeople(pet)).containsExactlyElementsOf(
         List.of(sus));
   }
+
+@Test
 
   private Group createGroup() {
     GroupActionController groupController = new GroupActionController("test",
