@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.javamoney.moneta.Money;
@@ -33,19 +34,20 @@ public class GroupActionController {
 
   }
 
-  public Set<Person> getOtherPeople(Person creditor) {
-    return group.debts().get(creditor).keySet();
+  public List<Person> getOtherPeople(Person creditor) {
+    List<Person> keys = new ArrayList<>(group.debts().get(creditor).keySet());
+    return keys;
   }
 
-  public Set<Person> getCreditors(Person debtor) {
+  public Map<Person, Money> getCreditors(Person debtor) {
     if (group.debts().containsKey(debtor)) {
       return group.debts()
           .get(debtor)
           .entrySet()
           .stream()
-          .filter((v) -> v.getValue().isGreaterThan(Money.of(0, "EUR"))).map((e) -> e.getKey())
-          .collect(
-              Collectors.toSet());
+          .filter((v) -> v.getValue().isGreaterThan(Money.of(0, "EUR")))
+          .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+
     }
     return null;
   }
