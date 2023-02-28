@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,6 +48,13 @@ public class GroupActionController {
               Collectors.toSet());
     }
     return null;
+  }
+
+  public void createExpense(Person creditor, List<Person> debtors, Money amount) {
+    Money individualAmount = CalculationHelpers.paymentShare(amount, debtors.size()+1);
+    for (Person p : debtors) {
+      group.debts().get(p).put(creditor, individualAmount);
+    }
   }
 
   public Group getGroup() {

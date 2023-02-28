@@ -62,7 +62,27 @@ public class GroupActionControllerTest {
         List.of(sus));
   }
 
-@Test
+  @Test
+  void getCreditorsEmptyFilterTest() {
+    Person pet = new Person("Peter");
+    Person sus = new Person("Susan");
+    Person jens = new Person("Jens");
+    GroupActionController groupController = new GroupActionController("test", pet);
+    groupController.addUser(sus);
+    groupController.addUser(jens);
+    assertThat(groupController.getCreditors(pet).isEmpty());
+  }
+  @Test
+  void getCreditorsTest() {
+    Person pet = new Person("Peter");
+    Person sus = new Person("Susan");
+    Person jens = new Person("Jens");
+    GroupActionController groupController = new GroupActionController("test", pet);
+    groupController.addUser(sus);
+    groupController.addUser(jens);
+
+    assertThat(groupController.getCreditors(pet).isEmpty());
+  }
 
   private Group createGroup() {
     GroupActionController groupController = new GroupActionController("test",
