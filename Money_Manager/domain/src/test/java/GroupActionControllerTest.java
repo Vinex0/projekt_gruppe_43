@@ -61,10 +61,12 @@ public class GroupActionControllerTest {
     assertThat(groupController.getGroup().debts().get(pet).keySet()).containsExactlyElementsOf(
         List.of(sus));
   }
+
   private Group createGroup() {
     GroupActionController groupController = new GroupActionController("test",
         new Person("Peter"));
     return groupController.getGroup();
   }
+
 
 }

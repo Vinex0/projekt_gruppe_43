@@ -11,13 +11,15 @@ public class Person {
     this.userName = userName;
     this.groups = new ArrayList<Group>();
   }
+
   void addGroup(Group group) {
     groups.add(group);
   }
 
-  String getUserName(){
+  String getUserName() {
     return userName;
   }
+
   List<Group> getGroups() {
     return groups;
   }
