@@ -3,7 +3,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.javamoney.moneta.Money;
 
@@ -12,12 +11,8 @@ public class GroupActionController {
   private final Group group;
 
   GroupActionController(String title, Person creator) {
-    this.group = new Group(
-        title,
-        new ArrayList<Person>(),
-        new ArrayList<Expense>(),
-        new HashMap<Person, Map<Person, Money>>()
-    );
+    this.group = new Group(title, new ArrayList<Person>(), new ArrayList<Expense>(),
+        new HashMap<Person, Map<Person, Money>>());
     addUser(creator);
   }
 
@@ -41,10 +36,7 @@ public class GroupActionController {
 
   public Map<Person, Money> getCreditors(Person debtor) {
     if (group.debts().containsKey(debtor)) {
-      return group.debts()
-          .get(debtor)
-          .entrySet()
-          .stream()
+      return group.debts().get(debtor).entrySet().stream()
           .filter((v) -> v.getValue().isGreaterThan(Money.of(0, "EUR")))
           .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
 
@@ -53,7 +45,7 @@ public class GroupActionController {
   }
 
   public void createExpense(Person creditor, List<Person> debtors, Money amount, String title) {
-    Money individualAmount = CalculationHelpers.paymentShare(amount, debtors.size()+1);
+    Money individualAmount = CalculationHelpers.paymentShare(amount, debtors.size() + 1);
     Expense e = new Expense(title, creditor, debtors, amount);
     group.expenses().add(e);
     for (Person p : debtors) {
@@ -68,17 +60,16 @@ public class GroupActionController {
     for (Person p : involved) {
       for (Person b : involved) {
         if (!b.equals(p)) {
-          var amount_p = group.debts().get(p).get(b);
-          var amount_b = group.debts().get(b).get(p);
-          var diff = CalculationHelpers.difference(amount_p, amount_b);
-          var reverse_diff = CalculationHelpers.difference(amount_b, amount_p);
+          var amountP = group.debts().get(p).get(b);
+          var amountB = group.debts().get(b).get(p);
+          var diff = CalculationHelpers.difference(amountP, amountB);
+          var reverseDiff = CalculationHelpers.difference(amountB, amountP);
           if (diff.isGreaterThan(Money.of(0, "EUR"))) {
             group.debts().get(p).put(b, diff);
             group.debts().get(b).put(p, Money.of(0, "EUR"));
-          }
-          else {
+          } else {
             group.debts().get(p).put(b, Money.of(0, "EUR"));
-            group.debts().get(b).put(p, reverse_diff);
+            group.debts().get(b).put(p, reverseDiff);
           }
         }
       }
@@ -88,6 +79,7 @@ public class GroupActionController {
   public Group getGroup() {
     return group;
   }
+
   public List<Expense> getExpenses() {
     return group.expenses();
   }

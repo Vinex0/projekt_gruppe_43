@@ -1,15 +1,9 @@
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.assertj.core.util.Arrays.asList;
 
 public class GroupActionControllerTest {
 
@@ -119,6 +113,18 @@ public class GroupActionControllerTest {
         () -> assertThat(groupController.getCreditors(sus).get(pet)).isEqualTo(Money.of(25, "EUR")),
         () -> assertThat(groupController.getCreditors(pet).get(sus)).isNull()
     );
+  }
+
+  @Test
+  void partialExpenseTest() {
+    Person pet = new Person("Peter");
+    Person sus = new Person("Susan");
+    Person jens = new Person("Jens");
+    GroupActionController groupController = new GroupActionController("test", pet);
+    groupController.addUser(sus);
+    groupController.addUser(jens);
+    groupController.createExpense(pet, List.of(sus), Money.of(100, "EUR"), "new expense");
+    assertThat(groupController.getCreditors(jens)).isEmpty();
   }
 
   private Group createGroup() {

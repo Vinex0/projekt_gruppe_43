@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import org.javamoney.moneta.Money;
 
 public class Person {
 
