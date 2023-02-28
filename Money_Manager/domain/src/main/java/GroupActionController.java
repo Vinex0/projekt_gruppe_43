@@ -52,15 +52,44 @@ public class GroupActionController {
     return null;
   }
 
-  public void createExpense(Person creditor, List<Person> debtors, Money amount) {
+  public void createExpense(Person creditor, List<Person> debtors, Money amount, String title) {
     Money individualAmount = CalculationHelpers.paymentShare(amount, debtors.size()+1);
+    Expense e = new Expense(title, creditor, debtors, amount);
+    group.expenses().add(e);
     for (Person p : debtors) {
       group.debts().get(p).put(creditor, individualAmount);
+    }
+    List<Person> part = new ArrayList<>(debtors);
+    part.add(creditor);
+    adjustDebts(part);
+  }
+
+  private void adjustDebts(List<Person> involved) {
+    for (Person p : involved) {
+      for (Person b : involved) {
+        if (!b.equals(p)) {
+          var amount_p = group.debts().get(p).get(b);
+          var amount_b = group.debts().get(b).get(p);
+          var diff = CalculationHelpers.difference(amount_p, amount_b);
+          var reverse_diff = CalculationHelpers.difference(amount_b, amount_p);
+          if (diff.isGreaterThan(Money.of(0, "EUR"))) {
+            group.debts().get(p).put(b, diff);
+            group.debts().get(b).put(p, Money.of(0, "EUR"));
+          }
+          else {
+            group.debts().get(p).put(b, Money.of(0, "EUR"));
+            group.debts().get(b).put(p, reverse_diff);
+          }
+        }
+      }
     }
   }
 
   public Group getGroup() {
     return group;
+  }
+  public List<Expense> getExpenses() {
+    return group.expenses();
   }
 }
 

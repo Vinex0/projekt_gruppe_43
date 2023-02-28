@@ -73,8 +73,20 @@ public class GroupActionControllerTest {
     GroupActionController groupController = new GroupActionController("test", pet);
     groupController.addUser(sus);
     groupController.addUser(jens);
-    assertThat(groupController.getCreditors(pet).isEmpty());
+    assertThat(groupController.getCreditors(pet)).isEmpty();
   }
+  @Test
+  void  createExpenseTest() {
+    Person pet = new Person("Peter");
+    Person sus = new Person("Susan");
+    GroupActionController groupController = new GroupActionController("test", pet);
+    groupController.addUser(sus);
+    groupController.createExpense(pet, groupController.getOtherPeople(pet), Money.of(100, "EUR"), "expense test");
+
+    assertThat(groupController.getExpenses().get(0).title()).isEqualTo("expense test");
+    assertThat(groupController.getExpenses().get(0).amount()).isEqualTo(Money.of(100, "EUR"));
+  }
+
   @Test
   void getCreditorsTest() {
     Person pet = new Person("Peter");
@@ -84,22 +96,28 @@ public class GroupActionControllerTest {
     groupController.addUser(sus);
     groupController.addUser(jens);
 
-    assertThat(groupController.getCreditors(pet).isEmpty());
-  }
-
-  @Test
-  void createExpenseTest() {
-    Person pet = new Person("Peter");
-    Person sus = new Person("Susan");
-    Person jens = new Person("Jens");
-    GroupActionController groupController = new GroupActionController("test", pet);
-    groupController.addUser(sus);
-    groupController.addUser(jens);
-
-    groupController.createExpense(pet, groupController.getOtherPeople(pet), Money.of(150, "EUR"));
+    groupController.createExpense(pet, groupController.getOtherPeople(pet), Money.of(150, "EUR"), "new expense");
     assertAll(
         () -> assertThat(groupController.getCreditors(sus)).isEqualTo(Map.of(pet, Money.of(50, "EUR"))),
         () -> assertThat(groupController.getCreditors(jens)).isEqualTo(Map.of(pet, Money.of(50, "EUR")))
+    );
+  }
+
+  @Test
+  void creditAdjustmentTest() {
+    Person pet = new Person("Peter");
+    Person sus = new Person("Susan");
+    GroupActionController groupController = new GroupActionController("test", pet);
+    groupController.addUser(sus);
+
+
+    groupController.createExpense(pet, groupController.getOtherPeople(pet), Money.of(100, "EUR"), "new expense");
+    groupController.createExpense(sus, groupController.getOtherPeople(sus), Money.of(50, "EUR"), "new expense 2");
+    var x = groupController.getCreditors(sus).get(pet);
+    var y = groupController.getCreditors(pet).get(sus);
+    assertAll(
+        () -> assertThat(groupController.getCreditors(sus).get(pet)).isEqualTo(Money.of(25, "EUR")),
+        () -> assertThat(groupController.getCreditors(pet).get(sus)).isNull()
     );
   }
 

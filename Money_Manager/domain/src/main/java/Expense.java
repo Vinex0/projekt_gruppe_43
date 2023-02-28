@@ -1,5 +1,5 @@
-import java.util.ArrayList;
+import java.util.List;
 import org.javamoney.moneta.Money;
 
-public record Expense(String title, Person payer, ArrayList<Person> participants, Money amount) {
+public record Expense(String title, Person payer, List<Person> participants, Money amount) {
 }

@@ -11,4 +11,8 @@ public class CalculationHelpers {
     return amount.divide(numberOfPeople);
   }
 
+  static Money difference(Money amount_person_a, Money amount_person_b) {
+    return amount_person_a.subtract(amount_person_b);
+  }
+
 }
