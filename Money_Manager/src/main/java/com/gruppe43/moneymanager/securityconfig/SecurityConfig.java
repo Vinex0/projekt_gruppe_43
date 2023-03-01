@@ -19,7 +19,7 @@ public class SecurityConfig {
                 .requestMatchers("/", "/css/*").permitAll()
                 .anyRequest().authenticated()
         ).httpBasic(Customizer.withDefaults())
-        .oauth2Login( config ->
+        .oauth2Login(config ->
             config.userInfoEndpoint(
                 info -> info.userService(new AppUserService())
             ));

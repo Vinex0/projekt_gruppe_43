@@ -12,7 +12,7 @@ public class GroupActionController {
 
   private final Group group;
 
-  GroupActionController(String title, Person creator) {
+  public GroupActionController(String title, Person creator) {
     this.group = new Group(title, new ArrayList<Person>(), new ArrayList<Expense>(),
         new HashMap<Person, Map<Person, Money>>());
     addUser(creator);

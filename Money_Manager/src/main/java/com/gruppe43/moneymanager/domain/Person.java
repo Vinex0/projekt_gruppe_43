@@ -8,7 +8,8 @@ public class Person {
   private String userName;
 
   private List<Group> groups;
-  Person(String userName) {
+
+  public Person(String userName) {
     this.userName = userName;
     this.groups = new ArrayList<Group>();
   }
