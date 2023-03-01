@@ -35,4 +35,9 @@ public class MoneyManagerController {
     return "redirect:/groupPage";
   }
 
+  @GetMapping("/groupPage")
+  public String getGroupPage() {
+    return "groupPage";
+  }
+
 }

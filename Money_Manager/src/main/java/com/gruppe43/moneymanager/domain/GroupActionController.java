@@ -51,7 +51,8 @@ public class GroupActionController {
     Expense e = new Expense(title, creditor, debtors, amount);
     group.expenses().add(e);
     for (Person p : debtors) {
-      group.debts().get(p).put(creditor, individualAmount);
+      Money tmp = group.debts().get(p).get(creditor);
+      group.debts().get(p).put(creditor, tmp.add(individualAmount));
     }
     List<Person> part = new ArrayList<>(debtors);
     part.add(creditor);

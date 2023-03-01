@@ -100,6 +100,54 @@ public class GroupActionControllerTest {
   }
 
   @Test
+  void testSzenario_1() {
+    Person pet = new Person("Peter");
+    Person sus = new Person("Susan");
+
+    GroupActionController groupController = new GroupActionController("test", pet);
+    groupController.addUser(sus);
+
+
+    groupController.createExpense(pet, groupController.getOtherPeople(pet), Money.of(10, "EUR"), "expense1");
+    groupController.createExpense(pet, groupController.getOtherPeople(pet), Money.of(20, "EUR"), "expense2");
+
+    assertThat(groupController.getCreditors(sus)).isEqualTo(Map.of(pet, Money.of(15, "EUR")));
+
+  }
+
+  @Test
+  void testSzenario_2() {
+    Person pet = new Person("Peter");
+    Person sus = new Person("Susan");
+
+    GroupActionController groupController = new GroupActionController("test", pet);
+    groupController.addUser(sus);
+
+
+    groupController.createExpense(pet, groupController.getOtherPeople(pet), Money.of(10, "EUR"), "expense1");
+    groupController.createExpense(sus, groupController.getOtherPeople(sus), Money.of(20, "EUR"), "expense2");
+
+    assertThat(groupController.getCreditors(pet)).isEqualTo(Map.of(sus, Money.of(5, "EUR")));
+
+  }
+
+  //TODO adjust createExpense
+  @Test
+  void testSzenario_3() {
+    Person pet = new Person("Peter");
+    Person sus = new Person("Susan");
+
+    GroupActionController groupController = new GroupActionController("test", pet);
+    groupController.addUser(sus);
+
+    groupController.createExpense(pet, groupController.getOtherPeople(pet), Money.of(20, "EUR"), "expense1");
+
+
+    assertThat(groupController.getCreditors(sus)).isEqualTo(Map.of(pet, Money.of(20, "EUR")));
+
+  }
+
+  @Test
   void creditAdjustmentTest() {
     Person pet = new Person("Peter");
     Person sus = new Person("Susan");
