@@ -6,8 +6,8 @@ import java.util.List;
 public class Person {
 
   private String userName;
-  private List<Group> groups;
 
+  private List<Group> groups;
   Person(String userName) {
     this.userName = userName;
     this.groups = new ArrayList<Group>();
@@ -24,4 +24,9 @@ public class Person {
   List<Group> getGroups() {
     return groups;
   }
+
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
 }
