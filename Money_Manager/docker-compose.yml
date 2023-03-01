@@ -7,4 +7,4 @@ services:
       dockerfile: Dockerfile
     image: moneymanager:latest
     ports:
-      - "9000:9001"
+      - "9000:9000"
