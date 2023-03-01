@@ -22,7 +22,7 @@ Eine Gruppe von sechs Freunden (A,B,C,D,E und F) macht einen gemeinsamen Städte
     
 Am Ende des Trips sollen nun die Konten ausgeglichen werden, dabei wollen wir, dass
 
-. eine Person immer nur selber Überweisungen an andere tätigt, oder Geld überwiesen bekommt, aber niemals beides. Es soll also zum Beispiel nicht vorkommen, dass B an A für das Hotelzimmer eine Überweisung tätigen muss, und A dann an B den Anteil am Benzinverbrauch überweist. Auch Zirkelüberweisungen sollen ausgeschlossen werden.
+. eine com.gruppe43.moneymanager.domain.Person immer nur selber Überweisungen an andere tätigt, oder Geld überwiesen bekommt, aber niemals beides. Es soll also zum Beispiel nicht vorkommen, dass B an A für das Hotelzimmer eine Überweisung tätigen muss, und A dann an B den Anteil am Benzinverbrauch überweist. Auch Zirkelüberweisungen sollen ausgeschlossen werden.
 . es höchstens eine Überweisung zwischen zwei Personen gibt und Niemand sich selber Geld überweist.
 . die Anzahl der Transaktionen minimal ist.
 
@@ -58,7 +58,7 @@ Die im Praktikum entwickelte Software soll folgenden Funktionsumfang haben:
 * Personen können über ihren GitHub-Namen hinzugefügt werden
 * Personen, die in einer Gruppe sind, können Ausgaben, die für die Gruppe (oder auch nur Teile der Gruppe!) getätigt wurden eintragen.
 * Die Nutzer:innen der Anwendung können eine Übersicht über alle Gruppen bekommen, in denen sie eingetragen sind. Von dieser Übersicht aus können sie in eine Detailansicht der einzelnen Gruppen navigieren und sehen dort:
-** Alle getätigten Ausgaben der Gruppe und welche Personen beteiligt sind. Alle Ausgaben, die in irgendeiner Weise die eigene Person betreffen sind geeignet hervorgehoben.
+** Alle getätigten Ausgaben der Gruppe und welche Personen beteiligt sind. Alle Ausgaben, die in irgendeiner Weise die eigene com.gruppe43.moneymanager.domain.Person betreffen sind geeignet hervorgehoben.
 ** Eine Übersicht über die notwendigen Transaktionen zwischen einzelnen Personen, um die Auslagen auszugleichen.
 * Zu einem bestimmten Zeitpunkt kann die Gruppe geschlossen werden, danach sind keine Eintragungen mehr möglich. Es ist aber immer noch möglich, alle Details der Gruppe anzuschauen. Geschlossene Gruppen sind auf der Übersichtsseite von offenen getrennt aufgeführt.
 
@@ -67,15 +67,15 @@ Die im Praktikum entwickelte Software soll folgenden Funktionsumfang haben:
 Es sollen folgende Autorisierungen umgesetzt werden. Wir verwenden GitHub als OAuth-Provider zur Authentifikation. 
 
 * Gruppengründung und Schließung
-** Jede Person mit einem GitHub-Account kann eine neue Gruppe gründen. Die Person, die die Gruppe gründet, wird automatisch zur Gruppe hinzugefügt.
-** Jede Person in einer Gruppe kann neue Teilnehmer:innen hinzufügen. Dazu werden GitHub-Namen eingetragen. In unserem MVP wird nur geprüft, ob der GitHub-Name prinzipiell möglich ist, nicht, ob der Account existiert. Nachträgliche Änderungen des Accountnamens werden nicht berücksichtigt. 
+** Jede com.gruppe43.moneymanager.domain.Person mit einem GitHub-Account kann eine neue Gruppe gründen. Die com.gruppe43.moneymanager.domain.Person, die die Gruppe gründet, wird automatisch zur Gruppe hinzugefügt.
+** Jede com.gruppe43.moneymanager.domain.Person in einer Gruppe kann neue Teilnehmer:innen hinzufügen. Dazu werden GitHub-Namen eingetragen. In unserem MVP wird nur geprüft, ob der GitHub-Name prinzipiell möglich ist, nicht, ob der Account existiert. Nachträgliche Änderungen des Accountnamens werden nicht berücksichtigt.
 ** Sobald eine Ausgabe für die Gruppe eingetragen wurde, können keine weiteren Personen mehr hinzugefügt werden. 
-** Jede Person in einer Gruppe kann die Gruppe schließen.
+** Jede com.gruppe43.moneymanager.domain.Person in einer Gruppe kann die Gruppe schließen.
 
 * Ansichten 
-** Jede Person bekommt eine Liste mit allen Gruppen, in denen sie Mitglied ist, angezeigt. 
-** Jede Person kann die Übersicht über jede Gruppe, in der sie Mitglied ist, anschauen.
-** Jede Person kann die Übersicht über die zum momentanen Zeitpunkt zum Ausgleich notwendigen Transaktionen für alle Gruppen, in der sie Mitglied ist, anschauen.
+** Jede com.gruppe43.moneymanager.domain.Person bekommt eine Liste mit allen Gruppen, in denen sie Mitglied ist, angezeigt.
+** Jede com.gruppe43.moneymanager.domain.Person kann die Übersicht über jede Gruppe, in der sie Mitglied ist, anschauen.
+** Jede com.gruppe43.moneymanager.domain.Person kann die Übersicht über die zum momentanen Zeitpunkt zum Ausgleich notwendigen Transaktionen für alle Gruppen, in der sie Mitglied ist, anschauen.
 
 === Randbedingungen 
 

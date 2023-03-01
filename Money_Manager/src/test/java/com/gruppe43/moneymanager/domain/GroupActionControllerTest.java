@@ -1,3 +1,5 @@
+package com.gruppe43.moneymanager.domain;
+
 import java.util.List;
 import java.util.Map;
 import org.javamoney.moneta.Money;

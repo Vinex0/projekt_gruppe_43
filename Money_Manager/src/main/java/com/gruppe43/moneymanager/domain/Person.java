@@ -1,3 +1,5 @@
+package com.gruppe43.moneymanager.domain;
+
 import java.util.ArrayList;
 import java.util.List;
 

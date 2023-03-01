@@ -1,3 +1,5 @@
+package com.gruppe43.moneymanager.domain;
+
 import java.security.InvalidParameterException;
 import java.util.Map;
 import org.javamoney.moneta.Money;
@@ -28,7 +30,7 @@ public class CalculationHelperTest {
 
   @Test
   void debtDifferenceCalculationTestValid(){
-    //Map<Person, Money>
+    //Map<com.gruppe43.moneymanager.domain.Person, Money>
     Map<Person, Map<Person, Money>> debts;
   }
 

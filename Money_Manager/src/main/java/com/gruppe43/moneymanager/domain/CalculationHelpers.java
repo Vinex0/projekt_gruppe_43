@@ -1,3 +1,5 @@
+package com.gruppe43.moneymanager.domain;
+
 import java.security.InvalidParameterException;
 import org.javamoney.moneta.Money;
 
