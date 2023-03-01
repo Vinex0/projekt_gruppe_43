@@ -18,11 +18,11 @@ public class SecurityConfig {
             configurer -> configurer
                 .requestMatchers("/", "/css/*").permitAll()
                 .anyRequest().authenticated()
-        ).httpBasic(Customizer.withDefaults())
-        .oauth2Login(config ->
-            config.userInfoEndpoint(
-                info -> info.userService(new AppUserService())
-            ));
+        ).httpBasic(Customizer.withDefaults());
+//        .oauth2Login(config ->
+//            config.userInfoEndpoint(
+//                info -> info.userService(new AppUserService())
+//            ));
 
     return chainBuilder.build();
   }

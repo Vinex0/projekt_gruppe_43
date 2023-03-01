@@ -2,6 +2,7 @@ package com.gruppe43.moneymanager.web;
 
 import com.gruppe43.moneymanager.domain.GroupActionController;
 import com.gruppe43.moneymanager.domain.Person;
+import com.gruppe43.moneymanager.service.PersonRepository;
 import com.gruppe43.moneymanager.service.PersonService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
@@ -27,9 +28,11 @@ public class MoneyManagerController {
   }
 
   @PostMapping("/")
-  public String add(OAuth2AuthenticationToken authenticationToken,
-      RedirectAttributes redirectAttributes) {
-    return null;
+  public String add(Model model) {
+
+    Person person = personService.getPerson("Peter");
+    model.addAttribute("username", person.getUserName());
+    return "redirect:/groupPage";
   }
 
 }

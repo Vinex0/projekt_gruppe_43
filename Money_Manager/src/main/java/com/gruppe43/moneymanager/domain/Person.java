@@ -18,7 +18,7 @@ public class Person {
     groups.add(group);
   }
 
-  String getUserName() {
+  public String getUserName() {
     return userName;
   }
 
