@@ -1,3 +1,4 @@
 rootProject.name = 'MoneyManager'
 include 'domain'
+include 'web'
 
