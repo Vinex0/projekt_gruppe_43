@@ -80,6 +80,17 @@ public class GroupActionController {
     }
   }
 
+  public List<Money> getDebts(Person person){
+    List<Money> moneyList = new ArrayList<>();
+    moneyList.addAll(group.debts().get(person).values());
+    return moneyList;
+  }
+
+  //Fuer test Szenario 4..
+  public void closeGroup(){
+    adjustDebts(group.participants());
+  }
+
   public Group getGroup() {
     return group;
   }

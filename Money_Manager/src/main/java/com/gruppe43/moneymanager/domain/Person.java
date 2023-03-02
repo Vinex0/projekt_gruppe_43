@@ -22,7 +22,7 @@ public class Person {
     return userName;
   }
 
-  List<Group> getGroups() {
+  public List<Group> getGroups() {
     return groups;
   }
 
