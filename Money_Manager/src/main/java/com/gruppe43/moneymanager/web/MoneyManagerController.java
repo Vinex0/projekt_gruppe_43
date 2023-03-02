@@ -3,13 +3,11 @@ package com.gruppe43.moneymanager.web;
 import com.gruppe43.moneymanager.domain.Group;
 import com.gruppe43.moneymanager.domain.GroupActionController;
 import com.gruppe43.moneymanager.domain.Person;
-import com.gruppe43.moneymanager.service.PersonRepository;
+import com.gruppe43.moneymanager.service.GroupService;
 import com.gruppe43.moneymanager.service.PersonService;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,9 +17,11 @@ import java.util.stream.Collectors;
 public class MoneyManagerController {
 
     private final PersonService personService;
+    private final GroupService groupService;
 
-    public MoneyManagerController(PersonService service) {
+    public MoneyManagerController(PersonService service, GroupService groupService, GroupService groupService1) {
         this.personService = service;
+        this.groupService = groupService1;
     }
 
     @GetMapping("/")
@@ -48,8 +48,27 @@ public class MoneyManagerController {
 
         return "groupPage";
     }
+
+    /*
     @GetMapping("/group")
+    public String getGroupInfo(@RequestParam("groupName") String groupName, Model model) {
+        return "groupPage";
+    }
+
+    @PostMapping("/createGroup")
+    public String createGroup(@ModelAttribute("username") Person username, String title){
+        GroupActionController groupActionController = groupService.createGroup(title, username);
+
+        return "redirect:/groupPage";
+    }
+    //TODO
+    @PostMapping("/addPerson")
+    public String addPerson(@ModelAttribute("username") Person username, @ModelAttribute("groupTitle") String title){
 
 
+        return "redirect:/groupPage";
+    }
+
+    */
 
 }
