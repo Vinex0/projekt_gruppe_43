@@ -3,6 +3,7 @@ package com.gruppe43.moneymanager.domain;
 import java.util.List;
 import java.util.Map;
 import org.javamoney.moneta.Money;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -92,7 +93,7 @@ public class GroupActionControllerTest {
     groupController.addUser(sus);
     groupController.addUser(jens);
 
-    groupController.createExpense(pet, groupController.getOtherPeople(pet), Money.of(150, "EUR"), "new expense");
+    groupController.createExpense(pet, groupController.getGroup().participants(), Money.of(150, "EUR"), "new expense");
     assertAll(
         () -> assertThat(groupController.getCreditors(sus)).isEqualTo(Map.of(pet, Money.of(50, "EUR"))),
         () -> assertThat(groupController.getCreditors(jens)).isEqualTo(Map.of(pet, Money.of(50, "EUR")))
@@ -108,8 +109,8 @@ public class GroupActionControllerTest {
     groupController.addUser(sus);
 
 
-    groupController.createExpense(pet, groupController.getOtherPeople(pet), Money.of(10, "EUR"), "expense1");
-    groupController.createExpense(pet, groupController.getOtherPeople(pet), Money.of(20, "EUR"), "expense2");
+    groupController.createExpense(pet, groupController.getGroup().participants(), Money.of(10, "EUR"), "expense1");
+    groupController.createExpense(pet, groupController.getGroup().participants(), Money.of(20, "EUR"), "expense2");
 
     assertThat(groupController.getCreditors(sus)).isEqualTo(Map.of(pet, Money.of(15, "EUR")));
 
@@ -124,8 +125,8 @@ public class GroupActionControllerTest {
     groupController.addUser(sus);
 
 
-    groupController.createExpense(pet, groupController.getOtherPeople(pet), Money.of(10, "EUR"), "expense1");
-    groupController.createExpense(sus, groupController.getOtherPeople(sus), Money.of(20, "EUR"), "expense2");
+    groupController.createExpense(pet, groupController.getGroup().participants(), Money.of(10, "EUR"), "expense1");
+    groupController.createExpense(sus, groupController.getGroup().participants(), Money.of(20, "EUR"), "expense2");
 
     assertThat(groupController.getCreditors(pet)).isEqualTo(Map.of(sus, Money.of(5, "EUR")));
 
@@ -155,8 +156,8 @@ public class GroupActionControllerTest {
     groupController.addUser(sus);
 
 
-    groupController.createExpense(pet, groupController.getOtherPeople(pet), Money.of(100, "EUR"), "new expense");
-    groupController.createExpense(sus, groupController.getOtherPeople(sus), Money.of(50, "EUR"), "new expense 2");
+    groupController.createExpense(pet, groupController.getGroup().participants(), Money.of(100, "EUR"), "new expense");
+    groupController.createExpense(sus, groupController.getGroup().participants(), Money.of(50, "EUR"), "new expense 2");
     var x = groupController.getCreditors(sus).get(pet);
     var y = groupController.getCreditors(pet).get(sus);
     assertAll(

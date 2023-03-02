@@ -20,7 +20,7 @@ public class CalculationHelperTest {
   @Test
   void paymentShareTestInvalidPeopleCount() {
     Money amount = Money.of(12.4, "EUR");
-    assertThrows(InvalidParameterException.class, () -> CalculationHelpers.paymentShare(amount, 1));
+    assertThrows(InvalidParameterException.class, () -> CalculationHelpers.paymentShare(amount, 0));
   }
 
   @Test

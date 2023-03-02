@@ -47,15 +47,16 @@ public class GroupActionController {
   }
 
   public void createExpense(Person creditor, List<Person> debtors, Money amount, String title) {
-    Money individualAmount = CalculationHelpers.paymentShare(amount, debtors.size() + 1);
+    Money individualAmount = CalculationHelpers.paymentShare(amount, debtors.size());
     Expense e = new Expense(title, creditor, debtors, amount);
     group.expenses().add(e);
     for (Person p : debtors) {
-      Money tmp = group.debts().get(p).get(creditor);
-      group.debts().get(p).put(creditor, tmp.add(individualAmount));
+      if(!p.equals(creditor)){
+        Money tmp = group.debts().get(p).get(creditor);
+        group.debts().get(p).put(creditor, tmp.add(individualAmount));
+      }
     }
     List<Person> part = new ArrayList<>(debtors);
-    part.add(creditor);
     adjustDebts(part);
   }
 
@@ -86,5 +87,6 @@ public class GroupActionController {
   public List<Expense> getExpenses() {
     return group.expenses();
   }
+
 }
 
