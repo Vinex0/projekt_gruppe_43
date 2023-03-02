@@ -37,7 +37,7 @@ public class MoneyManagerController {
         return "redirect:/groupPage";
     }
 
-    @GetMapping("/groupPage")
+    @GetMapping("/groupOverview")
     public String getGroupPage(@ModelAttribute("username") String username, Model model) {
         Person p = personService.getPerson(username);
         List<String> titles = p.getGroups().stream().map(Group::title).collect(Collectors.toList());
@@ -48,5 +48,8 @@ public class MoneyManagerController {
 
         return "groupPage";
     }
+    @GetMapping("/group")
+
+
 
 }
