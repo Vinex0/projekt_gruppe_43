@@ -1,5 +1,6 @@
 package com.gruppe43.moneymanager.service;
 
+import com.gruppe43.moneymanager.domain.Group;
 import com.gruppe43.moneymanager.domain.GroupActionController;
 import com.gruppe43.moneymanager.domain.Person;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,8 @@ public class GroupService {
         return new GroupActionController(title, username);
     }
 
+    public Group getGroup (String title){
+        return getGroup(title);
+    }
 
 }

@@ -19,9 +19,9 @@ public class MoneyManagerController {
     private final PersonService personService;
     private final GroupService groupService;
 
-    public MoneyManagerController(PersonService service, GroupService groupService, GroupService groupService1) {
+    public MoneyManagerController(PersonService service, GroupService groupService) {
         this.personService = service;
-        this.groupService = groupService1;
+        this.groupService = groupService;
     }
 
     @GetMapping("/")
@@ -37,7 +37,7 @@ public class MoneyManagerController {
         return "redirect:/groupPage";
     }
 
-    @GetMapping("/groupOverview")
+    @GetMapping("/groupPage")
     public String getGroupPage(@ModelAttribute("username") String username, Model model) {
         Person p = personService.getPerson(username);
         List<String> titles = p.getGroups().stream().map(Group::title).collect(Collectors.toList());
@@ -49,12 +49,13 @@ public class MoneyManagerController {
         return "groupPage";
     }
 
-    /*
-    @GetMapping("/group")
-    public String getGroupInfo(@RequestParam("groupName") String groupName, Model model) {
-        return "groupPage";
-    }
 
+    @GetMapping("/groupPage")
+    public String getGroupInfo(@RequestParam("groupName") String groupName, Model model) {
+        groupService.getGroup(groupName);
+        return "redirect:/group";
+    }
+     /*
     @PostMapping("/createGroup")
     public String createGroup(@ModelAttribute("username") Person username, String title){
         GroupActionController groupActionController = groupService.createGroup(title, username);
