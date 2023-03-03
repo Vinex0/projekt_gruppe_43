@@ -18,9 +18,11 @@ public class PersonService {
   public List<Person> allPersons() {
     return repository.findAll().stream().toList();
   }
+
   public void addPerson(Person person) {
     persons.add(person);
   }
+
   //TODO datenbank implementieren
   public Person getPerson(String name) {
     return new Person(name);

@@ -1,64 +1,67 @@
 package com.gruppe43.moneymanager.web;
 
-import com.gruppe43.moneymanager.domain.Group;
-import com.gruppe43.moneymanager.domain.GroupActionController;
+import com.gruppe43.moneymanager.domain.Gruppe;
 import com.gruppe43.moneymanager.domain.Person;
-import com.gruppe43.moneymanager.service.GroupService;
+import com.gruppe43.moneymanager.service.GruppenService;
 import com.gruppe43.moneymanager.service.PersonService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
 @SessionAttributes("username")
 public class MoneyManagerController {
 
-    private final PersonService personService;
-    private final GroupService groupService;
+  private final PersonService personService;
+  private final GruppenService gruppenService;
 
-    public MoneyManagerController(PersonService service, GroupService groupService) {
-        this.personService = service;
-        this.groupService = groupService;
-    }
+  public MoneyManagerController(PersonService service, GruppenService gruppenService) {
+    this.personService = service;
+    this.gruppenService = gruppenService;
+  }
 
-    @GetMapping("/")
-    public String startPage() {
-        return "start";
-    }
+  @GetMapping("/")
+  public String startPage() {
+    return "start";
+  }
 
-    @PostMapping("/")
-    public String add(Model model) {
+  @PostMapping("/")
+  public String add(Model model) {
 
-        Person person = personService.getPerson("Peter");
-        model.addAttribute("username", person.getUserName());
-        return "redirect:/groupPage";
-    }
+    Person person = personService.getPerson("Peter");
+    model.addAttribute("nutzername", person.getNutzerName());
+    return "redirect:/gruppenOverview";
+  }
 
-    @GetMapping("/groupPage")
-    public String getGroupPage(@ModelAttribute("username") String username, Model model) {
-        Person p = personService.getPerson(username);
-        List<String> titles = p.getGroups().stream().map(Group::title).collect(Collectors.toList());
-        titles.add("TestGruppe1");
-        titles.add("TestGruppe2");
+  @GetMapping("/gruppenOverview")
+  public String getGroupPage(@ModelAttribute("nutzername") String nutzername, Model model) {
+    Person p = personService.getPerson(nutzername);
+    List<String> titles = p.getGruppen().stream().map(Gruppe::title).collect(Collectors.toList());
+    titles.add("TestGruppe1");
+    titles.add("TestGruppe2");
 
-        model.addAttribute("groups", titles);
+    model.addAttribute("gruppen", titles);
 
-        return "groupPage";
-    }
+    return "gruppenOverview";
+  }
 
 
-    @GetMapping("/groupPage")
-    public String getGroupInfo(@RequestParam("groupName") String groupName, Model model) {
-        groupService.getGroup(groupName);
-        return "redirect:/group";
-    }
+  @GetMapping("/group")
+  public String getGroupInfo(@RequestParam("gruppenName") String gruppenName, Model model) {
+    Gruppe gruppe = gruppenService.getGruppe(gruppenName);
+    model.addAttribute("grup", gruppe);
+    return "gruppe";
+  }
      /*
     @PostMapping("/createGroup")
     public String createGroup(@ModelAttribute("username") Person username, String title){
-        GroupActionController groupActionController = groupService.createGroup(title, username);
+        GruppenActionController groupActionController = groupService.createGroup(title, username);
 
         return "redirect:/groupPage";
     }

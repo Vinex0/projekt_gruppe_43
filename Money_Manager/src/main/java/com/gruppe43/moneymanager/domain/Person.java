@@ -5,29 +5,29 @@ import java.util.List;
 
 public class Person {
 
-  private String userName;
+  private String nutzerName;
 
-  private List<Group> groups;
+  private final List<Gruppe> gruppen;
 
-  public Person(String userName) {
-    this.userName = userName;
-    this.groups = new ArrayList<Group>();
+  public Person(String nutzerName) {
+    this.nutzerName = nutzerName;
+    this.gruppen = new ArrayList<Gruppe>();
   }
 
-  void addGroup(Group group) {
-    groups.add(group);
+  void addGruppe(Gruppe gruppe) {
+    gruppen.add(gruppe);
   }
 
-  public String getUserName() {
-    return userName;
+  public String getNutzerName() {
+    return nutzerName;
   }
 
-  public List<Group> getGroups() {
-    return groups;
+  public List<Gruppe> getGruppen() {
+    return gruppen;
   }
 
-  public void setUserName(String userName) {
-    this.userName = userName;
+  public void setNutzerName(String nutzerName) {
+    this.nutzerName = nutzerName;
   }
 
 }
