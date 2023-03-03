@@ -1,58 +1,164 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-          crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <link href="signin.css" rel="stylesheet">
+    <link href="../static/signin.css" rel="stylesheet">
 
     <title>Group View</title>
 </head>
+
 <body class="gradient-custom">
-<nav class="navbar navbar-expand-lg navbar-dark gradient-custom">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Money Manager</a>
+    <nav class="navbar navbar-expand-lg navbar-dark gradient-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Money Manager</a>
 
 
-    </div>
-    </div>
-</nav>
-<div class="row justify-content-center">
-    <div class="card text-white bg-dark" style="width: 75%">
-        <div class="card-header">
-            Groups
         </div>
-        <div class="card-body">
-            <h5 class="card-title">Group:</h5>
-            <table class="table table-dark">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Group Name</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="group,iterationStatus:${groups}">
-                    <th scope="row" th:text="${iterationStatus.count}">1</th>
-                    <td th:text="${group}">Mark</td>
+        </div>
+    </nav>
+    <div class="row justify-content-center">
+        <div class="card text-white bg-dark" style="width: 75%">
+            <div class="card-header">
+                Groups
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="input-group mb-3 col">
+                            <input type="text" class="form-control" placeholder="Username" aria-label="username"
+                                aria-describedby="button-addon2">
+                            <button class="btn btn-outline-secondary me-2" type="button" id="button-addon2">Add
+                                User</button>
+                        </div>
+                        <button class="btn btn-primary mb-3 col-md-auto">Create Expense</button>
+                    </div>
+                    <div class="row">
+                        <table class="table table-dark mb-3 col">
+                            <thead>
+                                <tr class="table-active">
+                                    <th scope="col">Participants</th>
+                                </tr>
+                                <tr>
+                                    <th>Name</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <tr>
+                                    <th scope="row">Peter</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <table class="table table-dark table-striped-columns mb-3 col">
+                            <thead>
+                                <tr class="table-active">
+                                    <th colspan="4">Expenses</th>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Title</th>
+                                    <th>Payer</th>
+                                    <th>Participants</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
 
-                </tr>
-                </tbody>
-            </table>
-            <a href="#" class="btn btn-primary">Create Group</a>
+                                <tr>
+                                    <th scope="row">Test</th>
+                                    <th>Peter</th>
+                                    <th>Waldy, Peter</th>
+                                    <th>400</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <table class="table table-dark table-striped-columns mb-3">
+                                        <thead>
+                                            <tr class="table-active">
+                                                <th colspan="2">Username</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Creditor</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="table-group-divider">
+
+                                            <tr>
+                                                <th scope="row">Peter</th>
+                                                <th>323</th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col">
+                                    <table class="table table-dark table-striped-columns mb-3">
+                                        <thead>
+                                            <tr class="table-active">
+                                                <th colspan="2">Username</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Creditor</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="table-group-divider">
+
+                                            <tr>
+                                                <th scope="row">Peter</th>
+                                                <th>323</th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col">
+                                    <table class="table table-dark table-striped-columns mb-3">
+                                        <thead>
+                                            <tr class="table-active">
+                                                <th colspan="2">Username</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Creditor</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="table-group-divider">
+
+                                            <tr>
+                                                <th scope="row">Peter</th>
+                                                <th>323</th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button class="btn btn-primary mb-3 col-auto">Close Group</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
 
 </body>
+
 </html>
