@@ -45,12 +45,12 @@ public class MoneyManagerController {
     List<String> titles = p.getGruppen().stream().map(Gruppe::title).collect(Collectors.toList());
     titles.add("TestGruppe1");
     titles.add("TestGruppe2");
+    titles.addAll(gruppenService.getTitles());
 
     model.addAttribute("gruppen", titles);
 
     return "gruppenOverview";
   }
-
 
   @GetMapping("/group")
   public String getGroupInfo(@RequestParam("gruppenName") String gruppenName, Model model) {
@@ -58,21 +58,19 @@ public class MoneyManagerController {
     model.addAttribute("grup", gruppe);
     return "gruppe";
   }
-     /*
-    @PostMapping("/createGroup")
-    public String createGroup(@ModelAttribute("username") Person username, String title){
-        GruppenActionController groupActionController = groupService.createGroup(title, username);
 
-        return "redirect:/groupPage";
-    }
-    //TODO
-    @PostMapping("/addPerson")
-    public String addPerson(@ModelAttribute("username") Person username, @ModelAttribute("groupTitle") String title){
+  @GetMapping("/createGruppe")
+  public String createGruppe(Model model) {
+    return "createGruppe";
+  }
 
-
-        return "redirect:/groupPage";
-    }
-
-    */
+  @PostMapping("/createGruppe")
+  public String submitGruppe(Model model, String name,
+      @ModelAttribute("nutzername") String nutzername) {
+    System.out.println(name);
+    if(name.length() < 1) return "redirect:createGruppe";
+    gruppenService.addGruppe(name, personService.getPerson("nutzername"));
+    return "redirect:gruppenOverview";
+  }
 
 }
