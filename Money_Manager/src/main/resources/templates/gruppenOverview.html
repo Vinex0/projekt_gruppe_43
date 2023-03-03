@@ -22,7 +22,6 @@
 
 
         </div>
-        </div>
     </nav>
     <div class="row justify-content-center">
         <div class="card text-white bg-dark" style="width: 75%">
@@ -41,8 +40,7 @@
                     <tbody>
                         <tr th:each="gruppe,iterationStatus:${gruppen}">
                             <th scope="row" th:text="${iterationStatus.count}">1</th>
-                            <td th:text="${gruppe}">Mark</td>
-
+                            <td><a th:text="${gruppe}" th:href='@{|/gruppe/${gruppe}|}'></a> </td>
                         </tr>
                     </tbody>
                 </table>

@@ -12,13 +12,17 @@ public class GruppenActionController {
 
   private final Gruppe gruppe;
 
+  public GruppenActionController(Gruppe gruppe) {
+    this.gruppe = gruppe;
+  }
+
   public GruppenActionController(String title, Person ersteller) {
     this.gruppe = new Gruppe(title, new ArrayList<Person>(), new ArrayList<Ausgabe>(),
         new HashMap<Person, Map<Person, Money>>());
     addNutzer(ersteller);
   }
 
-  void addNutzer(Person neuerNutzer) {
+  public void addNutzer(Person neuerNutzer) {
     neuerNutzer.addGruppe(gruppe);
     gruppe.teilnehmer().add(neuerNutzer);
     gruppe.schulden().put(neuerNutzer, new HashMap<Person, Money>());

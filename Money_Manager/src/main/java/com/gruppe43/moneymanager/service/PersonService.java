@@ -25,7 +25,11 @@ public class PersonService {
 
   //TODO datenbank implementieren
   public Person getPerson(String name) {
-    return new Person(name);
+    for(Person p : persons) {
+      if (p.getNutzerName().equals(name)) return p;
+    }
+    addPerson(new Person(name));
+    return getPerson(name);
   }
 
 }

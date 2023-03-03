@@ -1,6 +1,7 @@
 package com.gruppe43.moneymanager.web;
 
 import com.gruppe43.moneymanager.domain.Gruppe;
+import com.gruppe43.moneymanager.domain.GruppenActionController;
 import com.gruppe43.moneymanager.domain.Person;
 import com.gruppe43.moneymanager.service.GruppenService;
 import com.gruppe43.moneymanager.service.PersonService;
@@ -10,12 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
-@SessionAttributes("username")
+@SessionAttributes("nutzername")
 public class MoneyManagerController {
 
   private final PersonService personService;
@@ -68,9 +70,25 @@ public class MoneyManagerController {
   public String submitGruppe(Model model, String name,
       @ModelAttribute("nutzername") String nutzername) {
     System.out.println(name);
+    System.out.println(nutzername);
     if(name.length() < 1) return "redirect:createGruppe";
-    gruppenService.addGruppe(name, personService.getPerson("nutzername"));
+    gruppenService.addGruppe(name, personService.getPerson(nutzername));
     return "redirect:gruppenOverview";
+  }
+
+  @GetMapping("/gruppe/{title}")
+  public String getGruppe(@PathVariable("title") String title, Model model) {
+    System.out.println(title);
+    model.addAttribute("gruppe", gruppenService.getGruppe(title));
+    return "gruppe";
+  }
+
+  @PostMapping("/addNutzer/{title}")
+  public String addNutzer(@PathVariable("title") String title, Model model, String nutzername) {
+    System.out.println(nutzername);
+    GruppenActionController gruppe = new GruppenActionController(gruppenService.getGruppe(title));
+    gruppe.addNutzer(personService.getPerson(nutzername));
+    return "redirect:/gruppe/" + title;
   }
 
 }
