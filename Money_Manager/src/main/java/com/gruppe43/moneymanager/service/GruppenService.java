@@ -48,6 +48,15 @@ public class GruppenService {
     }
     throw new InvalidParameterException("Group does not exist");
   }
+
+  public Map<Person, Boolean> getToggleHelper(String title) {
+    Map<Person, Boolean> toggleHelper = new HashMap<>();
+    Gruppe g = getGruppe(title);
+      for (Person p : g.getTeilnehmer()) {
+        toggleHelper.put(p, false);
+    }
+    return toggleHelper;
+  }
   public List<String> getTitles(){
     return gruppen.stream().map(Gruppe::getTitel).collect(Collectors.toList());
   }

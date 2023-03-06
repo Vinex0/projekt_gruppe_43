@@ -41,7 +41,7 @@
               </button>
             </div>
           </form>
-          <button class="btn btn-primary mb-3 col-md-auto">Create Expense</button>
+          <a th:href="@{|/createAusgabe/${gruppe.getTitel()}|}" class="btn btn-primary mb-3 col-md-auto" role="button">Create Expense</a>
         </div>
         <div class="row">
           <table class="table table-dark mb-3 col">
