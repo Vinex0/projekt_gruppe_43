@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface GruppenRepository {
 
-  List<Gruppe> finaAll();
+  List<Gruppe> findAll();
 
   Optional<Gruppe> findById(int id);
 

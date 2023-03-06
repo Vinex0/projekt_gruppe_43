@@ -12,5 +12,5 @@ public interface PersonRepository {
 
   Optional<Person> findById(int id);
 
-  Person save();
+  Person save(Person person);
 }

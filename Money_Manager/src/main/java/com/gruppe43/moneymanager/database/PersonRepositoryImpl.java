@@ -20,7 +20,7 @@ public class PersonRepositoryImpl implements PersonRepository {
   }
 
   @Override
-  public Person save() {
+  public Person save(Person person) {
     return null;
   }
 }

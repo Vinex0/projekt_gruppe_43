@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public class GruppenRepositoryImpl implements GruppenRepository {
 
   @Override
-  public List<Gruppe> finaAll() {
+  public List<Gruppe> findAll() {
     return null;
   }
 

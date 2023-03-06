@@ -8,28 +8,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class PersonService {
 
-  private final List<Person> persons = new ArrayList<>();
-  private final PersonRepository repository;
+  private final PersonRepository personRepository;
 
-  public PersonService(PersonRepository repository) {
-    this.repository = repository;
+  public PersonService(PersonRepository personRepository) {
+    this.personRepository = personRepository;
+  }
+
+  public List<Person> allePersonen() {
+    return personRepository.findAll().stream().sorted().toList();
+  }
+
+  public Person person(int nr) {
+    return personRepository.findById(nr).orElseThrow(NichtVorhandenException::new);
+  }
+
+  public void personHinzufuegen(int id, String text) {
+
   }
 
   public List<Person> allPersons() {
-    return repository.findAll().stream().toList();
+    return personRepository.findAll().stream().toList();
   }
 
-  public void addPerson(Person person) {
-    persons.add(person);
-  }
 
-  //TODO datenbank implementieren
-  public Person getPerson(String name) {
-    for(Person p : persons) {
-      if (p.getNutzerName().equals(name)) return p;
-    }
-    addPerson(new Person(name));
-    return getPerson(name);
-  }
 
 }

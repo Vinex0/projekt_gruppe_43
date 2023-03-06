@@ -2,32 +2,35 @@ package com.gruppe43.moneymanager.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
 
-public class Person {
+@Getter
+public class Person implements Comparable<Person> {
 
-  private String nutzerName;
+  private final Integer id;
+
+  private final String nutzerName;
 
   private final List<Gruppe> gruppen;
 
   public Person(String nutzerName) {
+    this(null, nutzerName, new ArrayList<>());
+  }
+
+  public Person(Integer id, String nutzerName, List<Gruppe> gruppen) {
+    this.id = id;
     this.nutzerName = nutzerName;
-    this.gruppen = new ArrayList<Gruppe>();
+    this.gruppen = gruppen;
   }
 
   void addGruppe(Gruppe gruppe) {
     gruppen.add(gruppe);
   }
 
-  public String getNutzerName() {
-    return nutzerName;
-  }
 
-  public List<Gruppe> getGruppen() {
-    return gruppen;
-  }
 
-  public void setNutzerName(String nutzerName) {
-    this.nutzerName = nutzerName;
+  @Override
+  public int compareTo(Person other) {
+    return nutzerName.compareTo(other.nutzerName);
   }
-
 }
