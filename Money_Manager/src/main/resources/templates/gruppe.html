@@ -31,7 +31,7 @@
     <div class="card-body">
       <div class="container">
         <div class="row">
-          <form action="#" th:action="@{|/addNutzer/${gruppe.title()}|}" method="post">
+          <form action="#" th:action="@{|/addNutzer/${gruppe.getTitel()}|}" method="post">
             <div class="input-group mb-3 col">
               <input name="nutzername" type="text" class="form-control" placeholder="Username"
                      aria-label="username"
@@ -54,7 +54,7 @@
             </tr>
             </thead>
             <tbody class="table-group-divider">
-            <tr th:each="teilnehmer : ${gruppe.teilnehmer()}">
+            <tr th:each="teilnehmer : ${gruppe.getTeilnehmer()}">
               <th scope="row" th:text="${teilnehmer.getNutzerName()}">Peter</th>
             </tr>
             </tbody>
@@ -66,7 +66,7 @@
             <tr class="table-active">
               <th colspan="4">Ausgaben</th>
             </tr>
-            <tr th:each="ausgabe : ${gruppe.ausgaben()}">
+            <tr th:each="ausgabe : ${gruppe.getAusgaben()}">
               <th scope="row">Title</th>
               <th>Payer</th>
               <th>Participants</th>
@@ -74,11 +74,11 @@
             </tr>
             </thead>
             <tbody class="table-group-divider">
-            <tr th:each="ausgabe : ${gruppe.ausgaben()}">
-              <th scope="row" th:text="${ausgabe.title()}">Title</th>
-              <th th:text="${ausgabe.glaeubiger()}">Payer</th>
-              <th th:text="${ausgabe.teilnehmer()}">Participants</th>
-              <th th:text="${ausgabe.summe()}">Amount</th>
+            <tr th:each="ausgabe : ${gruppe.getAusgaben()}">
+              <th scope="row" th:text="${ausgabe.getTitel()}">Title</th>
+              <th th:text="${ausgabe.getGlaeubiger()}">Payer</th>
+              <th th:text="${ausgabe.getSchuldnerListe()}">Participants</th>
+              <th th:text="${ausgabe.getSumme()}">Amount</th>
             </tr>
             </tbody>
           </table>
@@ -86,11 +86,11 @@
         <div class="row">
           <div class="container">
             <div class="row">
-              <div class="col" th:each="teiln : ${gruppe.schulden().keySet()}">
+              <div class="col" th:each="teiln : ${gruppe.getSchulden().keySet()}">
                 <table class="table table-dark table-striped-columns mb-3">
                   <thead>
                   <tr class="table-active">
-                    <th colspan="2" th:text="teiln">Username</th>
+                    <th colspan="2" th:text="${teiln.getNutzerName()}">Username</th>
                   </tr>
                   <tr>
                     <th>Creditor</th>
@@ -98,8 +98,8 @@
                   </tr>
                   </thead>
                   <tbody class="table-group-divider">
-                  <tr th:each="glaeubiger : ${gruppe.schulden().entrySet()}">
-                    <th scope="row" th:text="${glaeubiger.getKey()}">Creditor</th>
+                  <tr th:each="glaeubiger : ${gruppe.getSchulden().get(teiln).entrySet()}">
+                    <th scope="row" th:text="${glaeubiger.getKey().getNutzerName()}">Creditor</th>
                     <th th:text="${glaeubiger.getValue()}">Amount</th>
                   </tr>
                   </tbody>

@@ -10,6 +10,8 @@ public class PersonService {
 
   private final PersonRepository personRepository;
 
+  private final List<Person> persons = new ArrayList<>();
+
   public PersonService(PersonRepository personRepository) {
     this.personRepository = personRepository;
   }
@@ -30,6 +32,16 @@ public class PersonService {
     return personRepository.findAll().stream().toList();
   }
 
+  public void addPerson(Person person) {
+    persons.add(person);
+  }
 
+  public Person getPerson(String name) {
+    for(Person p : persons) {
+      if (p.getNutzerName().equals(name)) return p;
+    }
+    addPerson(new Person(name));
+    return getPerson(name);
+  }
 
 }
