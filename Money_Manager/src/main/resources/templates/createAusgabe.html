@@ -45,13 +45,23 @@
                             <option th:each="teiln : ${gruppe.getTeilnehmer()}" th:text="${teiln.getNutzerName()}" name="name" th:value="${teiln.getNutzerName()}">One</option>
                         </select>
                     </div>
-                    <label class="form-label" for="teilnehmerSelector">Waehle Teilnehmer:</label>
-                    <div th:each="checkboxHelper : ${checkboxHelpers}" name="checkboxHelpers" class="form-check">
+
+                    <ul>
+                        <li th:each="helper : ${checkboxHelpers}">
+                            <label th:for="${helper.person.getNutzerName()}" th:text="${helper.person.getNutzerName()}">Role name</label>
+                            <input type="checkbox" th:id="${helper.person.getNutzerName()}"
+                                   th:name="${helper.person.getNutzerName()}" th:checked="${helper.checked}"/>
+                        </li>
+                    </ul>
+
+
+                    <!-- <label class="form-label" for="teilnehmerSelector">Waehle Teilnehmer:</label>
+                     <div th:each="checkboxHelper : ${checkboxHelpers}" name="checkboxHelpers" class="form-check">
                         <input class="form-check-input" th:value="${checkboxHelper.checked}" type="checkbox" value="" id="teilnehmerSelector">
                         <label class="form-check-label" for="teilnehmerSelector" th:text="${checkboxHelper.person.getNutzerName()}">
                             Default checkbox
                         </label>
-                    </div>
+                    </div> -->
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary">Ausgabe Erstellen</button>
                     </div>

@@ -76,8 +76,8 @@
             <tbody class="table-group-divider">
             <tr th:each="ausgabe : ${gruppe.getAusgaben()}">
               <th scope="row" th:text="${ausgabe.getTitel()}">Title</th>
-              <th th:text="${ausgabe.getGlaeubiger()}">Payer</th>
-              <th th:text="${ausgabe.getSchuldnerListe()}">Participants</th>
+              <th th:text="${ausgabe.getGlaeubiger().getNutzerName()}">Payer</th>
+              <th><p th:each="schuldner: ${ausgabe.getSchuldnerListe()}"><i th:text="${schuldner.getNutzerName()}"></i></p></th>
               <th th:text="${ausgabe.getSumme()}">Amount</th>
             </tr>
             </tbody>

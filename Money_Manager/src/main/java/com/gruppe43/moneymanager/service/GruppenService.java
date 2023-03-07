@@ -46,8 +46,8 @@ public class GruppenService {
     throw new InvalidParameterException("Group does not exist");
   }
 
-  public List<CheckboxHelper> getCheckboxHelper(String title) {
-    List<CheckboxHelper> checkboxHelpers = new ArrayList<>();
+  public ArrayList<CheckboxHelper> getCheckboxHelper(String title) {
+    ArrayList<CheckboxHelper> checkboxHelpers = new ArrayList<>();
     Gruppe g = getGruppe(title);
       for (Person p : g.getTeilnehmer()) {
         CheckboxHelper checkboxHelper = new CheckboxHelper(p,false);

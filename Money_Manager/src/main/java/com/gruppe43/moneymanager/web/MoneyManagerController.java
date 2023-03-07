@@ -8,6 +8,8 @@ import com.gruppe43.moneymanager.service.PersonService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.javamoney.moneta.Money;
@@ -92,7 +94,7 @@ public class MoneyManagerController {
     @GetMapping("/createAusgabe/{title}")
     public String createAusgabe(@PathVariable("title") String title, Model model) {
         Gruppe gruppe = gruppenService.getGruppe(title);
-        List<CheckboxHelper> checkboxHelpers = gruppenService.getCheckboxHelper(title);
+        ArrayList<CheckboxHelper> checkboxHelpers = gruppenService.getCheckboxHelper(title);
 
         model.addAttribute("checkboxHelpers", checkboxHelpers);
         model.addAttribute("gruppe", gruppe);
@@ -100,9 +102,22 @@ public class MoneyManagerController {
     }
 
     @PostMapping("/createAusgabe/{title}")
-    public String getAusgabe(@PathVariable("title") String title, String ausgabeTitel, String name, @RequestParam("summe") String summe, ArrayList<CheckboxHelper> checkboxHelpers) {
+    public String getAusgabe(Model model, @PathVariable("title") String title, String ausgabeTitel, String name, @RequestParam("summe") String summe, @RequestParam Map<String, String> allParams) {
         Gruppe gruppe = gruppenService.getGruppe(title);
         List<Person> schuldenTeilnehmer = new ArrayList<>();
+
+        allParams.remove("name");
+        allParams.remove("_csrf");
+        allParams.remove("summe");
+        allParams.remove("ausgabeTitel");
+
+
+        List<CheckboxHelper> checkboxHelpers = new ArrayList<>();
+        for (Entry<String, String> e : allParams.entrySet()) {
+            var a = new CheckboxHelper(personService.getPerson(e.getKey()), e.getValue().equals("on"));
+            checkboxHelpers.add(a);
+        }
+
 
         for (CheckboxHelper helper : checkboxHelpers) {
             if (helper.checked) {
