@@ -37,8 +37,10 @@ public class PersonService {
   }
 
   public Person getPerson(String name) {
-    for(Person p : persons) {
-      if (p.getNutzerName().equals(name)) return p;
+    for (Person p : persons) {
+      if (p.getNutzerName().equals(name)) {
+        return p;
+      }
     }
     addPerson(new Person(name));
     return getPerson(name);

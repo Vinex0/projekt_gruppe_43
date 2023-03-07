@@ -6,7 +6,6 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +18,7 @@ public class GruppenService {
   public GruppenService(GruppenRepository gruppenRepository) {
     this.gruppenRepository = gruppenRepository;
   }
+
   public List<Gruppe> alleGruppen() {
     return gruppenRepository.findAll().stream().sorted().toList();
   }
@@ -49,13 +49,14 @@ public class GruppenService {
   public ArrayList<CheckboxHelper> getCheckboxHelper(String title) {
     ArrayList<CheckboxHelper> checkboxHelpers = new ArrayList<>();
     Gruppe g = getGruppe(title);
-      for (Person p : g.getTeilnehmer()) {
-        CheckboxHelper checkboxHelper = new CheckboxHelper(p,false);
-        checkboxHelpers.add(checkboxHelper);
+    for (Person p : g.getTeilnehmer()) {
+      CheckboxHelper checkboxHelper = new CheckboxHelper(p, false);
+      checkboxHelpers.add(checkboxHelper);
     }
     return checkboxHelpers;
   }
-  public List<String> getTitles(){
+
+  public List<String> getTitles() {
     return gruppen.stream().map(Gruppe::getTitel).collect(Collectors.toList());
   }
 

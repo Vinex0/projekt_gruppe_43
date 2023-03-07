@@ -40,7 +40,7 @@ public class Gruppe {
   }
 
   public void addTeilnehmer(Person neuerNutzer) {
-    if(ausgaben.isEmpty() && neuerNutzer.compareTo(startPerson) != 0 ) {
+    if (ausgaben.isEmpty() && neuerNutzer.compareTo(startPerson) != 0) {
       teilnehmer.add(neuerNutzer);
       schulden.put(neuerNutzer, new HashMap<>());
 
@@ -60,7 +60,8 @@ public class Gruppe {
       ausgabe.addSchuldner(p);
     }
 
-    Money individualAmount = CalculationHelpers.paymentShare(summe, ausgabe.getSchuldnerListe().size());
+    Money individualAmount = CalculationHelpers.paymentShare(summe,
+        ausgabe.getSchuldnerListe().size());
 
     ausgaben.add(ausgabe);
     for (Person p : ausgabe.getSchuldnerListe()) {
