@@ -1,15 +1,12 @@
 package com.gruppe43.moneymanager.service;
 
-import com.gruppe43.moneymanager.domain.Ausgabe;
 import com.gruppe43.moneymanager.domain.Gruppe;
 import com.gruppe43.moneymanager.domain.Person;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-import org.javamoney.moneta.Money;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -49,13 +46,14 @@ public class GruppenService {
     throw new InvalidParameterException("Group does not exist");
   }
 
-  public Map<Person, Boolean> getToggleHelper(String title) {
-    Map<Person, Boolean> toggleHelper = new HashMap<>();
+  public List<CheckboxHelper> getCheckboxHelper(String title) {
+    List<CheckboxHelper> checkboxHelpers = new ArrayList<>();
     Gruppe g = getGruppe(title);
       for (Person p : g.getTeilnehmer()) {
-        toggleHelper.put(p, false);
+        CheckboxHelper checkboxHelper = new CheckboxHelper(p,false);
+        checkboxHelpers.add(checkboxHelper);
     }
-    return toggleHelper;
+    return checkboxHelpers;
   }
   public List<String> getTitles(){
     return gruppen.stream().map(Gruppe::getTitel).collect(Collectors.toList());
