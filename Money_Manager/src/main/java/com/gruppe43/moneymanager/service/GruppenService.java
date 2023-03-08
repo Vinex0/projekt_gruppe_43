@@ -68,4 +68,14 @@ public class GruppenService {
     }
     return null;
   }
+
+  public List<Gruppe> getGruppenbyNutzer(Person person) {
+    List<Gruppe> nutzerGruppen = new ArrayList<>();
+    for (Gruppe g : gruppen) {
+      if (g.getTeilnehmer().contains(person)) {
+        nutzerGruppen.add(g);
+      }
+    }
+    return nutzerGruppen;
+  }
 }

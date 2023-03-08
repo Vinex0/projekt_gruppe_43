@@ -5,14 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.javamoney.moneta.Money;
 
 @EqualsAndHashCode(of = "id")
 @Getter
+@AllArgsConstructor
+@ToString
+
 public class Gruppe {
 
   private final Integer id;
@@ -39,17 +43,6 @@ public class Gruppe {
       schulden.put(startPerson, new HashMap<>());
     }
 
-  }
-
-  public Gruppe(Integer id, String titel, Person startPerson, List<Person> teilnehmer,
-      List<Ausgabe> ausgaben, Map<Person, Map<Person, Money>> schulden, boolean closed) {
-    this.id = id;
-    this.titel = titel;
-    this.startPerson = startPerson;
-    this.teilnehmer = teilnehmer;
-    this.ausgaben = ausgaben;
-    this.schulden = schulden;
-    this.closed = closed;
   }
 
   public void addTeilnehmer(Person neuerNutzer) {
