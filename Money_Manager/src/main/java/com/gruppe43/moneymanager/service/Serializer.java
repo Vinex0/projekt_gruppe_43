@@ -2,7 +2,11 @@ package com.gruppe43.moneymanager.service;
 
 import com.gruppe43.moneymanager.domain.Ausgabe;
 import com.gruppe43.moneymanager.domain.Gruppe;
+import com.gruppe43.moneymanager.domain.Person;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import org.javamoney.moneta.Money;
 
 public class Serializer {
   public static String gruppeToJson(Gruppe gruppe) {
@@ -69,9 +73,27 @@ public class Serializer {
     builder.append("]");
     return builder.toString();
  }
- /*public static String schuldenToJson(Gruppe gruppe) {
-    StringBuilder builder = new StringBuilder();
-    builder.append("[{");
 
- }*/
+ public static String schuldenToJson(Gruppe gruppe) {
+    var map = gruppe.getSchulden();
+    StringBuilder builder = new StringBuilder();
+    builder.append("[");
+    for(Entry<Person, Map<Person, Money>> e : map.entrySet()) {
+      for(Entry<Person, Money> m : e.getValue().entrySet()) {
+        if (!m.getValue().equals(Money.of(0, "EUR"))) {
+          builder.append("{\"von\" : \"");
+          builder.append(e.getKey().getNutzerName());
+          builder.append("\", \"an\" : \"");
+          builder.append(m.getKey().getNutzerName());
+          builder.append("\", \"cents\" : ");
+          builder.append(m.getValue().getNumber().doubleValue() * 100);
+          builder.append("},");
+        }
+      }
+    }
+    builder.delete(builder.length() - 1, builder.length());
+    builder.append("]");
+    return builder.toString();
+
+ }
 }
