@@ -70,8 +70,7 @@ public class Gruppe {
         schulden.get(p).put(glaeubiger, tmp.add(individualAmount));
       }
     }
-    List<Person> part = new ArrayList<>(ausgabe.getSchuldnerListe());
-    adjustSchulden(part);
+    adjustSchulden(teilnehmer);
   }
 
   private void adjustSchulden(List<Person> involved) {
