@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,22 +22,34 @@ public class Gruppe {
   private final List<Ausgabe> ausgaben;
   private final Map<Person, Map<Person, Money>> schulden;
 
+  private final boolean closed;
+
   public Gruppe(String titel, Person startPerson) {
-    this(null, titel, startPerson, new ArrayList<>(), new ArrayList<>(), new HashMap<>());
+    this(null, titel, startPerson, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), false);
     if (!teilnehmer.contains(startPerson)) {
       teilnehmer.add(startPerson);
       schulden.put(startPerson, new HashMap<>());
     }
   }
 
+  public Gruppe(String titel, Person startPerson, int id) {
+    this(id, titel, startPerson, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), false);
+    if (!teilnehmer.contains(startPerson)) {
+      teilnehmer.add(startPerson);
+      schulden.put(startPerson, new HashMap<>());
+    }
+
+  }
+
   public Gruppe(Integer id, String titel, Person startPerson, List<Person> teilnehmer,
-      List<Ausgabe> ausgaben, Map<Person, Map<Person, Money>> schulden) {
+      List<Ausgabe> ausgaben, Map<Person, Map<Person, Money>> schulden, boolean closed) {
     this.id = id;
     this.titel = titel;
     this.startPerson = startPerson;
     this.teilnehmer = teilnehmer;
     this.ausgaben = ausgaben;
     this.schulden = schulden;
+    this.closed = closed;
   }
 
   public void addTeilnehmer(Person neuerNutzer) {
@@ -70,7 +83,8 @@ public class Gruppe {
         schulden.get(p).put(glaeubiger, tmp.add(individualAmount));
       }
     }
-    adjustSchulden(teilnehmer);
+    List<Person> part = new ArrayList<>(ausgabe.getSchuldnerListe());
+    adjustSchulden(part);
   }
 
   private void adjustSchulden(List<Person> involved) {
