@@ -36,9 +36,10 @@ public class Gruppe {
   }
 
   public Gruppe(String titel, List<String> personen) {
-    this(null, titel, personen.get(0), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), false);
+    this(null, titel, personen.get(0), new ArrayList<>(), new ArrayList<>(), new HashMap<>(),
+        false);
     for (String p : personen) {
-      if(!teilnehmer.contains(p)) {
+      if (!teilnehmer.contains(p)) {
         addTeilnehmer(p);
       }
     }
@@ -54,7 +55,9 @@ public class Gruppe {
   }
 
   public void addTeilnehmer(String neuerNutzer) {
-    if(closed) throw new RuntimeException("Group already closed");
+    if (closed) {
+      throw new RuntimeException("Group already closed");
+    }
     if (ausgaben.isEmpty() && neuerNutzer.compareTo(startPerson) != 0) {
       teilnehmer.add(neuerNutzer);
       schulden.put(neuerNutzer, new HashMap<>());
@@ -69,7 +72,9 @@ public class Gruppe {
   }
 
   public void createAusgabe(String glaeubiger, List<String> schuldner, Money summe, String title) {
-    if(closed) throw new RuntimeException("Group already closed");
+    if (closed) {
+      throw new RuntimeException("Group already closed");
+    }
     Ausgabe ausgabe = new Ausgabe(glaeubiger, title, summe);
 
     for (String p : schuldner) {

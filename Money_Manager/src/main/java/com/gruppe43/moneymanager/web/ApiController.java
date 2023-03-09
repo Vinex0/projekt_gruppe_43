@@ -30,14 +30,19 @@ public class ApiController {
   @GetMapping("/api/gruppen/{id}")
   public ResponseEntity<?> getGruppe(@PathVariable("id") String id) {
     Gruppe gruppe = gruppenService.getGruppeById(id);
-    if(gruppe == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    if (gruppe == null) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
     return ResponseEntity.status(HttpStatus.OK).body(Serializer.gruppeToJson(gruppe));
   }
 
   @GetMapping("/api/gruppen/{id}/ausgleich")
   public ResponseEntity<?> getSchulden(@PathVariable("id") String id) {
-    if(gruppenService.getGruppeById(id) == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    return ResponseEntity.status(HttpStatus.OK).body(Serializer.schuldenToJson(gruppenService.getGruppeById(id)));
+    if (gruppenService.getGruppeById(id) == null) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(Serializer.schuldenToJson(gruppenService.getGruppeById(id)));
   }
 
   @GetMapping("/api/user/{name}/gruppen")
@@ -52,16 +57,18 @@ public class ApiController {
       JSONObject obj = new JSONObject(data);
       String name = obj.getString("name");
       JSONArray personen = obj.getJSONArray("personen");
-      if(personen.length() < 1) throw new JSONException("test");
+      if (personen.length() < 1) {
+        throw new JSONException("test");
+      }
       List<String> pers = new ArrayList<>();
-      for(int i = 0; i < personen.length(); i++) {
+      for (int i = 0; i < personen.length(); i++) {
         pers.add(personen.getString(i));
       }
 
       gruppenService.addGruppe(name, pers.get(0));
       Gruppe g = gruppenService.getGruppe(name);
       pers.remove(0);
-      for(String p : pers) {
+      for (String p : pers) {
         g.addTeilnehmer(p);
       }
       return ResponseEntity.status(HttpStatus.CREATED).body(gruppenService.getGruppe(name).getId());
@@ -74,7 +81,7 @@ public class ApiController {
 
   @PostMapping("/api/gruppen/{id}/schliessen")
   public ResponseEntity<?> closeGruppe(@PathVariable("id") String id) {
-    if (gruppenService.getGruppeById(id) != null){
+    if (gruppenService.getGruppeById(id) != null) {
       gruppenService.getGruppeById(id).close();
       return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -92,18 +99,24 @@ public class ApiController {
       int summe = obj.getInt("cent");
 
       JSONArray schuldner = obj.getJSONArray("schuldner");
-      if (schuldner.length() < 1) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+      if (schuldner.length() < 1) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+      }
       List<String> schuld = new ArrayList<>();
 
-      for (int i = 0; i < schuldner.length(); i++){
+      for (int i = 0; i < schuldner.length(); i++) {
         schuld.add(schuldner.getString(i));
       }
 
-      if(gruppenService.getGruppeById(id) == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-      if(gruppenService.getGruppeById(id).isClosed()) return ResponseEntity.status(HttpStatus.CONFLICT).build();
+      if (gruppenService.getGruppeById(id) == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+      }
+      if (gruppenService.getGruppeById(id).isClosed()) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+      }
 
-
-      gruppenService.getGruppeById(id).createAusgabe(glaeubiger, schuld, Money.of(summe, "EUR").divide(100), grund);
+      gruppenService.getGruppeById(id)
+          .createAusgabe(glaeubiger, schuld, Money.of(summe, "EUR").divide(100), grund);
       return ResponseEntity.status(HttpStatus.CREATED).build();
     } catch (JSONException e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
