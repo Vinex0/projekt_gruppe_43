@@ -1,5 +1,6 @@
 package com.gruppe43.moneymanager.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,19 +17,18 @@ import org.javamoney.moneta.Money;
 @Getter
 @AllArgsConstructor
 @ToString
-
 public class Gruppe {
 
   private final Integer id;
   private final String titel;
-  private final Person startPerson;
-  private final List<Person> teilnehmer;
+  private final String startPerson;
+  private final List<String> teilnehmer;
   private final List<Ausgabe> ausgaben;
-  private final Map<Person, Map<Person, Money>> schulden;
+  private final Map<String, Map<String, Money>> schulden;
 
   private final boolean closed;
 
-  public Gruppe(String titel, Person startPerson) {
+  public Gruppe(String titel, String startPerson) {
     this(null, titel, startPerson, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), false);
     if (!teilnehmer.contains(startPerson)) {
       teilnehmer.add(startPerson);
@@ -36,7 +36,7 @@ public class Gruppe {
     }
   }
 
-  public Gruppe(String titel, Person startPerson, int id) {
+  public Gruppe(String titel, String startPerson, int id) {
     this(id, titel, startPerson, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), false);
     if (!teilnehmer.contains(startPerson)) {
       teilnehmer.add(startPerson);
@@ -45,12 +45,12 @@ public class Gruppe {
 
   }
 
-  public void addTeilnehmer(Person neuerNutzer) {
+  public void addTeilnehmer(String neuerNutzer) {
     if (ausgaben.isEmpty() && neuerNutzer.compareTo(startPerson) != 0) {
       teilnehmer.add(neuerNutzer);
       schulden.put(neuerNutzer, new HashMap<>());
 
-      for (Person p : teilnehmer) {
+      for (String p : teilnehmer) {
         if (!p.equals(neuerNutzer)) {
           schulden.get(neuerNutzer).put(p, Money.of(0, "EUR"));
           schulden.get(p).put(neuerNutzer, Money.of(0, "EUR"));
@@ -59,10 +59,10 @@ public class Gruppe {
     }
   }
 
-  public void createAusgabe(Person glaeubiger, List<Person> schuldner, Money summe, String title) {
+  public void createAusgabe(String glaeubiger, List<String> schuldner, Money summe, String title) {
     Ausgabe ausgabe = new Ausgabe(glaeubiger, title, summe);
 
-    for (Person p : schuldner) {
+    for (String p : schuldner) {
       ausgabe.addSchuldner(p);
     }
 
@@ -70,37 +70,37 @@ public class Gruppe {
         ausgabe.getSchuldnerListe().size());
 
     ausgaben.add(ausgabe);
-    for (Person p : ausgabe.getSchuldnerListe()) {
+    for (String p : ausgabe.getSchuldnerListe()) {
       if (!p.equals(glaeubiger)) {
         Money tmp = schulden.get(p).get(glaeubiger);
         schulden.get(p).put(glaeubiger, tmp.add(individualAmount));
       }
     }
-    List<Person> part = new ArrayList<>(ausgabe.getSchuldnerListe());
+    List<String> part = new ArrayList<>(ausgabe.getSchuldnerListe());
     adjustSchulden(part);
   }
 
-  private void adjustSchulden(List<Person> involved) {
-    for (Person p : involved) {
-      for (Person b : involved) {
-        if (!b.equals(p)) {
-          var amountP = schulden.get(p).get(b);
-          var amountB = schulden.get(b).get(p);
-          var diff = CalculationHelpers.difference(amountP, amountB);
-          var reverseDiff = CalculationHelpers.difference(amountB, amountP);
+  private void adjustSchulden(List<String> involved) {
+    for (String a : involved) {
+      for (String b : involved) {
+        if (!b.equals(a)) {
+          Money amountA = getSchuldenFromTo(a, b);
+          Money amountB = getSchuldenFromTo(b, a);
+          Money diff = CalculationHelpers.difference(amountA, amountB);
+          Money reverseDiff = CalculationHelpers.difference(amountB, amountA);
           if (diff.isGreaterThan(Money.of(0, "EUR"))) {
-            schulden.get(p).put(b, diff);
-            schulden.get(b).put(p, Money.of(0, "EUR"));
+            schulden.get(a).put(b, diff);
+            schulden.get(b).put(a, Money.of(0, "EUR"));
           } else {
-            schulden.get(p).put(b, Money.of(0, "EUR"));
-            schulden.get(b).put(p, reverseDiff);
+            schulden.get(a).put(b, Money.of(0, "EUR"));
+            schulden.get(b).put(a, reverseDiff);
           }
         }
       }
     }
   }
 
-  public Map<Person, Money> getGlaeubigerFrom(Person schuldner) {
+  public Map<String, Money> getGlaeubigerFrom(String schuldner) {
     if (schulden.containsKey(schuldner)) {
       return schulden.get(schuldner).entrySet().stream()
           .filter((v) -> v.getValue().isGreaterThan(Money.of(0, "EUR")))
@@ -110,10 +110,17 @@ public class Gruppe {
   }
 
   // Helper Ausgleich von A an B
-  public Money getSchuldenFromTo(Person schuldner, Person glauebiger) {
+  public Money getSchuldenFromTo(String schuldner, String glauebiger) {
     return schulden.get(schuldner).get(glauebiger);
   }
 
+  public Money getTotalSchuldenFrom(String schuldner) {
+    Money betrag = Money.of(0, "EUR");
+    for (Money m : getGlaeubigerFrom(schuldner).values()) {
+      betrag.add(m);
+    }
+    return betrag;
+  }
 
 }
 

@@ -42,15 +42,15 @@
                     <div class="col-12">
                         <select name="name" class="form-select" aria-label="Default select example">
                             <option selected>Waehle Zahlenden</option>
-                            <option th:each="teiln : ${gruppe.getTeilnehmer()}" th:text="${teiln.getNutzerName()}" name="name" th:value="${teiln.getNutzerName()}">One</option>
+                            <option th:each="teiln : ${gruppe.getTeilnehmer()}" th:text="${teiln}" name="name" th:value="${teiln}">One</option>
                         </select>
                     </div>
 
                     <ul>
                         <li th:each="helper : ${checkboxHelpers}">
-                            <label th:for="${helper.person.getNutzerName()}" th:text="${helper.person.getNutzerName()}">Role name</label>
-                            <input type="checkbox" th:id="${helper.person.getNutzerName()}"
-                                   th:name="${helper.person.getNutzerName()}" th:checked="${helper.checked}"/>
+                            <label th:for="${helper.person}" th:text="${helper.person}">Role name</label>
+                            <input type="checkbox" th:id="${helper.person}"
+                                   th:name="${helper.person}" th:checked="${helper.checked}"/>
                         </li>
                     </ul>
 

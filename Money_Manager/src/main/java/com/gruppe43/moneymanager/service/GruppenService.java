@@ -1,7 +1,6 @@
 package com.gruppe43.moneymanager.service;
 
 import com.gruppe43.moneymanager.domain.Gruppe;
-import com.gruppe43.moneymanager.domain.Person;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +26,12 @@ public class GruppenService {
     return gruppenRepository.findById(nr).orElseThrow(NichtVorhandenException::new);
   }
 
-  public Gruppe gruppeHinzufuegen(String titel, Person person) {
+  public Gruppe gruppeHinzufuegen(String titel, String person) {
     Gruppe gruppe = new Gruppe(titel, person);
     return gruppenRepository.save(gruppe);
   }
 
-  public void addGruppe(String title, Person ersteller) {
+  public void addGruppe(String title, String ersteller) {
     Gruppe g = new Gruppe(title, ersteller, gruppen.size());
     gruppen.add(g);
   }
@@ -49,7 +48,7 @@ public class GruppenService {
   public ArrayList<CheckboxHelper> getCheckboxHelper(String title) {
     ArrayList<CheckboxHelper> checkboxHelpers = new ArrayList<>();
     Gruppe g = getGruppe(title);
-    for (Person p : g.getTeilnehmer()) {
+    for (String p : g.getTeilnehmer()) {
       CheckboxHelper checkboxHelper = new CheckboxHelper(p, false);
       checkboxHelpers.add(checkboxHelper);
     }
@@ -69,7 +68,7 @@ public class GruppenService {
     return null;
   }
 
-  public List<Gruppe> getGruppenbyNutzer(Person person) {
+  public List<Gruppe> getGruppenByNutzer(String person) {
     List<Gruppe> nutzerGruppen = new ArrayList<>();
     for (Gruppe g : gruppen) {
       if (g.getTeilnehmer().contains(person)) {

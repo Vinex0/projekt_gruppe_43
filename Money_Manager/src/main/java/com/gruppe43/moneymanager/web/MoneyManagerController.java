@@ -1,10 +1,9 @@
 package com.gruppe43.moneymanager.web;
 
 import com.gruppe43.moneymanager.domain.Gruppe;
-import com.gruppe43.moneymanager.domain.Person;
 import com.gruppe43.moneymanager.service.CheckboxHelper;
 import com.gruppe43.moneymanager.service.GruppenService;
-import com.gruppe43.moneymanager.service.PersonService;
+import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +23,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @SessionAttributes("nutzername")
 public class MoneyManagerController {
 
-  private final PersonService personService;
   private final GruppenService gruppenService;
 
-  public MoneyManagerController(PersonService service, GruppenService gruppenService) {
-    this.personService = service;
+  public MoneyManagerController(GruppenService gruppenService) {
     this.gruppenService = gruppenService;
   }
 
@@ -38,30 +35,21 @@ public class MoneyManagerController {
   }
 
   @PostMapping("/")
-  public String add(Model model) {
-    Person person = personService.getPerson("Peter");
-    model.addAttribute("nutzername", person.getNutzerName());
+  public String add(Model model, String nutzername) {
+    //TODO nutzername
+    model.addAttribute("nutzername", "Peter");
     return "redirect:/gruppenOverview";
   }
 
   @GetMapping("/gruppenOverview")
   public String getGroupPage(@ModelAttribute("nutzername") String nutzername, Model model) {
-
-    Person p = personService.getPerson(nutzername);
-    List<String> titles = p.getGruppen().stream().map(Gruppe::getTitel)
-        .collect(Collectors.toList());
-    titles.add("TestGruppe1");
-    titles.add("TestGruppe2");
-    titles.addAll(gruppenService.getTitles());
+    List<String> titles = new ArrayList<>(gruppenService.getTitles());
     model.addAttribute("gruppen", titles);
-
     return "gruppenOverview";
   }
 
   @GetMapping("/group")
   public String getGroupInfo(@RequestParam("gruppenName") String gruppenName, Model model) {
-    // Gruppe gruppe = gruppenService.getGruppe(gruppenName);
-    //model.addAttribute("grup", gruppe);
     return "gruppe";
   }
 
@@ -75,7 +63,7 @@ public class MoneyManagerController {
     if (name.length() < 1) {
       return "redirect:createGruppe";
     }
-    gruppenService.addGruppe(name, personService.getPerson(nutzername));
+    gruppenService.addGruppe(name, nutzername);
     return "redirect:gruppenOverview";
   }
 
@@ -88,7 +76,7 @@ public class MoneyManagerController {
   @PostMapping("/addNutzer/{title}")
   public String addNutzer(@PathVariable("title") String title, String nutzername) {
     Gruppe gruppe = gruppenService.getGruppe(title);
-    gruppe.addTeilnehmer(personService.getPerson(nutzername));
+    gruppe.addTeilnehmer(nutzername);
     return "redirect:/gruppe/" + title;
   }
 
@@ -103,11 +91,15 @@ public class MoneyManagerController {
   }
 
   @PostMapping("/createAusgabe/{title}")
-  public String getAusgabe(Model model, @PathVariable("title") String title, String ausgabeTitel,
-      String name, @RequestParam("summe") String summe,
+  public String getAusgabe(Model model,
+      @PathVariable("title") String title,
+      String ausgabeTitel,
+      String name,
+      @RequestParam("summe") String summe,
       @RequestParam Map<String, String> allParams) {
+
     Gruppe gruppe = gruppenService.getGruppe(title);
-    List<Person> schuldenTeilnehmer = new ArrayList<>();
+    List<String> schuldenTeilnehmer = new ArrayList<>();
 
     allParams.remove("name");
     allParams.remove("_csrf");
@@ -116,7 +108,9 @@ public class MoneyManagerController {
 
     List<CheckboxHelper> checkboxHelpers = new ArrayList<>();
     for (Entry<String, String> e : allParams.entrySet()) {
-      var a = new CheckboxHelper(personService.getPerson(e.getKey()), e.getValue().equals("on"));
+
+      //TODO Check if correct refactored  var a = new CheckboxHelper(personService.getPerson(e.getKey()), e.getValue().equals("on"));
+      var a = new CheckboxHelper(e.getKey(), e.getValue().equals("on"));
       checkboxHelpers.add(a);
     }
 
@@ -126,7 +120,7 @@ public class MoneyManagerController {
       }
     }
 
-    gruppe.createAusgabe(personService.getPerson(name), schuldenTeilnehmer,
+    gruppe.createAusgabe(name, schuldenTeilnehmer,
         Money.parse(summe + " EUR"), ausgabeTitel);
     return "redirect:/gruppe/" + title;
   }

@@ -2,7 +2,6 @@ package com.gruppe43.moneymanager.service;
 
 import com.gruppe43.moneymanager.domain.Ausgabe;
 import com.gruppe43.moneymanager.domain.Gruppe;
-import com.gruppe43.moneymanager.domain.Person;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -78,13 +77,13 @@ public class Serializer {
     var map = gruppe.getSchulden();
     StringBuilder builder = new StringBuilder();
     builder.append("[");
-    for(Entry<Person, Map<Person, Money>> e : map.entrySet()) {
-      for(Entry<Person, Money> m : e.getValue().entrySet()) {
+    for(Entry<String, Map<String, Money>> e : map.entrySet()) {
+      for(Entry<String, Money> m : e.getValue().entrySet()) {
         if (!m.getValue().equals(Money.of(0, "EUR"))) {
           builder.append("{\"von\" : \"");
-          builder.append(e.getKey().getNutzerName());
+          builder.append(e.getKey());
           builder.append("\", \"an\" : \"");
-          builder.append(m.getKey().getNutzerName());
+          builder.append(m.getKey());
           builder.append("\", \"cents\" : ");
           builder.append(m.getValue().getNumber().doubleValue() * 100);
           builder.append("},");

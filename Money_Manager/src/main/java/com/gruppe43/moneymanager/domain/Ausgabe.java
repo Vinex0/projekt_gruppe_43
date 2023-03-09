@@ -2,29 +2,24 @@ package com.gruppe43.moneymanager.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.javamoney.moneta.Money;
 
 @Getter
+@AllArgsConstructor
 public class Ausgabe implements Comparable<Ausgabe> {
 
-  private final Person glaeubiger;
-  private final List<Person> schuldnerListe;
+  private final String glaeubiger;
+  private final List<String> schuldnerListe;
   private final String titel;
   private final Money summe;
 
-  public Ausgabe(Person glaeubiger, String titel, Money summe) {
+  public Ausgabe(String glaeubiger, String titel, Money summe) {
     this(glaeubiger, new ArrayList<>(), titel, summe);
   }
 
-  public Ausgabe(Person glaeubiger, List<Person> schuldnerListe, String titel, Money summe) {
-    this.glaeubiger = glaeubiger;
-    this.schuldnerListe = schuldnerListe;
-    this.titel = titel;
-    this.summe = summe;
-  }
-
-  public void addSchuldner(Person schuldnerNehmer) {
+  public void addSchuldner(String schuldnerNehmer) {
     schuldnerListe.add(schuldnerNehmer);
   }
 

@@ -55,7 +55,7 @@
             </thead>
             <tbody class="table-group-divider">
             <tr th:each="teilnehmer : ${gruppe.getTeilnehmer()}">
-              <th scope="row" th:text="${teilnehmer.getNutzerName()}">Peter</th>
+              <th scope="row" th:text="${teilnehmer}">Peter</th>
             </tr>
             </tbody>
           </table>
@@ -76,8 +76,8 @@
             <tbody class="table-group-divider">
             <tr th:each="ausgabe : ${gruppe.getAusgaben()}">
               <th scope="row" th:text="${ausgabe.getTitel()}">Title</th>
-              <th th:text="${ausgabe.getGlaeubiger().getNutzerName()}">Payer</th>
-              <th><p th:each="schuldner: ${ausgabe.getSchuldnerListe()}"><i th:text="${schuldner.getNutzerName()}"></i></p></th>
+              <th th:text="${ausgabe.getGlaeubiger()}">Payer</th>
+              <th><p th:each="schuldner: ${ausgabe.getSchuldnerListe()}"><i th:text="${schuldner}"></i></p></th>
               <th th:text="${ausgabe.getSumme()}">Amount</th>
             </tr>
             </tbody>
@@ -90,7 +90,7 @@
                 <table class="table table-dark table-striped-columns mb-3">
                   <thead>
                   <tr class="table-active">
-                    <th colspan="2" th:text="${teiln.getNutzerName()}">Username</th>
+                    <th colspan="2" th:text="${teiln}">Username</th>
                   </tr>
                   <tr>
                     <th>Creditor</th>
@@ -99,7 +99,7 @@
                   </thead>
                   <tbody class="table-group-divider">
                   <tr th:each="glaeubiger : ${gruppe.getSchulden().get(teiln).entrySet()}">
-                    <th scope="row" th:text="${glaeubiger.getKey().getNutzerName()}">Creditor</th>
+                    <th scope="row" th:text="${glaeubiger.getKey()}">Creditor</th>
                     <th th:text="${glaeubiger.getValue()}">Amount</th>
                   </tr>
                   </tbody>
