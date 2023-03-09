@@ -22,10 +22,10 @@ public class ApiController {
       return Serializer.gruppeToJson(gruppe);
   }
 
-  /*@GetMapping("/api/gruppen/{id}/ausgleich")
-  public String getSchulden() {
-
-  }*/
+  @GetMapping("/api/gruppen/{id}/ausgleich")
+  public String getSchulden(@PathVariable("id") int id) {
+    return Serializer.schuldenToJson(gruppenService.getGroupbyID(id));
+  }
 
   @GetMapping("/api/user/{name}/gruppen")
   public String getGruppenOfPerson(@PathVariable("name") String name) {

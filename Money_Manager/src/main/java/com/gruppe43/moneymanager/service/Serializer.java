@@ -9,43 +9,52 @@ import org.javamoney.moneta.Money;
 
 public class Serializer {
   public static String gruppeToJson(Gruppe gruppe) {
+    return "{\"gruppe\" : "
+        + "\""
+        + gruppe.getId()
+        + "\""
+        + ", \"name\" : "
+        + "\""
+        + gruppe.getTitel()
+        + "\""
+        + ", \"personen\" : "
+        + personListToJson(gruppe.getTeilnehmer())
+        + ", \"geschlossen\" : "
+        + gruppe.isClosed()
+        + ", \"ausgaben\" : "
+        + ausgabenToJson(gruppe.getAusgaben())
+        + "}";
+  }
+
+  private static String personListToJson(List<String> personen) {
     StringBuilder builder = new StringBuilder();
-    builder.append("{\"gruppe\" : ");
-    builder.append("\"");
-    builder.append(gruppe.getId());
-    builder.append("\"");
-    builder.append(", \"name\" : ");
-    builder.append("\"");
-    builder.append(gruppe.getTitel());
-    builder.append("\"");
-    builder.append(", \"personen\" : ");
-    builder.append(gruppe.getTeilnehmer());
-    builder.append(", \"geschlossen\" : ");
-    builder.append(gruppe.isClosed());
-    builder.append(", \"ausgaben\" : ");
-    builder.append(ausgabenToJson(gruppe.getAusgaben()));
-    builder.append("}");
+    builder.append("[");
+    for (String p : personen) {
+      builder.append("\"");
+      builder.append(p);
+      builder.append("\", ");
+    }
+    builder.delete(builder.length()-2, builder.length());
+    builder.append("]");
     return builder.toString();
   }
 
   public static String ausgabeToJson(Ausgabe ausgabe) {
-    StringBuilder builder = new StringBuilder();
-    builder.append("{\"grund\" : ");
-    builder.append("\"");
-    builder.append(ausgabe.getTitel());
-    builder.append("\"");
-    builder.append(", \"glaeubiger\" : ");
-    builder.append("\"");
-    builder.append(ausgabe.getGlaeubiger());
-    builder.append("\"");
-    builder.append(", \"cent\" : ");
-    builder.append("\"");
-    builder.append(ausgabe.getSumme().multiply(100));
-    builder.append("\"");
-    builder.append(", \"schuldner\" : ");
-    builder.append(ausgabe.getSchuldnerListe());
-    builder.append("}");
-    return builder.toString();
+    return "{\"grund\" : "
+        + "\""
+        + ausgabe.getTitel()
+        + "\""
+        + ", \"glaeubiger\" : "
+        + "\""
+        + ausgabe.getGlaeubiger()
+        + "\""
+        + ", \"cent\" : "
+        + "\""
+        + ausgabe.getSumme().multiply(100)
+        + "\""
+        + ", \"schuldner\" : "
+        + personListToJson(ausgabe.getSchuldnerListe())
+        + "}";
   }
   public static String ausgabenToJson(List<Ausgabe> ausgaben) {
     StringBuilder builder = new StringBuilder();
