@@ -50,7 +50,7 @@ public class Serializer {
         + "\""
         + ", \"cent\" : "
         + "\""
-        + ausgabe.getSumme().multiply(100)
+        + ausgabe.getSumme().multiply(100).getNumber().intValue()
         + "\""
         + ", \"schuldner\" : "
         + personListToJson(ausgabe.getSchuldnerListe())

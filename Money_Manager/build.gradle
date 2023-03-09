@@ -27,6 +27,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation group: 'com.tdunning', name: 'json', version: '1.8'
 
 	implementation 'org.projectlombok:lombok:1.18.22'
 

@@ -32,8 +32,12 @@ public class GruppenService {
   }
 
   public void addGruppe(String title, String ersteller) {
-    Gruppe g = new Gruppe(title, ersteller, gruppen.size());
+    Gruppe g = new Gruppe(title, ersteller, String.valueOf(gruppen.size()));
     gruppen.add(g);
+  }
+
+  public void addGruppe(Gruppe gr) {
+    gruppen.add(gr);
   }
 
   public Gruppe getGruppe(String title) {
@@ -59,9 +63,9 @@ public class GruppenService {
     return gruppen.stream().map(Gruppe::getTitel).collect(Collectors.toList());
   }
 
-  public Gruppe getGroupbyID(int id) {
+  public Gruppe getGroupbyID(String id) {
     for (Gruppe g : gruppen) {
-      if (g.getId() == id) {
+      if (g.getId().equals(id)) {
         return g;
       }
     }

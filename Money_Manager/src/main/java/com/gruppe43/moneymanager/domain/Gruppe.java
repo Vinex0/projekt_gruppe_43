@@ -1,6 +1,5 @@
 package com.gruppe43.moneymanager.domain;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,14 +18,14 @@ import org.javamoney.moneta.Money;
 @ToString
 public class Gruppe {
 
-  private final Integer id;
+  private final String id;
   private final String titel;
   private final String startPerson;
   private final List<String> teilnehmer;
   private final List<Ausgabe> ausgaben;
   private final Map<String, Map<String, Money>> schulden;
 
-  private final boolean closed;
+  private boolean closed;
 
   public Gruppe(String titel, String startPerson) {
     this(null, titel, startPerson, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), false);
@@ -36,7 +35,16 @@ public class Gruppe {
     }
   }
 
-  public Gruppe(String titel, String startPerson, int id) {
+  public Gruppe(String titel, List<String> personen) {
+    this(null, titel, personen.get(0), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), false);
+    for (String p : personen) {
+      if(!teilnehmer.contains(p)) {
+        addTeilnehmer(p);
+      }
+    }
+  }
+
+  public Gruppe(String titel, String startPerson, String id) {
     this(id, titel, startPerson, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), false);
     if (!teilnehmer.contains(startPerson)) {
       teilnehmer.add(startPerson);
@@ -46,6 +54,7 @@ public class Gruppe {
   }
 
   public void addTeilnehmer(String neuerNutzer) {
+    if(closed) throw new RuntimeException("Group already closed");
     if (ausgaben.isEmpty() && neuerNutzer.compareTo(startPerson) != 0) {
       teilnehmer.add(neuerNutzer);
       schulden.put(neuerNutzer, new HashMap<>());
@@ -60,6 +69,7 @@ public class Gruppe {
   }
 
   public void createAusgabe(String glaeubiger, List<String> schuldner, Money summe, String title) {
+    if(closed) throw new RuntimeException("Group already closed");
     Ausgabe ausgabe = new Ausgabe(glaeubiger, title, summe);
 
     for (String p : schuldner) {
@@ -120,6 +130,10 @@ public class Gruppe {
       betrag.add(m);
     }
     return betrag;
+  }
+
+  public void close() {
+    closed = true;
   }
 
 }
