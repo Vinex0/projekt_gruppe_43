@@ -26,7 +26,7 @@
 <div class="row justify-content-center gradient-custom">
   <div class="card text-white bg-dark" style="width: 75%">
     <div class="card-header">
-      Groups
+      Gruppe
     </div>
     <div class="card-body">
       <div class="container">
@@ -36,18 +36,17 @@
               <input name="nutzername" type="text" class="form-control" placeholder="Username"
                      aria-label="username"
                      aria-describedby="button-addon2">
-              <button class="btn btn-outline-secondary me-2" type="submit" id="button-addon2">Add
-                User
+              <button class="btn btn-outline-secondary me-2" type="submit" id="button-addon2">Nutzer Hinzufuegen
               </button>
             </div>
           </form>
-          <a th:href="@{|/createAusgabe/${gruppe.getTitel()}|}" class="btn btn-primary mb-3 col-md-auto" role="button">Create Expense</a>
+          <a th:href="@{|/createAusgabe/${gruppe.getTitel()}|}" class="btn btn-primary mb-3 col-md-auto" role="button">Neue Ausgabe</a>
         </div>
         <div class="row">
           <table class="table table-dark mb-3 col">
             <thead>
             <tr class="table-active">
-              <th scope="col">Participants</th>
+              <th scope="col">Teilnehmer</th>
             </tr>
             <tr>
               <th>Name</th>
@@ -66,17 +65,17 @@
             <tr class="table-active">
               <th colspan="4">Ausgaben</th>
             </tr>
-            <tr th:each="ausgabe : ${gruppe.getAusgaben()}">
-              <th scope="row">Title</th>
-              <th>Payer</th>
-              <th>Participants</th>
-              <th>Amount</th>
+            <tr>
+              <th scope="row">Name</th>
+              <th>Glaeubiger</th>
+              <th>Schuldner</th>
+              <th>Summe</th>
             </tr>
             </thead>
             <tbody class="table-group-divider">
             <tr th:each="ausgabe : ${gruppe.getAusgaben()}">
-              <th scope="row" th:text="${ausgabe.getTitel()}">Title</th>
-              <th th:text="${ausgabe.getGlaeubiger()}">Payer</th>
+              <th scope="row" th:text="${ausgabe.getTitel()}">Name</th>
+              <th th:text="${ausgabe.getGlaeubiger()}">Glaeubiger</th>
               <th><p th:each="schuldner: ${ausgabe.getSchuldnerListe()}"><i th:text="${schuldner}"></i></p></th>
               <th th:text="${ausgabe.getSumme()}">Amount</th>
             </tr>
@@ -93,8 +92,8 @@
                     <th colspan="2" th:text="${teiln}">Username</th>
                   </tr>
                   <tr>
-                    <th>Creditor</th>
-                    <th>Amount</th>
+                    <th>Glaeubiger</th>
+                    <th>Summe</th>
                   </tr>
                   </thead>
                   <tbody class="table-group-divider">
@@ -108,7 +107,7 @@
             </div>
           </div>
           <div class="row">
-            <button class="btn btn-primary mb-3 col-auto">Close Group</button>
+            <button class="btn btn-primary mb-3 col-auto">Schliesse Gruppe</button>
           </div>
         </div>
       </div>

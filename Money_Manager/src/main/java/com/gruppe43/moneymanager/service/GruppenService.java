@@ -63,7 +63,7 @@ public class GruppenService {
     return gruppen.stream().map(Gruppe::getTitel).collect(Collectors.toList());
   }
 
-  public Gruppe getGroupbyID(String id) {
+  public Gruppe getGruppeById(String id) {
     for (Gruppe g : gruppen) {
       if (g.getId().equals(id)) {
         return g;

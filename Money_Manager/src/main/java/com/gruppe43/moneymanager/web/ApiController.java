@@ -5,7 +5,6 @@ import com.gruppe43.moneymanager.service.GruppenService;
 import com.gruppe43.moneymanager.service.Serializer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import org.javamoney.moneta.Money;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -31,15 +29,15 @@ public class ApiController {
 
   @GetMapping("/api/gruppen/{id}")
   public ResponseEntity<?> getGruppe(@PathVariable("id") String id) {
-    Gruppe gruppe = gruppenService.getGroupbyID(id);
+    Gruppe gruppe = gruppenService.getGruppeById(id);
     if(gruppe == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     return ResponseEntity.status(HttpStatus.OK).body(Serializer.gruppeToJson(gruppe));
   }
 
   @GetMapping("/api/gruppen/{id}/ausgleich")
   public ResponseEntity<?> getSchulden(@PathVariable("id") String id) {
-    if(gruppenService.getGroupbyID(id) == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    return ResponseEntity.status(HttpStatus.OK).body(Serializer.schuldenToJson(gruppenService.getGroupbyID(id)));
+    if(gruppenService.getGruppeById(id) == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    return ResponseEntity.status(HttpStatus.OK).body(Serializer.schuldenToJson(gruppenService.getGruppeById(id)));
   }
 
   @GetMapping("/api/user/{name}/gruppen")
@@ -76,8 +74,8 @@ public class ApiController {
 
   @PostMapping("/api/gruppen/{id}/schliessen")
   public ResponseEntity<?> closeGruppe(@PathVariable("id") String id) {
-    if (gruppenService.getGroupbyID(id) != null){
-      gruppenService.getGroupbyID(id).close();
+    if (gruppenService.getGruppeById(id) != null){
+      gruppenService.getGruppeById(id).close();
       return ResponseEntity.status(HttpStatus.OK).build();
     }
     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -101,11 +99,11 @@ public class ApiController {
         schuld.add(schuldner.getString(i));
       }
 
-      if(gruppenService.getGroupbyID(id) == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-      if(gruppenService.getGroupbyID(id).isClosed()) return ResponseEntity.status(HttpStatus.CONFLICT).build();
+      if(gruppenService.getGruppeById(id) == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+      if(gruppenService.getGruppeById(id).isClosed()) return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
 
-      gruppenService.getGroupbyID(id).createAusgabe(glaeubiger, schuld, Money.of(summe, "EUR").divide(100), grund);
+      gruppenService.getGruppeById(id).createAusgabe(glaeubiger, schuld, Money.of(summe, "EUR").divide(100), grund);
       return ResponseEntity.status(HttpStatus.CREATED).build();
     } catch (JSONException e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
