@@ -38,9 +38,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="gruppe,iterationStatus:${gruppen}">
+                        <tr th:each="g,iterationStatus:${gruppenObject}">
                             <th scope="row" th:text="${iterationStatus.count}">1</th>
-                            <td><a th:text="${gruppe}" th:href='@{|/gruppe/${gruppe}|}'></a> </td>
+                            <td><a th:text="${g.getTitel()}" th:href='@{|/gruppe/${g.getId()}|}'></a> </td>
                         </tr>
                     </tbody>
                 </table>

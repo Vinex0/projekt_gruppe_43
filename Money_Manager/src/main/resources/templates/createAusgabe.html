@@ -30,7 +30,7 @@
             </div>
             <div class="card-body">
                 <h5 class="card-title">Neue Ausgabe</h5>
-                <form class="row g-3" action="#" th:action="@{|/createAusgabe/${gruppe.getTitel()}|}" method="post">
+                <form class="row g-3" action="#" th:action="@{|/createAusgabe/${gruppe.getId()}|}" method="post">
                     <div class="col-md">
                         <label for="inputTitel" class="form-label">Title</label>
                         <input type="text" name="ausgabeTitel" class="form-control" id="inputTitel">

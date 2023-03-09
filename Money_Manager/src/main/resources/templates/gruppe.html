@@ -31,7 +31,7 @@
     <div class="card-body">
       <div class="container">
         <div class="row">
-          <form action="#" th:action="@{|/addNutzer/${gruppe.getTitel()}|}" method="post">
+          <form action="#" th:action="@{|/addNutzer/${gruppe.getId()}|}" method="post">
             <div class="input-group mb-3 col">
               <input name="nutzername" type="text" class="form-control" placeholder="Username"
                      aria-label="username"
@@ -40,7 +40,7 @@
               </button>
             </div>
           </form>
-          <a th:href="@{|/createAusgabe/${gruppe.getTitel()}|}" class="btn btn-primary mb-3 col-md-auto" role="button">Neue Ausgabe</a>
+          <a th:href="@{|/createAusgabe/${gruppe.getId()}|}" class="btn btn-primary mb-3 col-md-auto" role="button">Neue Ausgabe</a>
         </div>
         <div class="row">
           <table class="table table-dark mb-3 col">
@@ -107,7 +107,9 @@
             </div>
           </div>
           <div class="row">
-            <button class="btn btn-primary mb-3 col-auto">Schliesse Gruppe</button>
+            <form action="" th:action="@{|/schliesseGruppe/${gruppe.getId()}|}" method="post">
+              <button class="btn btn-primary mb-3 col-auto" type="submit">Schliesse Gruppe</button>
+            </form>
           </div>
         </div>
       </div>

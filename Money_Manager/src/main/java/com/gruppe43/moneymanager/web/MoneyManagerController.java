@@ -45,6 +45,7 @@ public class MoneyManagerController {
   public String getGroupPage(@ModelAttribute("nutzername") String nutzername, Model model) {
     List<String> titles = new ArrayList<>(gruppenService.getTitles());
     model.addAttribute("gruppen", titles);
+    model.addAttribute("gruppenObject", gruppenService.getGruppenByNutzer(nutzername));
     return "gruppenOverview";
   }
 
@@ -67,38 +68,38 @@ public class MoneyManagerController {
     return "redirect:gruppenOverview";
   }
 
-  @GetMapping("/gruppe/{title}")
-  public String getGruppe(@PathVariable("title") String title, Model model) {
-    model.addAttribute("gruppe", gruppenService.getGruppe(title));
+  @GetMapping("/gruppe/{id}")
+  public String getGruppe(@PathVariable("id") String id, Model model) {
+    model.addAttribute("gruppe", gruppenService.getGruppeById(id));
     return "gruppe";
   }
 
-  @PostMapping("/addNutzer/{title}")
-  public String addNutzer(@PathVariable("title") String title, String nutzername) {
-    Gruppe gruppe = gruppenService.getGruppe(title);
+  @PostMapping("/addNutzer/{id}")
+  public String addNutzer(@PathVariable("id") String id, String nutzername) {
+    Gruppe gruppe = gruppenService.getGruppeById(id);
     gruppe.addTeilnehmer(nutzername);
-    return "redirect:/gruppe/" + title;
+    return "redirect:/gruppe/" + id;
   }
 
-  @GetMapping("/createAusgabe/{title}")
-  public String createAusgabe(@PathVariable("title") String title, Model model) {
-    Gruppe gruppe = gruppenService.getGruppe(title);
-    ArrayList<CheckboxHelper> checkboxHelpers = gruppenService.getCheckboxHelper(title);
+  @GetMapping("/createAusgabe/{id}")
+  public String createAusgabe(@PathVariable("id") String id, Model model) {
+    Gruppe gruppe = gruppenService.getGruppeById(id);
+    ArrayList<CheckboxHelper> checkboxHelpers = gruppenService.getCheckboxHelper(id);
 
     model.addAttribute("checkboxHelpers", checkboxHelpers);
     model.addAttribute("gruppe", gruppe);
     return "createAusgabe";
   }
 
-  @PostMapping("/createAusgabe/{title}")
+  @PostMapping("/createAusgabe/{id}")
   public String getAusgabe(Model model,
-      @PathVariable("title") String title,
+      @PathVariable("id") String id,
       String ausgabeTitel,
       String name,
       @RequestParam("summe") String summe,
       @RequestParam Map<String, String> allParams) {
 
-    Gruppe gruppe = gruppenService.getGruppe(title);
+    Gruppe gruppe = gruppenService.getGruppeById(id);
     List<String> schuldenTeilnehmer = new ArrayList<>();
 
     allParams.remove("name");
@@ -122,7 +123,14 @@ public class MoneyManagerController {
 
     gruppe.createAusgabe(name, schuldenTeilnehmer,
         Money.parse(summe + " EUR"), ausgabeTitel);
-    return "redirect:/gruppe/" + title;
+    return "redirect:/gruppe/" + id;
   }
+
+  @PostMapping("/schliesseGruppe/{id}")
+  public String closeGruppe(@PathVariable("id") String id) {
+    gruppenService.getGruppeById(id).close();
+    return "redirect:/gruppe/" + id;
+  }
+
 
 }

@@ -51,7 +51,7 @@ public class GruppenService {
 
   public ArrayList<CheckboxHelper> getCheckboxHelper(String title) {
     ArrayList<CheckboxHelper> checkboxHelpers = new ArrayList<>();
-    Gruppe g = getGruppe(title);
+    Gruppe g = getGruppeById(title);
     for (String p : g.getTeilnehmer()) {
       CheckboxHelper checkboxHelper = new CheckboxHelper(p, false);
       checkboxHelpers.add(checkboxHelper);

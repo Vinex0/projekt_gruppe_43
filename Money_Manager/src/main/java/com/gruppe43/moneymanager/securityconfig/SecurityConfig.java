@@ -21,7 +21,7 @@ public class SecurityConfig {
 
     chainBuilder.authorizeHttpRequests(
         configurer -> configurer
-            .requestMatchers("*", "/", "/css/*").permitAll().requestMatchers(HttpMethod.POST, "*").permitAll()
+            .requestMatchers("*", "/", "/css/*").permitAll().requestMatchers(HttpMethod.POST, "*", "/schliesseGruppe/*").permitAll()
             .anyRequest().permitAll()
     ).httpBasic(Customizer.withDefaults());
 //        .oauth2Login(config ->
