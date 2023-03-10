@@ -21,13 +21,10 @@ public class SecurityConfig {
 
     chainBuilder.authorizeHttpRequests(
         configurer -> configurer
-            .requestMatchers("*", "/", "/css/*").permitAll().requestMatchers(HttpMethod.POST, "*", "/schliesseGruppe/*").permitAll()
-            .anyRequest().permitAll()
-    ).httpBasic(Customizer.withDefaults());
-//        .oauth2Login(config ->
-//            config.userInfoEndpoint(
-//                info -> info.userService(new AppUserService())
-//            ));
+            .requestMatchers("*", "/", "/css/*").permitAll().requestMatchers(HttpMethod.POST, "*", "/schliesseGruppe/*","/api/*").permitAll()
+                .requestMatchers(HttpMethod.GET,"/api/*","/").permitAll()
+                .anyRequest().authenticated()
+    ).oauth2Login();
 
     return chainBuilder.build();
   }
