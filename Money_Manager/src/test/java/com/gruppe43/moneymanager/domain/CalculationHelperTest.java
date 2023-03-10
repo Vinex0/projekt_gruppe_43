@@ -29,11 +29,4 @@ public class CalculationHelperTest {
     assertThrows(InvalidParameterException.class, () -> CalculationHelpers.paymentShare(amount, 3));
   }
 
-  @Test
-  void debtDifferenceCalculationTestValid() {
-    //Map<com.gruppe43.moneymanager.domain.Person, Money>
-    Map<Person, Map<Person, Money>> debts;
-  }
-
-
 }
