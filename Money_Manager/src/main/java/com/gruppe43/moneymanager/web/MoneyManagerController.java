@@ -2,6 +2,7 @@ package com.gruppe43.moneymanager.web;
 
 import com.gruppe43.moneymanager.domain.Gruppe;
 import com.gruppe43.moneymanager.service.CheckboxHelper;
+import com.gruppe43.moneymanager.service.GitUserTester;
 import com.gruppe43.moneymanager.service.GruppenService;
 import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
@@ -79,7 +80,9 @@ public class MoneyManagerController {
   @PostMapping("/addNutzer/{id}")
   public String addNutzer(@PathVariable("id") String id, String nutzername) {
     Gruppe gruppe = gruppenService.getGruppeById(id);
-    gruppe.addTeilnehmer(nutzername);
+    if (GitUserTester.exists(nutzername)) {
+      gruppe.addTeilnehmer(nutzername);
+    }
     return "redirect:/gruppe/" + id;
   }
 
