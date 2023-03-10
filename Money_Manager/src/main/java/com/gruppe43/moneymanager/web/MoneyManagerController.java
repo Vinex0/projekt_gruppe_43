@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import org.javamoney.moneta.Money;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,17 +37,17 @@ public class MoneyManagerController {
   }
 
   @PostMapping("/")
-  public String add(Model model, String nutzername) {
-    //TODO nutzername
-    model.addAttribute("nutzername", "Peter");
+  public String add(Model model) {
     return "redirect:/gruppenOverview";
   }
 
   @GetMapping("/gruppenOverview")
-  public String getGroupPage(@ModelAttribute("nutzername") String nutzername, Model model) {
+  public String getGroupPage(@AuthenticationPrincipal OAuth2User principal, Model model) {
     List<String> titles = new ArrayList<>(gruppenService.getTitles());
+    String logIn = principal.getAttribute("login");
+    model.addAttribute("nutzername", logIn);
     model.addAttribute("gruppen", titles);
-    model.addAttribute("gruppenObject", gruppenService.getGruppenByNutzer(nutzername));
+    model.addAttribute("gruppenObject", gruppenService.getGruppenByNutzer(logIn));
     return "gruppenOverview";
   }
 
