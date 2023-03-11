@@ -27,7 +27,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	implementation 'org.springframework.security:spring-security-test'
 	implementation group: 'com.tdunning', name: 'json', version: '1.8'
 
 	implementation 'org.projectlombok:lombok:1.18.22'
@@ -40,6 +39,7 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation("org.assertj:assertj-core:3.21.0")
+	testImplementation('org.springframework.security:spring-security-test')
 }
 
 tasks.named('test') {

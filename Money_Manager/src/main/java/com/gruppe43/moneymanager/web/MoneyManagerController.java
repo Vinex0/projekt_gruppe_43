@@ -4,12 +4,10 @@ import com.gruppe43.moneymanager.domain.Gruppe;
 import com.gruppe43.moneymanager.service.CheckboxHelper;
 import com.gruppe43.moneymanager.service.GitUserTester;
 import com.gruppe43.moneymanager.service.GruppenService;
-import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import org.javamoney.moneta.Money;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -43,7 +41,7 @@ public class MoneyManagerController {
   }
 
   @GetMapping("/gruppenOverview")
-  public String getGroupPage(@AuthenticationPrincipal OAuth2User principal, Model model) {
+  public String getGruppenPage(@AuthenticationPrincipal OAuth2User principal, Model model) {
     List<String> titles = new ArrayList<>(gruppenService.getTitles());
     String logIn = principal.getAttribute("login");
     model.addAttribute("nutzername", logIn);
@@ -52,10 +50,6 @@ public class MoneyManagerController {
     return "gruppenOverview";
   }
 
-  @GetMapping("/group")
-  public String getGroupInfo(@RequestParam("gruppenName") String gruppenName, Model model) {
-    return "gruppe";
-  }
 
   @GetMapping("/createGruppe")
   public String createGruppe(Model model) {

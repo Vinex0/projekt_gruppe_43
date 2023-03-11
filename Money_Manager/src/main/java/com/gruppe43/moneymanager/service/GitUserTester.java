@@ -14,12 +14,11 @@ public class GitUserTester {
         .GET()
         .build();
     try {
-      HttpResponse response = client.send(request, HttpResponse.BodyHandlers.ofString());
-      if (response.toString().contains("200")){
+      HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+      if (response.toString().contains("200")) {
         return true;
       }
-    }
-    catch(InterruptedException | IOException e) {
+    } catch (InterruptedException | IOException e) {
       e.printStackTrace();
     }
     return false;

@@ -1,6 +1,5 @@
 package com.gruppe43.moneymanager.helper;
 
-public class WithOAuth2UserSecurityContextFactory {
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,4 +47,3 @@ import org.springframework.util.Assert;
       return context;
     }
   }
-}
