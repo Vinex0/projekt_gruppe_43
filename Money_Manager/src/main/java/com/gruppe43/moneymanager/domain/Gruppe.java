@@ -1,8 +1,13 @@
 package com.gruppe43.moneymanager.domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -24,6 +29,7 @@ public class Gruppe {
   private final List<String> teilnehmer;
   private final List<Ausgabe> ausgaben;
   private final Map<String, Map<String, Money>> schulden;
+
 
   private boolean closed;
 
@@ -59,14 +65,18 @@ public class Gruppe {
       throw new RuntimeException("Group already closed");
     }
     if (ausgaben.isEmpty() && neuerNutzer.compareTo(startPerson) != 0) {
-      teilnehmer.add(neuerNutzer);
-      schulden.put(neuerNutzer, new HashMap<>());
+      initializeSchuldenMap(neuerNutzer);
+    }
+  }
 
-      for (String p : teilnehmer) {
-        if (!p.equals(neuerNutzer)) {
-          schulden.get(neuerNutzer).put(p, Money.of(0, "EUR"));
-          schulden.get(p).put(neuerNutzer, Money.of(0, "EUR"));
-        }
+  private void initializeSchuldenMap(String neuerNutzer) {
+    teilnehmer.add(neuerNutzer);
+    schulden.put(neuerNutzer, new HashMap<>());
+
+    for (String p : teilnehmer) {
+      if (!p.equals(neuerNutzer)) {
+        schulden.get(neuerNutzer).put(p, Money.of(0, "EUR"));
+        schulden.get(p).put(neuerNutzer, Money.of(0, "EUR"));
       }
     }
   }
@@ -85,30 +95,34 @@ public class Gruppe {
         ausgabe.getSchuldnerListe().size());
 
     ausgaben.add(ausgabe);
-    for (String p : ausgabe.getSchuldnerListe()) {
-      if (!p.equals(glaeubiger)) {
-        Money tmp = schulden.get(p).get(glaeubiger);
-        schulden.get(p).put(glaeubiger, tmp.add(individualAmount));
+    createIndividualSchuld(glaeubiger, ausgabe, individualAmount);
+    //adjustSchulden(ausgabe.getSchuldnerListe());
+  }
+
+  private void createIndividualSchuld(String glaeubiger, Ausgabe ausgabe, Money individualAmount) {
+    for (String person : ausgabe.getSchuldnerListe()) {
+      if (!person.equals(glaeubiger)) {
+        schulden.get(person)
+            .put(glaeubiger, getSchuldenFromTo(person, glaeubiger).add(individualAmount));
       }
     }
-    List<String> part = new ArrayList<>(ausgabe.getSchuldnerListe());
-    adjustSchulden(part);
   }
 
   private void adjustSchulden(List<String> involved) {
+
     for (String a : involved) {
       for (String b : involved) {
         if (!b.equals(a)) {
           Money amountA = getSchuldenFromTo(a, b);
           Money amountB = getSchuldenFromTo(b, a);
-          Money diff = CalculationHelpers.difference(amountA, amountB);
-          Money reverseDiff = CalculationHelpers.difference(amountB, amountA);
-          if (diff.isGreaterThan(Money.of(0, "EUR"))) {
-            schulden.get(a).put(b, diff);
+          Money diffFromAtoB = CalculationHelpers.difference(amountA, amountB);
+          Money diffFromBtoA = CalculationHelpers.difference(amountB, amountA);
+          if (diffFromAtoB.isGreaterThan(Money.of(0, "EUR"))) {
+            schulden.get(a).put(b, diffFromAtoB);
             schulden.get(b).put(a, Money.of(0, "EUR"));
           } else {
             schulden.get(a).put(b, Money.of(0, "EUR"));
-            schulden.get(b).put(a, reverseDiff);
+            schulden.get(b).put(a, diffFromBtoA);
           }
         }
       }
@@ -130,16 +144,238 @@ public class Gruppe {
   }
 
   public Money getTotalSchuldenFrom(String schuldner) {
-    Money betrag = Money.of(0, "EUR");
+    double betrag = 0d;
     for (Money m : getGlaeubigerFrom(schuldner).values()) {
-      betrag.add(m);
+      betrag += m.getNumber().doubleValue();
     }
-    return betrag;
+    return Money.of(betrag, "EUR");
+  }
+
+  public Money getTotalPaymentFrom(String glaeubiger) {
+    double betrag = 0d;
+    for (Ausgabe ausgabe : ausgaben) {
+      if (glaeubiger.equals(ausgabe.getGlaeubiger())) {
+
+        if (ausgabe.getSchuldnerListe().contains(glaeubiger)) {
+          double betweenSum =
+              ausgabe.getSumme().getNumber().doubleValue() / ausgabe.getSchuldnerListe().size();
+          betrag += (ausgabe.getSumme().getNumber().doubleValue() - betweenSum);
+        } else {
+          betrag += ausgabe.getSumme().getNumber().doubleValue();
+        }
+
+      }
+    }
+    return Money.of(betrag, "EUR");
   }
 
   public void close() {
     closed = true;
   }
 
-}
+  public void adjustSchuldenV2() {
+    Map<String, Money> debtMap = new HashMap<>();
+    Map<String, Money> creditMap = new HashMap<>();
 
+    Map<String, Money> mustPay = new HashMap<>();
+    Map<String, Money> mustGet = new HashMap<>();
+
+    Map<String, Money> descPayMap = new LinkedHashMap<>();
+    Map<String, Money> ascCreditMap = new LinkedHashMap<>();
+
+    //Adjust initial amount
+    for (String person : teilnehmer) {
+      debtMap.put(person, getTotalSchuldenFrom(person));
+      creditMap.put(person, getTotalPaymentFrom(person));
+    }
+
+    //Adjust mustPay and mustGet
+    for (String person : teilnehmer) {
+      if (debtMap.containsKey(person) && creditMap.containsKey(person)) {
+        if (creditMap.get(person).subtract(debtMap.get(person)).isLessThan(Money.of(0, "EUR"))) {
+          mustGet.put(person, Money.of(0, "EUR"));
+          mustPay.put(person, debtMap.get(person).subtract(creditMap.get(person)));
+        } else if (creditMap.get(person).subtract(debtMap.get(person))
+            .isEqualTo(Money.of(0, "EUR"))) {
+          mustGet.put(person, Money.of(0, "EUR"));
+          mustPay.put(person, Money.of(0, "EUR"));
+        } else {
+          mustGet.put(person, creditMap.get(person).subtract(debtMap.get(person)));
+          mustPay.put(person, Money.of(0, "EUR"));
+        }
+
+      }
+    }
+
+    Map<String, Money> copyOfMustPay = new HashMap<>(mustPay);
+    Map<String, Money> copyOfMustGet = new HashMap<>(mustGet);
+
+    //Get ascending order of payment
+    for (String person : teilnehmer) {
+      for (String personB : teilnehmer) {
+        if (!personB.equals(person)) {
+          Map.Entry<String, Money> maxSchuldner = null;
+          if (!descPayMap.containsKey(person)) {
+            for (Map.Entry<String, Money> entry : mustPay.entrySet()) {
+              if (maxSchuldner == null
+                  || entry.getValue().compareTo(maxSchuldner.getValue()) >= 0) {
+                maxSchuldner = entry;
+              }
+            }
+            assert maxSchuldner != null;
+            descPayMap.put(maxSchuldner.getKey(), maxSchuldner.getValue());
+            mustPay.remove(maxSchuldner.getKey());
+          } else if (!descPayMap.containsKey(personB) && mustPay.get(personB).isZero()) {
+            descPayMap.put(personB, Money.of(0, "EUR"));
+            mustPay.remove(personB);
+          }
+        }
+      }
+    }
+
+    //Get descending order of credit
+    for (String person : teilnehmer) {
+      for (String personB : teilnehmer) {
+        if (!personB.equals(person)) {
+          Map.Entry<String, Money> minBekommen = null;
+          if (!ascCreditMap.containsKey(personB)) {
+            for (Map.Entry<String, Money> entry : mustGet.entrySet()) {
+              if (minBekommen == null || entry.getValue().compareTo(minBekommen.getValue()) < 0) {
+                minBekommen = entry;
+              }
+            }
+            assert minBekommen != null;
+            ascCreditMap.put(minBekommen.getKey(), minBekommen.getValue());
+            mustGet.remove(minBekommen.getKey());
+          } else if (!ascCreditMap.containsKey(person) && mustGet.size() == 1 && mustGet.get(person)
+              .isPositiveOrZero()) {
+            ascCreditMap.put(person, mustGet.get(person));
+            mustGet.remove(person);
+          }
+        }
+      }
+    }
+
+    Map<String, Money> copyOfDescPayMap = new LinkedHashMap<>(descPayMap);
+    Map<String, Money> copyOfAscCreditMap = new LinkedHashMap<>(ascCreditMap);
+
+    //Do not delete counter, cycle helper
+    //Final adjustment
+    int counter = 0;
+    for (String zahltGeld : copyOfDescPayMap.keySet()) {
+      for (String bekommtGeld : copyOfAscCreditMap.keySet()) {
+
+        //Ring
+        if (counter < teilnehmer.size()) {
+          if (descPayMap.get(bekommtGeld).isEqualTo(ascCreditMap.get(bekommtGeld))
+              && descPayMap.get(bekommtGeld) != null && ascCreditMap.get(bekommtGeld) != null) {
+            for (String personC : teilnehmer) {
+              if (!personC.equals(bekommtGeld)) {
+                schulden.get(bekommtGeld).put(personC, Money.of(0, "EUR"));
+                schulden.get(personC).put(bekommtGeld, Money.of(0, "EUR"));
+              }
+            }
+          }
+        }
+
+        double counterHelper = teilnehmer.size();
+
+        if (counter < Math.pow(counterHelper, 2)) {
+
+          if (ascCreditMap.get(zahltGeld) != null && ascCreditMap.get(zahltGeld)
+              .isPositiveOrZero()) { //gets money
+            if (!bekommtGeld.equals(zahltGeld)) { // a != b
+
+              for (String s : copyOfDescPayMap.keySet()) {
+                if (!s.equals(zahltGeld)) {
+                  if (copyOfAscCreditMap.get(zahltGeld).isZero()) {
+                    schulden.get(bekommtGeld).put(zahltGeld, Money.of(0, "EUR"));
+                  }
+                }
+              }
+
+              //precision error validation 73.37 !equal 73.37
+              if ((ascCreditMap.get(zahltGeld).add(Money.of(0.001, "EUR"))).isGreaterThanOrEqualTo(
+                  descPayMap.get(bekommtGeld))) { //if a has higher credit, then b must pay
+
+                Money diff = descPayMap.get(zahltGeld).subtract(ascCreditMap.get(bekommtGeld));
+                Money diffInverse = ascCreditMap.get(bekommtGeld)
+                    .subtract(descPayMap.get(zahltGeld));
+
+                if (diff.isGreaterThanOrEqualTo(ascCreditMap.get(bekommtGeld)) && !ascCreditMap.get(
+                    bekommtGeld).isEqualTo(Money.of(0, "EUR"))) {
+
+                  for (String p : teilnehmer) {
+                    if (!p.equals(zahltGeld)) {
+                      if (p.equals(bekommtGeld)) {
+                        schulden.get(zahltGeld).put(bekommtGeld, ascCreditMap.get(bekommtGeld));
+                        schulden.get(bekommtGeld).put(zahltGeld, Money.of(0, "EUR"));
+                      }
+                    }
+                  }
+
+                  ascCreditMap.put(bekommtGeld, Money.of(0, "EUR"));
+                  descPayMap.put(zahltGeld, diff);
+
+                } else if (diff.toString().equals(diffInverse.toString())) {  //diff.isZero
+                  for (String p : teilnehmer) {
+                    if (!p.equals(zahltGeld)) {
+                      if (p.equals(bekommtGeld)) {
+                        if (!descPayMap.get(zahltGeld).isZero()) {
+                          schulden.get(zahltGeld).put(bekommtGeld, descPayMap.get(zahltGeld));
+                          schulden.get(bekommtGeld).put(zahltGeld, Money.of(0, "EUR"));
+                        }
+                      } else if (copyOfDescPayMap.get(p) != null && !copyOfDescPayMap.get(p)
+                          .isZero() && copyOfAscCreditMap.get(p).isZero()
+                          && copyOfAscCreditMap.get(p) != null) {
+                        schulden.get(zahltGeld).put(p, Money.of(0, "EUR"));
+                      } else if (copyOfDescPayMap.get(zahltGeld) != null && copyOfDescPayMap.get(
+                          zahltGeld).isZero() && ascCreditMap.get(p).isZero()) {
+                        schulden.get(zahltGeld).put(p, Money.of(0, "EUR"));
+                      }
+                    }
+                  }
+                  ascCreditMap.put(bekommtGeld, Money.of(0, "EUR"));
+                  descPayMap.put(zahltGeld, Money.of(0, "EUR"));
+
+                } else if (diffInverse.isPositive() && diff.isNegative()) {
+
+                  for (String person : teilnehmer) {
+                    if (!person.equals(zahltGeld)) {
+                      if (person.equals(bekommtGeld)) {
+                        if (!descPayMap.get(zahltGeld).isZero()) {
+                          schulden.get(zahltGeld).put(bekommtGeld, descPayMap.get(zahltGeld));
+                          schulden.get(bekommtGeld).put(zahltGeld, Money.of(0, "EUR"));
+                          for (String s : teilnehmer) {
+                            if (!s.equals(zahltGeld)) {
+                              if (!s.equals(bekommtGeld)) {
+                                if (!copyOfAscCreditMap.get(person).isZero() && descPayMap.get(s)
+                                    .isZero()) {
+                                  schulden.get(bekommtGeld).put(s, Money.of(0, "EUR"));
+                                }
+                              }
+                            }
+                          }
+                        } else {
+                          schulden.get(zahltGeld).put(bekommtGeld, Money.of(0, "EUR"));
+                        }
+                      }
+                    }
+                  }
+                  ascCreditMap.put(bekommtGeld, diffInverse);
+                  descPayMap.put(zahltGeld, Money.of(0, "EUR"));
+                } else if (diffInverse.isNegative() && diff.isPositive()) {
+                  schulden.get(zahltGeld).put(bekommtGeld, Money.of(0, "EUR"));
+                }
+              }
+            }
+          }
+        }
+
+        counter += 1;
+      }
+    }
+
+  }
+
+}
