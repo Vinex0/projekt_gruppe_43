@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import org.javamoney.moneta.Money;
 
-public class Serializer {
+public class SerializerService {
 
   public static String gruppeToJson(Gruppe gruppe) {
     return "{\"gruppe\" : " + "\"" + gruppe.getId() + "\"" + ", \"name\" : " + "\""

@@ -2,7 +2,7 @@ package com.gruppe43.moneymanager.web;
 
 import com.gruppe43.moneymanager.domain.Gruppe;
 import com.gruppe43.moneymanager.helper.WithMockOAuth2User;
-import com.gruppe43.moneymanager.service.CheckboxHelper;
+import com.gruppe43.moneymanager.helper.CheckboxHelper;
 import com.gruppe43.moneymanager.service.GruppenService;
 import java.util.ArrayList;
 import java.util.List;

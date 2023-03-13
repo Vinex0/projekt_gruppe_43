@@ -1,5 +1,6 @@
 package com.gruppe43.moneymanager.domain;
 
+import com.gruppe43.moneymanager.stereotypes.AggregateRoot;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -21,6 +22,7 @@ import org.javamoney.moneta.Money;
 @Getter
 @AllArgsConstructor
 @ToString
+@AggregateRoot
 public class Gruppe {
 
   private final String id;

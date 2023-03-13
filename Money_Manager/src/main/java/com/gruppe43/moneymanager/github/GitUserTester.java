@@ -1,4 +1,4 @@
-package com.gruppe43.moneymanager.service;
+package com.gruppe43.moneymanager.github;
 
 import java.io.IOException;
 import java.net.URI;
