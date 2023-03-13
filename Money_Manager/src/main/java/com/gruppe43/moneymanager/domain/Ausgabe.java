@@ -1,5 +1,6 @@
 package com.gruppe43.moneymanager.domain;
 
+import com.gruppe43.moneymanager.stereotypes.AggregateRoot;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -8,7 +9,7 @@ import org.javamoney.moneta.Money;
 
 @Getter
 @AllArgsConstructor
-public class Ausgabe implements Comparable<Ausgabe> {
+class Ausgabe implements Comparable<Ausgabe> {
 
   private final String glaeubiger;
   private final List<String> schuldnerListe;

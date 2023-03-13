@@ -1,19 +1,21 @@
 package com.gruppe43.moneymanager.service;
 
-import com.gruppe43.moneymanager.domain.Ausgabe;
 import com.gruppe43.moneymanager.domain.Gruppe;
+import com.gruppe43.moneymanager.domain.dto.AusgabeDto;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.javamoney.moneta.Money;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SerializerService {
 
   public static String gruppeToJson(Gruppe gruppe) {
     return "{\"gruppe\" : " + "\"" + gruppe.getId() + "\"" + ", \"name\" : " + "\""
         + gruppe.getTitel() + "\"" + ", \"personen\" : " + personListToJson(gruppe.getTeilnehmer())
         + ", \"geschlossen\" : " + gruppe.isClosed() + ", \"ausgaben\" : " + ausgabenToJson(
-        gruppe.getAusgaben()) + "}";
+        gruppe.getAusgabeDto()) + "}";
   }
 
   private static String personListToJson(List<String> personen) {
@@ -29,14 +31,14 @@ public class SerializerService {
     return builder.toString();
   }
 
-  public static String ausgabeToJson(Ausgabe ausgabe) {
+  public static String ausgabeToJson(AusgabeDto ausgabe) {
     return "{\"grund\" : " + "\"" + ausgabe.getTitel() + "\"" + ", \"glaeubiger\" : " + "\""
         + ausgabe.getGlaeubiger() + "\"" + ", \"cent\" : " + "\"" + ausgabe.getSumme().multiply(100)
         .getNumber().intValue() + "\"" + ", \"schuldner\" : " + personListToJson(
         ausgabe.getSchuldnerListe()) + "}";
   }
 
-  public static String ausgabenToJson(List<Ausgabe> ausgaben) {
+  public static String ausgabenToJson(List<AusgabeDto> ausgaben) {
     StringBuilder builder = new StringBuilder();
     builder.append("[");
     for (int i = 0; i < ausgaben.size(); i++) {

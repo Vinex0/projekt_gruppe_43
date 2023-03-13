@@ -1,5 +1,6 @@
 package com.gruppe43.moneymanager.domain;
 
+import com.gruppe43.moneymanager.domain.dto.AusgabeDto;
 import com.gruppe43.moneymanager.stereotypes.AggregateRoot;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -173,6 +174,10 @@ public class Gruppe {
 
   public void close() {
     closed = true;
+  }
+
+  public List<AusgabeDto> getAusgabeDto(){
+   return ausgaben.stream().map(a-> new AusgabeDto(a.getGlaeubiger(), a.getSchuldnerListe(), a.getTitel(), a.getSumme())).collect(Collectors.toList());
   }
 
   public void adjustSchuldenV2() {
