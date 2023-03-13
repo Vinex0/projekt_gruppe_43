@@ -2,120 +2,123 @@
 <html lang="en">
 
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-        crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
 
-  <link href="/signin.css" rel="stylesheet">
+    <link href="/signin.css" rel="stylesheet">
 
-  <title>gruppen View</title>
+    <title>gruppen View</title>
 </head>
 
 <body class="gradient-custom">
 <nav class="navbar navbar-expand-lg navbar-dark gradient-custom">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/gruppenOverview">Money Manager</a>
-  </div>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/gruppenOverview">Money Manager</a>
+    </div>
 </nav>
 <div class="row justify-content-center gradient-custom">
-  <div class="card text-white bg-dark" style="width: 75%">
-    <div class="card-header">
-      Gruppe
-    </div>
-    <div class="card-body">
-      <div class="container">
-        <div th:if="${not gruppe.isClosed()}" class="row">
-          <form action="#" th:action="@{|/addNutzer/${gruppe.getId()}|}" method="post">
-            <div class="input-group mb-3 col">
-              <input name="nutzername" type="text" class="form-control" placeholder="Username"
-                     aria-label="username"
-                     aria-describedby="button-addon2">
-              <button class="btn btn-outline-secondary me-2" type="submit" id="button-addon2">Nutzer Hinzufuegen
-              </button>
+    <div class="card text-white bg-dark" style="width: 75%">
+        <div class="card-header">
+            Gruppe
+        </div>
+        <div class="card-body">
+            <div class="container">
+                <div th:if="${not gruppe.isClosed()}" class="row">
+                    <form action="#" th:action="@{|/addNutzer/${gruppe.getId()}|}" method="post">
+                        <div class="input-group mb-3 col">
+                            <input name="nutzername" type="text" class="form-control" placeholder="Username"
+                                   aria-label="username"
+                                   aria-describedby="button-addon2">
+                            <button class="btn btn-outline-secondary me-2" type="submit" id="button-addon2">Nutzer
+                                Hinzufuegen
+                            </button>
+                        </div>
+                    </form>
+                    <a th:href="@{|/createAusgabe/${gruppe.getId()}|}" class="btn btn-primary mb-3 col-md-auto"
+                       role="button">Neue Ausgabe</a>
+                </div>
+                <div class="row">
+                    <table class="table table-dark mb-3 col">
+                        <thead>
+                        <tr class="table-active">
+                            <th scope="col">Teilnehmer</th>
+                        </tr>
+                        <tr>
+                            <th>Name</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                        <tr th:each="teilnehmer : ${gruppe.getTeilnehmer()}">
+                            <th scope="row" th:text="${teilnehmer}">Peter</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <table class="table table-dark table-striped-columns mb-3 col">
+                        <thead>
+                        <tr class="table-active">
+                            <th colspan="4">Ausgaben</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">Name</th>
+                            <th>Glaeubiger</th>
+                            <th>Schuldner</th>
+                            <th>Summe</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                        <tr th:each="ausgabe : ${gruppe.getAusgaben()}">
+                            <th scope="row" th:text="${ausgabe.getTitel()}">Name</th>
+                            <th th:text="${ausgabe.getGlaeubiger()}">Glaeubiger</th>
+                            <th><p th:each="schuldner: ${ausgabe.getSchuldnerListe()}"><i th:text="${schuldner}"></i>
+                            </p></th>
+                            <th th:text="${ausgabe.getSumme()}">Amount</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col" th:each="teiln : ${gruppe.getSchulden().keySet()}">
+                                <table class="table table-dark table-striped-columns mb-3">
+                                    <thead>
+                                    <tr class="table-active">
+                                        <th colspan="2" th:text="${teiln}">Username</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Glaeubiger</th>
+                                        <th>Summe</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="table-group-divider">
+                                    <tr th:each="glaeubiger : ${gruppe.getSchulden().get(teiln).entrySet()}">
+                                        <th scope="row" th:text="${glaeubiger.getKey()}">Creditor</th>
+                                        <th th:text="${glaeubiger.getValue()}">Amount</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${not gruppe.isClosed()}" class="row">
+                        <form action="" th:action="@{|/schliesseGruppe/${gruppe.getId()}|}" method="post">
+                            <button class="btn btn-primary mb-3 col-auto" type="submit">Schliesse Gruppe</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-          </form>
-          <a th:href="@{|/createAusgabe/${gruppe.getId()}|}" class="btn btn-primary mb-3 col-md-auto" role="button">Neue Ausgabe</a>
-        </div>
-        <div class="row">
-          <table class="table table-dark mb-3 col">
-            <thead>
-            <tr class="table-active">
-              <th scope="col">Teilnehmer</th>
-            </tr>
-            <tr>
-              <th>Name</th>
-            </tr>
-            </thead>
-            <tbody class="table-group-divider">
-            <tr th:each="teilnehmer : ${gruppe.getTeilnehmer()}">
-              <th scope="row" th:text="${teilnehmer}">Peter</th>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="row">
-          <table class="table table-dark table-striped-columns mb-3 col">
-            <thead>
-            <tr class="table-active">
-              <th colspan="4">Ausgaben</th>
-            </tr>
-            <tr>
-              <th scope="row">Name</th>
-              <th>Glaeubiger</th>
-              <th>Schuldner</th>
-              <th>Summe</th>
-            </tr>
-            </thead>
-            <tbody class="table-group-divider">
-            <tr th:each="ausgabe : ${gruppe.getAusgaben()}">
-              <th scope="row" th:text="${ausgabe.getTitel()}">Name</th>
-              <th th:text="${ausgabe.getGlaeubiger()}">Glaeubiger</th>
-              <th><p th:each="schuldner: ${ausgabe.getSchuldnerListe()}"><i th:text="${schuldner}"></i></p></th>
-              <th th:text="${ausgabe.getSumme()}">Amount</th>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="row">
-          <div class="container">
-            <div class="row">
-              <div class="col" th:each="teiln : ${gruppe.getSchulden().keySet()}">
-                <table class="table table-dark table-striped-columns mb-3">
-                  <thead>
-                  <tr class="table-active">
-                    <th colspan="2" th:text="${teiln}">Username</th>
-                  </tr>
-                  <tr>
-                    <th>Glaeubiger</th>
-                    <th>Summe</th>
-                  </tr>
-                  </thead>
-                  <tbody class="table-group-divider">
-                  <tr th:each="glaeubiger : ${gruppe.getSchulden().get(teiln).entrySet()}">
-                    <th scope="row" th:text="${glaeubiger.getKey()}">Creditor</th>
-                    <th th:text="${glaeubiger.getValue()}">Amount</th>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div th:if="${not gruppe.isClosed()}" class="row">
-            <form action="" th:action="@{|/schliesseGruppe/${gruppe.getId()}|}" method="post">
-              <button class="btn btn-primary mb-3 col-auto" type="submit">Schliesse Gruppe</button>
-            </form>
-          </div>
-        </div>
-      </div>
 
+        </div>
     </div>
-  </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"

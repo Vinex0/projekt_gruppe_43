@@ -74,7 +74,7 @@ public class MoneyManagerController {
   @PostMapping("/addNutzer/{id}")
   public String addNutzer(@PathVariable("id") String id, String nutzername) {
     Gruppe gruppe = gruppenService.getGruppeById(id);
-    if (gruppe.isClosed()){
+    if (gruppe.isClosed()) {
       return "redirect:/gruppe/" + id;
     }
 
@@ -88,7 +88,7 @@ public class MoneyManagerController {
   public String createAusgabe(@PathVariable("id") String id, Model model) {
     Gruppe gruppe = gruppenService.getGruppeById(id);
     ArrayList<CheckboxHelper> checkboxHelpers = gruppenService.getCheckboxHelper(id);
-    if (gruppe.isClosed()){
+    if (gruppe.isClosed()) {
       return "redirect:/gruppe/" + id;
     }
 
@@ -98,25 +98,20 @@ public class MoneyManagerController {
   }
 
   @PostMapping("/createAusgabe/{id}")
-  public String getAusgabe(Model model,
-      @PathVariable("id") String id,
-      String ausgabeTitel,
-      String name,
-      @RequestParam("summe") String summe,
+  public String getAusgabe(Model model, @PathVariable("id") String id, String ausgabeTitel,
+      String name, @RequestParam("summe") String summe,
       @RequestParam Map<String, String> allParams) {
 
-    Gruppe gruppe = gruppenService.getGruppeById(id);
+
     List<String> schuldenTeilnehmer = new ArrayList<>();
 
     allParams.remove("name");
     allParams.remove("_csrf");
     allParams.remove("summe");
     allParams.remove("ausgabeTitel");
-
+    Gruppe gruppe = gruppenService.getGruppeById(id);
     List<CheckboxHelper> checkboxHelpers = new ArrayList<>();
     for (Entry<String, String> e : allParams.entrySet()) {
-
-      //TODO Check if correct refactored  var a = new CheckboxHelper(personService.getPerson(e.getKey()), e.getValue().equals("on"));
       var a = new CheckboxHelper(e.getKey(), e.getValue().equals("on"));
       checkboxHelpers.add(a);
     }
@@ -127,8 +122,7 @@ public class MoneyManagerController {
       }
     }
 
-    gruppe.createAusgabe(name, schuldenTeilnehmer,
-        Money.parse(summe + " EUR"), ausgabeTitel);
+    gruppe.createAusgabe(name, schuldenTeilnehmer, Money.parse(summe + " EUR"), ausgabeTitel);
     return "redirect:/gruppe/" + id;
   }
 
@@ -138,12 +132,6 @@ public class MoneyManagerController {
     gruppenService.getGruppeById(id).adjustSchuldenV2();
     return "redirect:/gruppe/" + id;
   }
-/*
-  @GetMapping("/gruppeGeschlossen/{id}")
-  public String getGruppeGeschlossen(@PathVariable("id") String id, Model model) {
-    model.addAttribute("gruppe", gruppenService.getGruppeById(id));
-    return "gruppeGeschlossen";
-  }
-*/
+
 
 }

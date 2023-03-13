@@ -94,9 +94,7 @@ public class ApiController {
     try {
       JSONObject obj = new JSONObject(data);
 
-      String grund = obj.getString("grund");
-      String glaeubiger = obj.getString("glaeubiger");
-      int summe = obj.getInt("cent");
+
 
       JSONArray schuldner = obj.getJSONArray("schuldner");
       if (schuldner.length() < 1) {
@@ -104,9 +102,13 @@ public class ApiController {
       }
       List<String> schuld = new ArrayList<>();
 
+
       for (int i = 0; i < schuldner.length(); i++) {
         schuld.add(schuldner.getString(i));
       }
+      String grund = obj.getString("grund");
+      String glaeubiger = obj.getString("glaeubiger");
+      int summe = obj.getInt("cent");
 
       if (gruppenService.getGruppeById(id) == null) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
