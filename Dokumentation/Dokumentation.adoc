@@ -1,0 +1,40 @@
+= image:images/logoOnion.png[onion] Dokumentation
+// toc-title definition MUST follow document title without blank line!
+:toc-title: Inhaltsverzeichnis
+
+
+// horizontal line
+'''
+
+
+// numbering from here on
+:numbered:
+
+<<<
+// 1. Anforderungen und Ziele
+include::src/01-anforderungen_und_ziele.adoc[]
+
+
+<<<
+// 2. Randbedingungen
+include::src/02-randbedingungen.adoc[]
+
+<<<
+// 3. Kontextabgrenzung
+include::src/03-kontextabgrenzung.adoc[]
+
+<<<
+// 4. Entscheidungen
+include::src/04-entwurfsentscheidungen.adoc[]
+
+<<<
+// 5. Qualität...
+include::src/05-qualitaetsanforderungen.adoc[]
+
+<<<
+// Analyse-Tools
+include::src/AnalyseTools.adoc[]
+
+<<<
+// 6. Glossar
+include::src/06-glossar.adoc[]

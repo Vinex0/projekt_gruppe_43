@@ -1,0 +1,28 @@
+== Anforderungen und Ziele
+
+=== Einleitung
+
+Der Denkprozess für eine Gruppe......
+
+Das Ziel unserer Anwendung ist....
+
+=== Anforderungsübersicht
+
+* GitHub-Einbindung
+* Authentifizierung
+
+
+=== Qualitätsziele
+
+* Bequeme Bedienung für den User
+* Korrektheit
+* Wartbarkeit
+
+=== Stakeholder
+
+* Gruppe
+** Erwartungen:
+*** Die Anwendung soll die Verteilung des Geldbetrages in einer Gruppe vereinfachen
+* Teilnehmer
+** Erwartungen:
+*** alle Ausgaben sind schnell einsehbar

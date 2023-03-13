@@ -1,0 +1,21 @@
+== Randbedingungen
+
+=== GitHub-Einbindung
+
+* Login mit GitHub
+
+* Einladung innerhalb einer Gruppe
+
+=== Authentifizierung
+
+* Authentifizierung gelingt durch das Login mit GitHub mithilfe von Spring Security und OAuth2
+
+* Kommunikation mit der GitHub Rest API
+
+=== Technische Anforderungen
+
+* Spring Boot Anwendung
+
+* Dauerhaftes Speichern der Daten in einer Datenbank
+
+* Verwendung von Docker

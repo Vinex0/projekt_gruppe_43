@@ -1,0 +1,19 @@
+== Übersicht über die Views
+
+Alle Views des Programms werden im Folgenden aufgelistet und erklärt.
+Es wird das folgende Schema verwendet:
+* _Überschrift der Seite im Browser_ (_Route als URL_)
+** _Erklärungen_
++
+
+* Praktische Übungen: (/)
+** dies ist die Startseite für das Login.
+
+* Gruppe erstellen
+** Hier muss der Nutzer ein Name für die Gruppe eingeben, somit wird die Gruppe erstellt
+
+* Gruppen Überblick (/createGruppe/...../{....}/...../gruppe/{...}
+
+
+* Ausgabe erstellen: (/........)
+** hier wird di

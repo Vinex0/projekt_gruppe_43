@@ -1,0 +1,19 @@
+== Glossar
+
+=== Domänenbegriffe
+
+=====
+* *Gruppe*: Teilnehmer werden in der Gruppe eingeladen
+
+=====
+=====
+* *Ausgabe*: Teilnehmer und Betrag
+=====
+
+
+=== Weitere Begriffe
+
+* *GitUserTester*: Authentifizierter Nutzer, hat eine Github-Kennung und eine Rolle
+* *CheckboxHelper*: Bereitet die Liste der Teilnehmer an einer Ausgabe
+* *CalculationHelpers*: Verteilt den Betrag zwischen die Teilnehmer
+

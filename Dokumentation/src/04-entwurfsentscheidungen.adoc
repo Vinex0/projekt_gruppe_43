@@ -1,0 +1,20 @@
+== Entwurfsentscheidungen
+
+=== Architektur
+
+Die Anwendung hat eine Onion-Architektur.
+Unsere Software kann folgendermaßen aufgeteilt werden:
+
+* Database
+* Domain
+* Service
+* Web
+
+
+Die Einhaltung der Architektur führt zur Wartbarkeit und vereinfacht die Einhaltung der gelernten Prinzipien.
+
+Folgende Regeln müssen in unserer Onion-Architektur eingehalten werden:
+
+* Application Services greifen auf Domain zu
+* Web greifen auf Application Services zu
+

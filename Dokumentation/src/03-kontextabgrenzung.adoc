@@ -1,0 +1,17 @@
+== Kontextabgrenzung
+
+=== Fachlicher Kontext
+
+==== User
+Die Anwendung wird von folgenden Benutzern verwendet:
+* Student:innen, die das Modul "Softwareentwicklung im Team" belegen
+* Tutor:innen, welche die praktischen Übungen des Moduls "Softwareentwicklung im Team" betreuen
+* Organisator:innen, die das Modul "Softwareentwicklung im Team" organisieren.
+
+=== Technischer Kontext
+
+==== OAuth2
+
+Der User kann sich mithilfe von OAuth2 mit seinen GitHub-Daten einloggen und bekommt so Zugriff zur Anwendung.
+
+
