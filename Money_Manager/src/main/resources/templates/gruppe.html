@@ -30,7 +30,7 @@
     </div>
     <div class="card-body">
       <div class="container">
-        <div class="row">
+        <div th:if="${not gruppe.isClosed()}" class="row">
           <form action="#" th:action="@{|/addNutzer/${gruppe.getId()}|}" method="post">
             <div class="input-group mb-3 col">
               <input name="nutzername" type="text" class="form-control" placeholder="Username"
@@ -106,7 +106,7 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <div th:if="${not gruppe.isClosed()}" class="row">
             <form action="" th:action="@{|/schliesseGruppe/${gruppe.getId()}|}" method="post">
               <button class="btn btn-primary mb-3 col-auto" type="submit">Schliesse Gruppe</button>
             </form>

@@ -74,6 +74,10 @@ public class MoneyManagerController {
   @PostMapping("/addNutzer/{id}")
   public String addNutzer(@PathVariable("id") String id, String nutzername) {
     Gruppe gruppe = gruppenService.getGruppeById(id);
+    if (gruppe.isClosed()){
+      return "redirect:/gruppe/" + id;
+    }
+
     if (GitUserTester.exists(nutzername)) {
       gruppe.addTeilnehmer(nutzername);
     }
@@ -84,6 +88,9 @@ public class MoneyManagerController {
   public String createAusgabe(@PathVariable("id") String id, Model model) {
     Gruppe gruppe = gruppenService.getGruppeById(id);
     ArrayList<CheckboxHelper> checkboxHelpers = gruppenService.getCheckboxHelper(id);
+    if (gruppe.isClosed()){
+      return "redirect:/gruppe/" + id;
+    }
 
     model.addAttribute("checkboxHelpers", checkboxHelpers);
     model.addAttribute("gruppe", gruppe);
@@ -128,8 +135,15 @@ public class MoneyManagerController {
   @PostMapping("/schliesseGruppe/{id}")
   public String closeGruppe(@PathVariable("id") String id) {
     gruppenService.getGruppeById(id).close();
+    gruppenService.getGruppeById(id).adjustSchuldenV2();
     return "redirect:/gruppe/" + id;
   }
-
+/*
+  @GetMapping("/gruppeGeschlossen/{id}")
+  public String getGruppeGeschlossen(@PathVariable("id") String id, Model model) {
+    model.addAttribute("gruppe", gruppenService.getGruppeById(id));
+    return "gruppeGeschlossen";
+  }
+*/
 
 }
