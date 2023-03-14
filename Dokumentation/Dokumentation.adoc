@@ -32,13 +32,9 @@ include::src/04-entwurfsentscheidungen.adoc[]
 include::src/05-qualitaetsanforderungen.adoc[]
 
 <<<
-// 6. Glossar
-include::src/06-glossar.adoc[]
-
-<<<
 // Analyse-Tools
 include::src/AnalyseTools.adoc[]
 
 <<<
-// Analyse-Tools
-include::src/doku.adoc[]
+// 6. Glossar
+include::src/06-glossar.adoc[]

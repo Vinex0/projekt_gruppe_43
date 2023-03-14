@@ -1,6 +1,5 @@
 package com.gruppe43.moneymanager.service;
 
-import com.gruppe43.moneymanager.domain.dto.AusgabeDto;
 import com.gruppe43.moneymanager.database.GruppenRepository;
 import com.gruppe43.moneymanager.domain.Gruppe;
 import com.gruppe43.moneymanager.exeptions.NichtVorhandenException;
@@ -9,7 +8,6 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -86,5 +84,4 @@ public class GruppenService {
     }
     return nutzerGruppen;
   }
-
 }
