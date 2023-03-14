@@ -1,4 +1,4 @@
-= image:images/logoOnion.png[onion] Dokumentation
+= Dokumentation
 // toc-title definition MUST follow document title without blank line!
 :toc-title: Inhaltsverzeichnis
 
@@ -32,9 +32,13 @@ include::src/04-entwurfsentscheidungen.adoc[]
 include::src/05-qualitaetsanforderungen.adoc[]
 
 <<<
+// 6. Glossar
+include::src/06-glossar.adoc[]
+
+<<<
 // Analyse-Tools
 include::src/AnalyseTools.adoc[]
 
 <<<
-// 6. Glossar
-include::src/06-glossar.adoc[]
+// Analyse-Tools
+include::src/doku.adoc[]

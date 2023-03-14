@@ -3,7 +3,6 @@ package com.gruppe43.moneymanager.domain;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +10,7 @@ class AusgabeTest {
 
   @Test
   void test1() {
-    Ausgabe ausgabe = new Ausgabe("A", "ausgabe", Money.of(100, "EUR"));
+    Ausgabe ausgabe = Ausgabe.erstellen("A", "ausgabe", Money.of(100, "EUR"));
 
     assertThat(ausgabe).isNotNull();
   }
@@ -19,7 +18,9 @@ class AusgabeTest {
   @Test
   void test2() {
 
-    Ausgabe ausgabe = new Ausgabe("personA", List.of("personA", "personB"), "ausgabe", Money.of(100, "EUR"));
+    Ausgabe ausgabe = Ausgabe.erstellen("personA", "ausgabe", Money.of(100, "EUR"));
+    ausgabe.addSchuldner("personA");
+    ausgabe.addSchuldner("personB");
 
     assertAll(
         () -> assertThat(ausgabe.getGlaeubiger()).isEqualTo("personA"),

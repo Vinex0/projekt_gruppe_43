@@ -1,4 +1,4 @@
-package com.gruppe43.moneymanager.service;
+package com.gruppe43.moneymanager.helper;
 
 
 public class CheckboxHelper {

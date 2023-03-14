@@ -2,7 +2,7 @@ package com.gruppe43.moneymanager.web;
 
 import com.gruppe43.moneymanager.domain.Gruppe;
 import com.gruppe43.moneymanager.service.GruppenService;
-import com.gruppe43.moneymanager.service.Serializer;
+import com.gruppe43.moneymanager.service.SerializerService;
 import java.util.ArrayList;
 import java.util.List;
 import org.javamoney.moneta.Money;
@@ -33,7 +33,7 @@ public class ApiController {
     if (gruppe == null) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    return ResponseEntity.status(HttpStatus.OK).body(Serializer.gruppeToJson(gruppe));
+    return ResponseEntity.status(HttpStatus.OK).body(SerializerService.gruppeToJson(gruppe));
   }
 
   @GetMapping("/api/gruppen/{id}/ausgleich")
@@ -42,12 +42,12 @@ public class ApiController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     return ResponseEntity.status(HttpStatus.OK)
-        .body(Serializer.schuldenToJson(gruppenService.getGruppeById(id)));
+        .body(SerializerService.schuldenToJson(gruppenService.getGruppeById(id)));
   }
 
   @GetMapping("/api/user/{name}/gruppen")
   public String getGruppenOfPerson(@PathVariable("name") String name) {
-    return Serializer.gruppenByNutzerToJson(gruppenService.getGruppenByNutzer(name));
+    return SerializerService.gruppenListToJson(gruppenService.getGruppenByNutzer(name));
   }
 
   @PostMapping("/api/gruppen")
@@ -92,14 +92,16 @@ public class ApiController {
   public ResponseEntity<?> createAusgabe(@PathVariable String id, @RequestBody String data) {
 
     try {
-
       JSONObject obj = new JSONObject(data);
-      JSONArray schuldner = obj.getJSONArray("schuldner");
 
+
+
+      JSONArray schuldner = obj.getJSONArray("schuldner");
       if (schuldner.length() < 1) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
       }
       List<String> schuld = new ArrayList<>();
+
 
       for (int i = 0; i < schuldner.length(); i++) {
         schuld.add(schuldner.getString(i));

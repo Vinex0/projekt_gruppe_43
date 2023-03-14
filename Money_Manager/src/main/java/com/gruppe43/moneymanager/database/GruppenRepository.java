@@ -1,4 +1,4 @@
-package com.gruppe43.moneymanager.service;
+package com.gruppe43.moneymanager.database;
 
 import com.gruppe43.moneymanager.domain.Gruppe;
 import java.util.List;

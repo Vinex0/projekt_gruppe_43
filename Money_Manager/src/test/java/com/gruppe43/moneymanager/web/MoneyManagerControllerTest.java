@@ -2,7 +2,7 @@ package com.gruppe43.moneymanager.web;
 
 import com.gruppe43.moneymanager.domain.Gruppe;
 import com.gruppe43.moneymanager.helper.WithMockOAuth2User;
-import com.gruppe43.moneymanager.service.CheckboxHelper;
+import com.gruppe43.moneymanager.helper.CheckboxHelper;
 import com.gruppe43.moneymanager.service.GruppenService;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,8 +73,8 @@ public class MoneyManagerControllerTest {
   @Test
   void createGruppeNameFilterTest() throws Exception {
     mvc.perform(post("/createGruppe")
-        .param("name", "")
-        .sessionAttr("nutzername", "Peter"))
+            .param("name", "")
+            .sessionAttr("nutzername", "Peter"))
         .andExpect(redirectedUrl("createGruppe"))
         .andExpect(status().isFound());
   }
@@ -111,7 +111,7 @@ public class MoneyManagerControllerTest {
     when(gruppenService.getCheckboxHelper("0")).thenReturn(helpers);
 
     mvc.perform(get("/createAusgabe/0")
-        .param("id", "0"))
+            .param("id", "0"))
         .andExpect(status().isOk())
         .andExpect(model().attributeExists("checkboxHelpers"))
         .andExpect(model().attributeExists("gruppe"));
@@ -125,10 +125,10 @@ public class MoneyManagerControllerTest {
     when(gruppenService.getGruppeById("0")).thenReturn(testGruppe);
     List<String> schuldenTeilnehmer = new ArrayList<>();
     mvc.perform(post("/createAusgabe/0")
-        .param("id", "0")
-        .param("ausgabeTitel", "TestAusgabe")
-        .param("name", "Peter")
-        .param("summe", "10"))
+            .param("id", "0")
+            .param("ausgabeTitel", "TestAusgabe")
+            .param("name", "Peter")
+            .param("summe", "10"))
         .andExpect(status().isFound());
     verify(testGruppe)
         .createAusgabe("Peter", schuldenTeilnehmer, Money.parse("10" + " EUR"), "TestAusgabe");

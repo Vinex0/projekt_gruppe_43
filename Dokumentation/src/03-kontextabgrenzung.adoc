@@ -2,11 +2,15 @@
 
 === Fachlicher Kontext
 
-==== User
-Die Anwendung wird von folgenden Benutzern verwendet:
-* Student:innen, die das Modul "Softwareentwicklung im Team" belegen
-* Tutor:innen, welche die praktischen Übungen des Moduls "Softwareentwicklung im Team" betreuen
-* Organisator:innen, die das Modul "Softwareentwicklung im Team" organisieren.
+==== Gruppe
+Die Gruppe bietet folgende Funktionalität:
+
+* Die Gruppe wird von einem Nutzer erstellt.
+* Es können weiter Nutzer hinzugefügt werden.
+* Eine Ausgabe wird von einem Nutzer innerhalb einer Gruppe erstellt.
+* Eine Gruppe kann mehrere Ausgaben haben.
+
+
 
 === Technischer Kontext
 
@@ -14,4 +18,4 @@ Die Anwendung wird von folgenden Benutzern verwendet:
 
 Der User kann sich mithilfe von OAuth2 mit seinen GitHub-Daten einloggen und bekommt so Zugriff zur Anwendung.
 
-
+image::images/model.png[Das Programm verwendet OAuth für die Authentifizierung]

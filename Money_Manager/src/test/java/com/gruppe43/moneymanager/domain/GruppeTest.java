@@ -47,7 +47,7 @@ public class GruppeTest {
         Gruppe gruppe = new Gruppe("test", "personA");
         gruppe.addTeilnehmer("personB");
         gruppe.createAusgabe("personA", List.of("personA", "personB"), Money.of(100, "EUR"), "expense test");
-        gruppe.adjustSchuldenV2();
+        gruppe.close();
         assertAll(
             () -> assertThat(gruppe.getAusgaben()).hasSize(1),
             () -> assertThat(gruppe.getSchuldenFromTo("personB", "personA")).isEqualTo(Money.of(50, "EUR")),
@@ -66,13 +66,13 @@ public class GruppeTest {
         gruppe.createAusgabe("personA", List.of("personB", "personC"), Money.of(300, "EUR"), "expense1");
         gruppe.createAusgabe("personB", List.of("personC"), Money.of(300, "EUR"), "expense2");
         assertAll(
-                () -> assertThat(gruppe.getGlaeubigerFrom("personB")).isEqualTo(Map.of("personA", Money.of(150, "EUR"))),
-                () -> assertThat(gruppe.getGlaeubigerFrom("personC"))
-                    .containsExactlyInAnyOrderEntriesOf(Map.of(
+            () -> assertThat(gruppe.getGlaeubigerFrom("personB")).isEqualTo(Map.of("personA", Money.of(150, "EUR"))),
+            () -> assertThat(gruppe.getGlaeubigerFrom("personC"))
+                .containsExactlyInAnyOrderEntriesOf(Map.of(
                         "personA", Money.of(150, "EUR"),
                         "personB", Money.of(300, "EUR")
-                        )
                     )
+                )
         );
     }
 
@@ -84,7 +84,7 @@ public class GruppeTest {
         gruppe.createAusgabe("personA", gruppe.getTeilnehmer(), Money.of(10, "EUR"), "expense1");
         gruppe.createAusgabe("personA", gruppe.getTeilnehmer(), Money.of(20, "EUR"), "expense2");
 
-        gruppe.adjustSchuldenV2();
+        gruppe.close();
         assertThat(gruppe.getGlaeubigerFrom("personB")).isEqualTo(Map.of("personA", Money.of(15, "EUR")));
     }
 
@@ -95,7 +95,7 @@ public class GruppeTest {
 
         gruppe.createAusgabe("personA", gruppe.getTeilnehmer(), Money.of(10, "EUR"), "expense1");
         gruppe.createAusgabe("personB", gruppe.getTeilnehmer(), Money.of(20, "EUR"), "expense2");
-        gruppe.adjustSchuldenV2();
+        gruppe.close();
         assertThat(gruppe.getGlaeubigerFrom("personA")).isEqualTo(Map.of("personB", Money.of(5, "EUR")));
     }
 
@@ -107,7 +107,7 @@ public class GruppeTest {
 
         gruppe.createAusgabe("personA", List.of("personB"), Money.of(10, "EUR"), "expense1");
         gruppe.createAusgabe("personA", gruppe.getTeilnehmer(), Money.of(20, "EUR"), "expense2");
-        gruppe.adjustSchuldenV2();
+        gruppe.close();
         assertThat(gruppe.getGlaeubigerFrom("personB")).isEqualTo(Map.of("personA", Money.of(20, "EUR")));
     }
 
@@ -122,11 +122,11 @@ public class GruppeTest {
         gruppe.createAusgabe("personB", List.of("personB", "personC"), Money.of(10, "EUR"), "expense2");
         gruppe.createAusgabe("personC", List.of("personC", "personA"), Money.of(10, "EUR"), "expense3");
 
-        gruppe.adjustSchuldenV2();
+        gruppe.close();
         assertAll(
-                ()->assertThat(gruppe.getTotalSchuldenFrom("personA")).isEqualTo(Money.of(0, "EUR")),
-                ()->assertThat(gruppe.getTotalSchuldenFrom("personB")).isEqualTo(Money.of(0, "EUR")),
-                ()->assertThat(gruppe.getTotalSchuldenFrom("personC")).isEqualTo(Money.of(0, "EUR"))
+            ()->assertThat(gruppe.getTotalSchuldenFrom("personA")).isEqualTo(Money.of(0, "EUR")),
+            ()->assertThat(gruppe.getTotalSchuldenFrom("personB")).isEqualTo(Money.of(0, "EUR")),
+            ()->assertThat(gruppe.getTotalSchuldenFrom("personC")).isEqualTo(Money.of(0, "EUR"))
         );
     }
 
@@ -141,10 +141,10 @@ public class GruppeTest {
         gruppe.createAusgabe("berta", List.of("anton", "berta", "christian"), Money.of(30, "EUR"), "expense2");
         gruppe.createAusgabe("christian", List.of("berta", "christian"), Money.of(100, "EUR"), "expense3");
 
-        gruppe.adjustSchuldenV2();
+        gruppe.close();
         assertAll(
-                ()->assertThat(gruppe.getSchulden().get("berta").get("anton")).isEqualTo(Money.of(30,"EUR")),
-                ()->assertThat(gruppe.getSchulden().get("berta").get("christian")).isEqualTo(Money.of(20,"EUR"))
+            ()->assertThat(gruppe.getSchulden().get("berta").get("anton")).isEqualTo(Money.of(30,"EUR")),
+            ()->assertThat(gruppe.getSchulden().get("berta").get("christian")).isEqualTo(Money.of(20,"EUR"))
         );
     }
 
@@ -164,7 +164,7 @@ public class GruppeTest {
         gruppe.createAusgabe("d", List.of("a", "b", "c", "d", "e", "f"), Money.of(96, "EUR"), "Städtetour");
         gruppe.createAusgabe("f", List.of("b", "e", "f"), Money.of(95.37, "EUR"), "Theatervorstellung");
 
-        gruppe.adjustSchuldenV2();
+        gruppe.close();
         assertAll(
             ()->assertThat(gruppe.getSchuldenFromTo("b","a")).isEqualTo(Money.of(96.78,"EUR")),
             ()->assertThat(gruppe.getSchuldenFromTo("c", "a")).isGreaterThanOrEqualTo(Money.of(55.26,"EUR")),
@@ -194,7 +194,7 @@ public class GruppeTest {
         gruppe.createAusgabe("f", List.of("c"), Money.of(5, "EUR"), "ausgabe7");
         gruppe.createAusgabe("g", List.of("a"), Money.of(30, "EUR"), "ausgabe8");
 
-        gruppe.adjustSchuldenV2();
+        gruppe.close();
         assertAll(
             ()->assertThat(gruppe.getSchuldenFromTo("a", "f")).isEqualTo(Money.of(40,"EUR")),
             ()->assertThat(gruppe.getSchuldenFromTo("a", "g")).isEqualTo(Money.of(40,"EUR")),
@@ -212,10 +212,10 @@ public class GruppeTest {
 
         gruppe.createAusgabe("a", gruppe.getTeilnehmer(), Money.of(100, "EUR"), "new expense");
         gruppe.createAusgabe("b", gruppe.getTeilnehmer(), Money.of(50, "EUR"), "new expense 2");
-        gruppe.adjustSchuldenV2();
+        gruppe.close();
         assertAll(
-                () -> assertThat(gruppe.getGlaeubigerFrom("b").get("a")).isEqualTo(Money.of(25, "EUR")),
-                () -> assertThat(gruppe.getGlaeubigerFrom("a").get("b")).isNull()
+            () -> assertThat(gruppe.getGlaeubigerFrom("b").get("a")).isEqualTo(Money.of(25, "EUR")),
+            () -> assertThat(gruppe.getGlaeubigerFrom("a").get("b")).isNull()
         );
     }
 
@@ -227,7 +227,7 @@ public class GruppeTest {
         gruppe.addTeilnehmer("c");
 
         gruppe.createAusgabe("a", List.of("b"), Money.of(100, "EUR"), "new expense");
-        gruppe.adjustSchuldenV2();
+        gruppe.close();
         assertThat(gruppe.getGlaeubigerFrom("c")).isEmpty();
     }
 

@@ -1,8 +1,8 @@
 package com.gruppe43.moneymanager.web;
 
 import com.gruppe43.moneymanager.domain.Gruppe;
-import com.gruppe43.moneymanager.service.CheckboxHelper;
-import com.gruppe43.moneymanager.service.GitUserTester;
+import com.gruppe43.moneymanager.helper.CheckboxHelper;
+import com.gruppe43.moneymanager.github.GitUserTester;
 import com.gruppe43.moneymanager.service.GruppenService;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,9 +88,6 @@ public class MoneyManagerController {
   public String createAusgabe(@PathVariable("id") String id, Model model) {
     Gruppe gruppe = gruppenService.getGruppeById(id);
     ArrayList<CheckboxHelper> checkboxHelpers = gruppenService.getCheckboxHelper(id);
-    if (gruppe.isClosed()) {
-      return "redirect:/gruppe/" + id;
-    }
 
     model.addAttribute("checkboxHelpers", checkboxHelpers);
     model.addAttribute("gruppe", gruppe);
@@ -129,7 +126,7 @@ public class MoneyManagerController {
   @PostMapping("/schliesseGruppe/{id}")
   public String closeGruppe(@PathVariable("id") String id) {
     gruppenService.getGruppeById(id).close();
-    gruppenService.getGruppeById(id).adjustSchuldenV2();
+    //gruppenService.getGruppeById(id).adjustSchuldenV2();
     return "redirect:/gruppe/" + id;
   }
 

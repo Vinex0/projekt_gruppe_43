@@ -84,4 +84,5 @@ public class GruppenService {
     }
     return nutzerGruppen;
   }
+
 }
