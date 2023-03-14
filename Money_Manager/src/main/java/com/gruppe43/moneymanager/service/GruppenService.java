@@ -2,7 +2,7 @@ package com.gruppe43.moneymanager.service;
 
 import com.gruppe43.moneymanager.database.GruppenRepository;
 import com.gruppe43.moneymanager.domain.Gruppe;
-import com.gruppe43.moneymanager.exeptions.NichtVorhandenException;
+import com.gruppe43.moneymanager.exceptions.NichtVorhandenException;
 import com.gruppe43.moneymanager.helper.CheckboxHelper;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;

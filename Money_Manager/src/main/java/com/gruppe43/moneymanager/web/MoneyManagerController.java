@@ -1,7 +1,7 @@
 package com.gruppe43.moneymanager.web;
 
 import com.gruppe43.moneymanager.domain.Gruppe;
-import com.gruppe43.moneymanager.github.GitUserTester;
+import com.gruppe43.moneymanager.github.GitUserValidation;
 import com.gruppe43.moneymanager.helper.CheckboxHelper;
 import com.gruppe43.moneymanager.service.GruppenService;
 import java.util.ArrayList;
@@ -79,7 +79,7 @@ public class MoneyManagerController {
       return "redirect:/gruppe/" + id;
     }
 
-    if (GitUserTester.exists(nutzername)) {
+    if (GitUserValidation.exists(nutzername)) {
       gruppe.addTeilnehmer(nutzername);
     }
     return "redirect:/gruppe/" + id;

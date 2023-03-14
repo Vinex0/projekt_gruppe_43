@@ -13,7 +13,7 @@
 
 === Weitere Begriffe
 
-* *GitUserTester*: Authentifizierter Nutzer, hat eine Github-Kennung und eine Rolle
+* *GitUserValidation*: Authentifizierter Nutzer, hat eine Github-Kennung und eine Rolle
 * *CheckboxHelper*: Bereitet die Liste der Teilnehmer an einer Ausgabe
 
 
