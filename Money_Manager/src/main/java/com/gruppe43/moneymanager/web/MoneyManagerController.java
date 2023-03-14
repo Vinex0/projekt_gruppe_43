@@ -66,7 +66,8 @@ public class MoneyManagerController {
   }
 
   @GetMapping("/gruppe/{id}")
-  public String getGruppe(@ModelAttribute("nutzername") String nutzername, @PathVariable("id") String id, Model model) {
+  public String getGruppe(@ModelAttribute("nutzername") String nutzername,
+      @PathVariable("id") String id, Model model) {
     model.addAttribute("curNutzer", nutzername);
     model.addAttribute("gruppe", gruppenService.getGruppeById(id));
     return "gruppe";

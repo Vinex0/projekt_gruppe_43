@@ -3,6 +3,8 @@ package com.gruppe43.moneymanager.domain;
 import com.gruppe43.moneymanager.domain.dto.AusgabeDto;
 import com.gruppe43.moneymanager.stereotypes.AggregateRoot;
 import com.gruppe43.moneymanager.stereotypes.ClassOnly;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -74,57 +76,24 @@ public class Gruppe {
 
   }
 
-  public void addTeilnehmer(String neuerNutzer) {
+  public void addTeilnehmer(@NotBlank String neuerNutzer) {
     if (closed) {
       throw new RuntimeException("Group already closed");
     }
-    if (ausgaben.isEmpty() && neuerNutzer.compareTo(startPerson) != 0) {
+    if (neuerNutzer != null && ausgaben.isEmpty() && !neuerNutzer.equals(startPerson)) {
       initializeSchuldenMap(neuerNutzer);
     }
   }
 
-  @ClassOnly
-  private void initializeSchuldenMap(String neuerNutzer) {
-    teilnehmer.add(neuerNutzer);
-    schulden.put(neuerNutzer, new HashMap<>());
-
-    for (String p : teilnehmer) {
-      if (!p.equals(neuerNutzer)) {
-        schulden.get(neuerNutzer).put(p, Money.of(0, "EUR"));
-        schulden.get(p).put(neuerNutzer, Money.of(0, "EUR"));
-      }
-    }
-  }
-
-  public void createAusgabe(String glaeubiger, List<String> schuldner, Money summe, String title) {
+  public void createAusgabe(@NotNull @NotBlank String glaeubiger, List<String> schuldner,
+      @NotNull Money summe, @NotNull @NotBlank String title) {
     if (closed) {
       throw new RuntimeException("Group already closed");
     }
-    Ausgabe ausgabe = Ausgabe.erstellen(glaeubiger, title, summe);
-
-    for (String p : schuldner) {
-      ausgabe.addSchuldner(p);
-    }
-
-    if (schuldner.size() >= 1) {
-      Money individualAmount = summe.divide(schuldner.size());
-      ausgaben.add(ausgabe);
-      createIndividualSchuld(glaeubiger, ausgabe, individualAmount);
-    } else {
-      System.err.println("Teilnehmer darf nicht 0 sein");
-    }
+    erstelleAusgabe(glaeubiger, schuldner, summe, title);
   }
 
-  private void createIndividualSchuld(String glaeubiger, Ausgabe ausgabe, Money individualAmount) {
-    for (String person : ausgabe.getSchuldnerListe()) {
-      if (!person.equals(glaeubiger)) {
-        schulden.get(person)
-            .put(glaeubiger, getSchuldenFromTo(person, glaeubiger).add(individualAmount));
-      }
-    }
-  }
-
-  public Map<String, Money> getGlaeubigerFrom(String schuldner) {
+  public Map<String, Money> getGlaeubigerFrom(@NotNull String schuldner) {
     if (schulden.containsKey(schuldner)) {
       return schulden.get(schuldner).entrySet().stream()
           .filter((v) -> v.getValue().isGreaterThan(Money.of(0, "EUR")))
@@ -134,16 +103,73 @@ public class Gruppe {
   }
 
   // Helper Ausgleich von A an B
-  public Money getSchuldenFromTo(String schuldner, String glauebiger) {
+  public Money getSchuldenFromTo(@NotNull String schuldner, @NotNull String glauebiger) {
     return schulden.get(schuldner).get(glauebiger);
   }
 
-  public Money getTotalSchuldenFrom(String schuldner) {
+  public Money getTotalSchuldenFrom(@NotNull String schuldner) {
     double betrag = 0d;
     for (Money m : getGlaeubigerFrom(schuldner).values()) {
       betrag += m.getNumber().doubleValue();
     }
     return Money.of(betrag, "EUR");
+  }
+
+  public void close() {
+    adjustSchulden();
+    closed = true;
+  }
+
+  public List<AusgabeDto> getAusgabeDto() {
+
+    return ausgaben.stream()
+        .map(a -> new AusgabeDto(a.getGlaeubiger(),
+            a.getSchuldnerListe(),
+            a.getTitel(),
+            a.getSumme()))
+        .collect(Collectors.toList());
+  }
+
+  @ClassOnly
+  private void initializeSchuldenMap(String neuerNutzer) {
+    if (neuerNutzer != null) {
+      teilnehmer.add(neuerNutzer);
+      schulden.put(neuerNutzer, new HashMap<>());
+
+      for (String p : teilnehmer) {
+        if (!p.equals(neuerNutzer)) {
+          schulden.get(neuerNutzer).put(p, Money.of(0, "EUR"));
+          schulden.get(p).put(neuerNutzer, Money.of(0, "EUR"));
+        }
+      }
+    }
+  }
+
+  @ClassOnly
+  private void erstelleAusgabe(String glaeubiger, List<String> schuldner, Money summe,
+      String title) {
+    if (!schuldner.isEmpty()) {
+      Ausgabe ausgabe = Ausgabe.erstellen(glaeubiger, title, summe);
+
+      for (String p : schuldner) {
+        ausgabe.addSchuldner(p);
+      }
+      Money individualAmount = summe.divide(schuldner.size());
+      ausgaben.add(ausgabe);
+      createIndividualSchuld(glaeubiger, ausgabe, individualAmount);
+    } else {
+      System.err.println("Teilnehmer darf nicht 0 sein");
+    }
+  }
+
+  @ClassOnly
+  private void createIndividualSchuld(String glaeubiger, Ausgabe ausgabe, Money individualAmount) {
+    for (String person : ausgabe.getSchuldnerListe()) {
+      if (!person.equals(glaeubiger)) {
+        schulden.get(person)
+            .put(glaeubiger, getSchuldenFromTo(person, glaeubiger).add(individualAmount));
+      }
+    }
   }
 
   @ClassOnly
@@ -164,22 +190,6 @@ public class Gruppe {
     }
     return Money.of(betrag, "EUR");
   }
-
-  public void close() {
-    adjustSchulden();
-    closed = true;
-  }
-
-  public List<AusgabeDto> getAusgabeDto() {
-
-    return ausgaben.stream()
-        .map(a -> new AusgabeDto(a.getGlaeubiger(),
-            a.getSchuldnerListe(),
-            a.getTitel(),
-            a.getSumme()))
-        .collect(Collectors.toList());
-  }
-
 
   @ClassOnly
   private void adjustSchulden() {
