@@ -2,15 +2,11 @@
 
 === Fachlicher Kontext
 
-==== Gruppe
-Die Gruppe bietet folgende Funktionalität:
-
-* Die Gruppe wird von einem Nutzer erstellt.
-* Es können weiter Nutzer hinzugefügt werden.
-* Eine Ausgabe wird von einem Nutzer innerhalb einer Gruppe erstellt.
-* Eine Gruppe kann mehrere Ausgaben haben.
-
-
+==== User
+Die Anwendung wird von folgenden Benutzern verwendet:
+* Student:innen, die das Modul "Softwareentwicklung im Team" belegen
+* Tutor:innen, welche die praktischen Übungen des Moduls "Softwareentwicklung im Team" betreuen
+* Organisator:innen, die das Modul "Softwareentwicklung im Team" organisieren.
 
 === Technischer Kontext
 

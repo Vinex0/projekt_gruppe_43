@@ -2,17 +2,14 @@
 
 === Einleitung
 
-Das Ziel unserer Anwendung ist gemeinsam reisenden Gruppen zu ermöglichen ihre geteilten Ausgaben zu überblicken und zu optimieren.
+Der Denkprozess für eine Gruppe......
 
-In vielen Gruppensituationen entstehen Unstimmigkeiten und Konflikte, wenn es um Geld geht. Es kann schwierig sein, die Ausgaben aufzuschlüsseln und die Konten auszugleichen, besonders wenn es viele verschiedene Ausgaben gibt und einige Personen nicht alle Kosten übernehmen können. Eine Software, die diesen Prozess automatisiert, könnte dazu beitragen, diese Konflikte zu reduzieren und die Zusammenarbeit in der Gruppe zu erleichtern.
+Das Ziel unserer Anwendung ist....
 
 === Anforderungsübersicht
 
 * GitHub-Einbindung
 * Authentifizierung
-* Die Anwendung wurde als Webanwendung mit Spring Boot umgesetzt
-* Die Anwendung läuft auf Port 9000
-* Rest API
 
 
 === Qualitätsziele
@@ -21,4 +18,11 @@ In vielen Gruppensituationen entstehen Unstimmigkeiten und Konflikte, wenn es um
 * Korrektheit
 * Wartbarkeit
 
+=== Stakeholder
 
+* Gruppe
+** Erwartungen:
+*** Die Anwendung soll die Verteilung des Geldbetrages in einer Gruppe vereinfachen
+* Teilnehmer
+** Erwartungen:
+*** alle Ausgaben sind schnell einsehbar

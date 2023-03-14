@@ -1,4 +1,4 @@
-= Dokumentation
+= image:images/logoOnion.png[onion] Dokumentation
 // toc-title definition MUST follow document title without blank line!
 :toc-title: Inhaltsverzeichnis
 
