@@ -8,6 +8,7 @@ import static com.tngtech.archunit.library.Architectures.onionArchitecture;
 
 
 import com.gruppe43.moneymanager.stereotypes.AggregateRoot;
+import com.gruppe43.moneymanager.stereotypes.Wertobjekt;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.gruppe43.moneymanager.MoneyManagerApplication;
 import com.tngtech.archunit.junit.AnalyzeClasses;
@@ -36,15 +37,15 @@ public class MoneyManagerArchTest {
   @ArchTest
   static final ArchRule noComponentAnnotation = classes().should().notBeAnnotatedWith(Component.class);
 
-
   @ArchTest
   static final ArchRule annotationenTest = classes().that().resideInAnyPackage("..domain..")
       .and().arePublic()
       .or().areProtected()
-      .should().beAnnotatedWith(AggregateRoot.class);
+      .should().beAnnotatedWith(AggregateRoot.class)
+      .orShould().beAnnotatedWith(Wertobjekt.class);
 
   @ArchTest
-  static final ArchRule layers = layeredArchitecture()
+  static final ArchRule onionLayeredArchitecture = layeredArchitecture()
       .consideringAllDependencies()
       .layer("Controller").definedBy("..web..")
       .layer("Service").definedBy("..service..")
