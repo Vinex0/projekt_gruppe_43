@@ -4,6 +4,27 @@
 :source-highlighter: rouge
 :experimental:
 
+== Konfigurationsguide
+
+1. Github Repository herunterladen.
+
+2. In das Verzeichnis MoneyManager navigieren.
+
+3. CLIENT_ID und CLIENT_SECRET in der .env Datei einfügen.
+
+4. "gradle assemble" ausführen.
+
+5. "docker build --tag=moneymanager:latest ." ausführen.
+
+6. "docker compose --env-file .env up" ausführen.
+
+7. Im Browser localhost:9000 aufrufen.
+
+8. Viel Spaß! :)
+
+IMPORTANT: Beim Nutzer hinzufügen darauf achten, dass der Github Nutzer tatsächlich existiert! Bei der API ist diese Kontrolle zur Vereinfachung der Testbarkeit deaktiviert.
+
+
 == Organisatorisches
 
 Die finden die URL für das Webex System auf http://propra.de/ws2223/ab899545cb7e0df[dieser Seite]. Wir hoffen, dass die Webex-URL über das ganze Praktikum über gleich bleibt, können aber nicht ausschließen, dass es Änderungen geben muss. 
