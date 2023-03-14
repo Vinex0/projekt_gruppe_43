@@ -30,6 +30,23 @@
         </div>
         <div class="card-body">
             <h5 class="card-title">Gruppen:</h5>
+            <h6>Offene Gruppen</h6>
+            <table class="table table-dark">
+                <thead>
+
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Gruppen Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="g,iterationStatus:${gruppenObject}" th:if="${not g.isClosed()}">
+                    <th  scope="row" th:text="${iterationStatus.count}">1</th>
+                    <td><a th:text="${g.getTitel()}" th:href='@{|/gruppe/${g.getId()}|}'></a> </td>
+                </tr>
+                </tbody>
+            </table>
+            <h6>Geschlossene Gruppen</h6>
             <table class="table table-dark">
                 <thead>
                 <tr>
@@ -38,7 +55,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="g,iterationStatus:${gruppenObject}">
+                <tr th:each="g,iterationStatus:${gruppenObject}" th:if="${g.isClosed()}">
                     <th scope="row" th:text="${iterationStatus.count}">1</th>
                     <td><a th:text="${g.getTitel()}" th:href='@{|/gruppe/${g.getId()}|}'></a> </td>
                 </tr>
