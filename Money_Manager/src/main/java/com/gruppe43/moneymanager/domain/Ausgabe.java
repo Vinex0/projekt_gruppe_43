@@ -22,6 +22,7 @@ class Ausgabe implements Comparable<Ausgabe> {
   static Ausgabe erstellen(String glaeubiger, String titel, Money summe) {
     return new Ausgabe(glaeubiger, new ArrayList<>(), titel, summe);
   }
+
   void addSchuldner(String schuldnerNehmer) {
     schuldnerListe.add(schuldnerNehmer);
   }

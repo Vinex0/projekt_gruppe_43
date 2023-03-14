@@ -106,15 +106,13 @@ public class Gruppe {
       ausgabe.addSchuldner(p);
     }
 
-    if(schuldner.size() >= 1) {
+    if (schuldner.size() >= 1) {
       Money individualAmount = summe.divide(schuldner.size());
       ausgaben.add(ausgabe);
       createIndividualSchuld(glaeubiger, ausgabe, individualAmount);
     } else {
       System.err.println("Teilnehmer darf nicht 0 sein");
     }
-
-    //adjustSchulden(ausgabe.getSchuldnerListe());
   }
 
   private void createIndividualSchuld(String glaeubiger, Ausgabe ausgabe, Money individualAmount) {
@@ -122,27 +120,6 @@ public class Gruppe {
       if (!person.equals(glaeubiger)) {
         schulden.get(person)
             .put(glaeubiger, getSchuldenFromTo(person, glaeubiger).add(individualAmount));
-      }
-    }
-  }
-
-  private void adjustSchulden(List<String> involved) {
-
-    for (String a : involved) {
-      for (String b : involved) {
-        if (!b.equals(a)) {
-          Money amountA = getSchuldenFromTo(a, b);
-          Money amountB = getSchuldenFromTo(b, a);
-          Money diffFromAtoB = amountA.subtract(amountB);
-          Money diffFromBtoA = amountB.subtract(amountA);
-          if (diffFromAtoB.isGreaterThan(Money.of(0, "EUR"))) {
-            schulden.get(a).put(b, diffFromAtoB);
-            schulden.get(b).put(a, Money.of(0, "EUR"));
-          } else {
-            schulden.get(a).put(b, Money.of(0, "EUR"));
-            schulden.get(b).put(a, diffFromBtoA);
-          }
-        }
       }
     }
   }
@@ -189,14 +166,14 @@ public class Gruppe {
   }
 
   public void close() {
-    adjustSchuldenV2();
+    adjustSchulden();
     closed = true;
   }
 
-  public List<AusgabeDto> getAusgabeDto(){
+  public List<AusgabeDto> getAusgabeDto() {
 
     return ausgaben.stream()
-        .map(a-> new AusgabeDto(a.getGlaeubiger(),
+        .map(a -> new AusgabeDto(a.getGlaeubiger(),
             a.getSchuldnerListe(),
             a.getTitel(),
             a.getSumme()))
@@ -205,7 +182,7 @@ public class Gruppe {
 
 
   @ClassOnly
-  private void adjustSchuldenV2() {
+  private void adjustSchulden() {
     Map<String, Money> debtMap = new HashMap<>();
     Map<String, Money> creditMap = new HashMap<>();
 

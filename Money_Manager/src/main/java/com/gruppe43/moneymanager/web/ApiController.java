@@ -47,7 +47,7 @@ public class ApiController {
 
   @GetMapping("/api/user/{name}/gruppen")
   public String getGruppenOfPerson(@PathVariable("name") String name) {
-    return SerializerService.gruppenListToJson(gruppenService.getGruppenByNutzer(name));
+    return SerializerService.gruppenByNutzerToJson(gruppenService.getGruppenByNutzer(name));
   }
 
   @PostMapping("/api/gruppen")

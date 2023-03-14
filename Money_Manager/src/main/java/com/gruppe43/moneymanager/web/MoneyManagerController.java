@@ -1,8 +1,8 @@
 package com.gruppe43.moneymanager.web;
 
 import com.gruppe43.moneymanager.domain.Gruppe;
-import com.gruppe43.moneymanager.helper.CheckboxHelper;
 import com.gruppe43.moneymanager.github.GitUserTester;
+import com.gruppe43.moneymanager.helper.CheckboxHelper;
 import com.gruppe43.moneymanager.service.GruppenService;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +99,6 @@ public class MoneyManagerController {
       String name, @RequestParam("summe") String summe,
       @RequestParam Map<String, String> allParams) {
 
-
     List<String> schuldenTeilnehmer = new ArrayList<>();
 
     allParams.remove("name");
@@ -126,7 +125,6 @@ public class MoneyManagerController {
   @PostMapping("/schliesseGruppe/{id}")
   public String closeGruppe(@PathVariable("id") String id) {
     gruppenService.getGruppeById(id).close();
-    //gruppenService.getGruppeById(id).adjustSchuldenV2();
     return "redirect:/gruppe/" + id;
   }
 
