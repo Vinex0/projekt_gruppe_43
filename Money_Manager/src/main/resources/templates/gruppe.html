@@ -65,13 +65,14 @@
                     <table class="table table-dark table-striped-columns mb-3 col">
                         <thead>
                         <tr class="table-active">
-                            <th colspan="4">Ausgaben</th>
+                            <th colspan="5">Ausgaben</th>
                         </tr>
                         <tr>
                             <th scope="row">Name</th>
                             <th>Glaeubiger</th>
                             <th>Schuldner</th>
                             <th>Summe</th>
+                            <th>beteiligt?</th>
                         </tr>
                         </thead>
                         <tbody class="table-group-divider">
@@ -81,6 +82,7 @@
                             <th><p th:each="schuldner: ${ausgabe.getSchuldnerListe()}"><i th:text="${schuldner}"></i>
                             </p></th>
                             <th th:text="${ausgabe.getSumme()}">Amount</th>
+                            <th th:if="${ausgabe.glaeubiger.equals(curNutzer) || ausgabe.getSchuldnerListe().contains(curNutzer)}">JA</th>
                         </tr>
                         </tbody>
                     </table>
