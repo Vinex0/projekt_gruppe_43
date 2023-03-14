@@ -47,7 +47,7 @@ public class ApiController {
 
   @GetMapping("/api/user/{name}/gruppen")
   public String getGruppenOfPerson(@PathVariable("name") String name) {
-    return Serializer.gruppenByNutzerToJson(gruppenService.getGruppenByNutzer(name));
+    return Serializer.gruppenListToJson(gruppenService.getGruppenByNutzer(name));
   }
 
   @PostMapping("/api/gruppen")
@@ -92,14 +92,16 @@ public class ApiController {
   public ResponseEntity<?> createAusgabe(@PathVariable String id, @RequestBody String data) {
 
     try {
-
       JSONObject obj = new JSONObject(data);
-      JSONArray schuldner = obj.getJSONArray("schuldner");
 
+
+
+      JSONArray schuldner = obj.getJSONArray("schuldner");
       if (schuldner.length() < 1) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
       }
       List<String> schuld = new ArrayList<>();
+
 
       for (int i = 0; i < schuldner.length(); i++) {
         schuld.add(schuldner.getString(i));
