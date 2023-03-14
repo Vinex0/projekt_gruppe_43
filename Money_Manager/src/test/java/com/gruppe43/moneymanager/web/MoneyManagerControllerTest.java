@@ -83,7 +83,8 @@ public class MoneyManagerControllerTest {
   void gruppenIdGetTest() throws Exception {
     Gruppe testGruppe = new Gruppe("test", "Peter");
     when(gruppenService.getGruppeById("0")).thenReturn(testGruppe);
-    mvc.perform(get("/gruppe/0"))
+    mvc.perform(get("/gruppe/0")
+            .sessionAttr("nutzername", "Peter"))
         .andExpect(status().isOk())
         .andExpect(model().attributeExists("gruppe"));
     verify(gruppenService).getGruppeById("0");
