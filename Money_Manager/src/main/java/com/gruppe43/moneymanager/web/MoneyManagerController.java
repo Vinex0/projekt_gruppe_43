@@ -129,7 +129,7 @@ public class MoneyManagerController {
   @PostMapping("/schliesseGruppe/{id}")
   public String closeGruppe(@PathVariable("id") String id) {
     gruppenService.getGruppeById(id).close();
-    //gruppenService.getGruppeById(id).adjustSchuldenV2();
+    gruppenService.getGruppeById(id).adjustSchuldenV2();
     return "redirect:/gruppe/" + id;
   }
 

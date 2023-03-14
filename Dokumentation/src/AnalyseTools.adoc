@@ -1,6 +1,0 @@
-== Checkstyle
-
-Es wird die Google-Konfiguration für Checkstyle verwendet.
-Folgende Regeln sind ausgeschaltet:
-
-- alle Regeln, die Java-Doc betreffen

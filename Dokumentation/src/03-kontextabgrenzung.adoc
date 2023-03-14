@@ -14,4 +14,4 @@ Die Anwendung wird von folgenden Benutzern verwendet:
 
 Der User kann sich mithilfe von OAuth2 mit seinen GitHub-Daten einloggen und bekommt so Zugriff zur Anwendung.
 
-image::images/model.png[Das Programm verwendet OAuth für die Authentifizierung]
+

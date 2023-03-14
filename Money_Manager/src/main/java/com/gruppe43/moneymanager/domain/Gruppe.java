@@ -2,14 +2,16 @@ package com.gruppe43.moneymanager.domain;
 
 import com.gruppe43.moneymanager.domain.dto.AusgabeDto;
 import com.gruppe43.moneymanager.stereotypes.AggregateRoot;
-import com.gruppe43.moneymanager.stereotypes.ClassOnly;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -35,14 +37,7 @@ public class Gruppe {
   private boolean closed;
 
   public Gruppe(String titel, String startPerson) {
-    this(null,
-        Objects.requireNonNull(titel),
-        Objects.requireNonNull(startPerson),
-        new ArrayList<>(),
-        new ArrayList<>(),
-        new HashMap<>(),
-        false);
-
+    this(null, titel, startPerson, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), false);
     if (!teilnehmer.contains(startPerson)) {
       teilnehmer.add(startPerson);
       schulden.put(startPerson, new HashMap<>());
@@ -50,14 +45,8 @@ public class Gruppe {
   }
 
   public Gruppe(String titel, List<String> personen) {
-    this(null,
-        Objects.requireNonNull(titel),
-        personen.get(0),
-        new ArrayList<>(),
-        new ArrayList<>(),
-        new HashMap<>(),
+    this(null, titel, personen.get(0), new ArrayList<>(), new ArrayList<>(), new HashMap<>(),
         false);
-
     for (String p : personen) {
       if (!teilnehmer.contains(p)) {
         addTeilnehmer(p);
@@ -83,7 +72,6 @@ public class Gruppe {
     }
   }
 
-  @ClassOnly
   private void initializeSchuldenMap(String neuerNutzer) {
     teilnehmer.add(neuerNutzer);
     schulden.put(neuerNutzer, new HashMap<>());
@@ -100,20 +88,17 @@ public class Gruppe {
     if (closed) {
       throw new RuntimeException("Group already closed");
     }
-    Ausgabe ausgabe = Ausgabe.erstellen(glaeubiger, title, summe);
+    Ausgabe ausgabe = new Ausgabe(glaeubiger, title, summe);
 
     for (String p : schuldner) {
       ausgabe.addSchuldner(p);
     }
 
-    if(schuldner.size() >= 1) {
-      Money individualAmount = summe.divide(schuldner.size());
-      ausgaben.add(ausgabe);
-      createIndividualSchuld(glaeubiger, ausgabe, individualAmount);
-    } else {
-      System.err.println("Teilnehmer darf nicht 0 sein");
-    }
+    Money individualAmount = CalculationHelpers.paymentShare(summe,
+        ausgabe.getSchuldnerListe().size());
 
+    ausgaben.add(ausgabe);
+    createIndividualSchuld(glaeubiger, ausgabe, individualAmount);
     //adjustSchulden(ausgabe.getSchuldnerListe());
   }
 
@@ -133,8 +118,8 @@ public class Gruppe {
         if (!b.equals(a)) {
           Money amountA = getSchuldenFromTo(a, b);
           Money amountB = getSchuldenFromTo(b, a);
-          Money diffFromAtoB = amountA.subtract(amountB);
-          Money diffFromBtoA = amountB.subtract(amountA);
+          Money diffFromAtoB = CalculationHelpers.difference(amountA, amountB);
+          Money diffFromBtoA = CalculationHelpers.difference(amountB, amountA);
           if (diffFromAtoB.isGreaterThan(Money.of(0, "EUR"))) {
             schulden.get(a).put(b, diffFromAtoB);
             schulden.get(b).put(a, Money.of(0, "EUR"));
@@ -169,8 +154,7 @@ public class Gruppe {
     return Money.of(betrag, "EUR");
   }
 
-  @ClassOnly
-  private Money getTotalPaymentFrom(String glaeubiger) {
+  public Money getTotalPaymentFrom(String glaeubiger) {
     double betrag = 0d;
     for (Ausgabe ausgabe : ausgaben) {
       if (glaeubiger.equals(ausgabe.getGlaeubiger())) {
@@ -189,23 +173,14 @@ public class Gruppe {
   }
 
   public void close() {
-    adjustSchuldenV2();
     closed = true;
   }
 
   public List<AusgabeDto> getAusgabeDto(){
-
-    return ausgaben.stream()
-       .map(a-> new AusgabeDto(a.getGlaeubiger(),
-           a.getSchuldnerListe(),
-           a.getTitel(),
-           a.getSumme()))
-       .collect(Collectors.toList());
+   return ausgaben.stream().map(a-> new AusgabeDto(a.getGlaeubiger(), a.getSchuldnerListe(), a.getTitel(), a.getSumme())).collect(Collectors.toList());
   }
 
-
-  @ClassOnly
-  private void adjustSchuldenV2() {
+  public void adjustSchuldenV2() {
     Map<String, Money> debtMap = new HashMap<>();
     Map<String, Money> creditMap = new HashMap<>();
 
@@ -238,6 +213,9 @@ public class Gruppe {
 
       }
     }
+
+    Map<String, Money> copyOfMustPay = new HashMap<>(mustPay);
+    Map<String, Money> copyOfMustGet = new HashMap<>(mustGet);
 
     //Get ascending order of payment
     for (String person : teilnehmer) {

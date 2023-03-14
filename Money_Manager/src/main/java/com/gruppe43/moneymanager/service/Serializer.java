@@ -32,10 +32,10 @@ public class SerializerService {
   }
 
   public static String ausgabeToJson(AusgabeDto ausgabe) {
-    return "{\"grund\" : " + "\"" + ausgabe.titel() + "\"" + ", \"glaeubiger\" : " + "\""
-        + ausgabe.glaeubiger() + "\"" + ", \"cent\" : " + "\"" + ausgabe.summe().multiply(100)
+    return "{\"grund\" : " + "\"" + ausgabe.getTitel() + "\"" + ", \"glaeubiger\" : " + "\""
+        + ausgabe.getGlaeubiger() + "\"" + ", \"cent\" : " + "\"" + ausgabe.getSumme().multiply(100)
         .getNumber().intValue() + "\"" + ", \"schuldner\" : " + personListToJson(
-        ausgabe.schuldnerListe()) + "}";
+        ausgabe.getSchuldnerListe()) + "}";
   }
 
   public static String ausgabenToJson(List<AusgabeDto> ausgaben) {
