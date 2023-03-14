@@ -24,6 +24,8 @@
 
 IMPORTANT: Beim Nutzer hinzufügen darauf achten, dass der Github Nutzer tatsächlich existiert! Bei der API ist diese Kontrolle zur Vereinfachung der Testbarkeit deaktiviert.
 
+IMPORTANT: Schulden werden zu Minimierungszwecken erst beim Schließen der Gruppe verrechnet! Durch klicken auf den Moneymanager Button oben links kommt man zurück auf den Gruppenüberblick. Weitere Details sind falls nötig in der Dokumentation zu finden.
+
 
 == Organisatorisches
 
