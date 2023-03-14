@@ -3,10 +3,10 @@
 === Fachlicher Kontext
 
 ==== Gruppe
-Die Gruppe bietet folgende Funktionalität:
+Die Gruppe bietet folgende Funktionalitäten:
 
 * Die Gruppe wird von einem Nutzer erstellt.
-* Es können weiter Nutzer hinzugefügt werden.
+* Es können weitere Nutzer hinzugefügt werden.
 * Eine Ausgabe wird von einem Nutzer innerhalb einer Gruppe erstellt.
 * Eine Gruppe kann mehrere Ausgaben haben.
 

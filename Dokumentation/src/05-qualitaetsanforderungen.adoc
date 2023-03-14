@@ -4,6 +4,6 @@
 In diesem Kapitel wird aufgelistet, welche Qualitätsanforderungen an die Anwendung gestellt werden.
 
 * Die Anwendung soll wartbar sein.
-* Das System ist für Nutzern einfach zu benutzen.
-* Es können schnell Gruppen von Nutzer erstellt werden.
+* Das System ist für Nutzer einfach zu verwenden.
+* Gruppen und Ausgaben können schnell und einfach von Nutzern erstellt und eingetragen werden.
 * Tests folgen den FIRST-Prinzipien.

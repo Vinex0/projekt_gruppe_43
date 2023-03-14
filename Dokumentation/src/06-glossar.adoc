@@ -3,7 +3,7 @@
 === Domänenbegriffe
 
 =====
-* *Gruppe*: Teilnehmer werden in der Gruppe eingeladen
+* *Gruppe*: Teilnehmer werden in die Gruppe eingeladen
 
 =====
 =====
@@ -14,6 +14,6 @@
 === Weitere Begriffe
 
 * *GitUserValidation*: Authentifizierter Nutzer, hat eine Github-Kennung und eine Rolle
-* *CheckboxHelper*: Bereitet die Liste der Teilnehmer an einer Ausgabe
+* *CheckboxHelper*: Hilft bei der Übertragung von Checkboxdaten in den Controller
 
 

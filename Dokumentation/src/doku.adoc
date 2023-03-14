@@ -11,22 +11,22 @@ Es wird das folgende Schema verwendet:
 
 * Gruppe erstellen(/gruppenOverview)
 ** Wenn keine Gruppen erstellt wurden, ist die Liste aller Gruppe leer
-** Hier muss der Nutzer ein Name für die Gruppe eingeben, somit wird die Gruppe erstellt
-** Gleichzeitig bekommt der Nutzer ein Überblick von allen Gruppen
-** Der Nutzer kann auf eine Gruppe drücken um an die Informationen der Gruppe zukommen
+** Hier muss der Nutzer einen Namen für die Gruppe eingeben, somit wird die Gruppe erstellt
+** Gleichzeitig bekommt der Nutzer einen Überblick aller Gruppen
+** Der Nutzer kann auf eine Gruppe drücken um an die Informationen der Gruppe zu erhalten
 
 * Gruppen erstellen (/createGruppe)
-** Der Nutzer gibt der gewünschte Name ein, somit wird die Gruppe erstellt
+** Der Nutzer gibt den gewünschten Namen ein, somit wird die Gruppe erstellt
 ** Nach diesem Schritt wird der Nutzer zurück in den Gruppenüberblick geschickt
 
 * Gruppe(/gruppen/{id})
 ** Hier werden alle Informationen über die Teilnehmer und Schulden angezeigt
-** Wenn man auf der "Schliesse Gruppe" drückt, werden die Schulden angepasst
-** Sobald die Gruppe geschlossen ist, kann keine Ausgabe mehr erstellt werden
+** Wenn man den "Schliesse Gruppe" betätigt, werden die Schulden angepasst
+** Sobald die Gruppe geschlossen ist, können keine Ausgaben mehr erstellt werden
 
 * Nutzer hinzufügen:
 ** Ein neuer Nutzer kann in der Gruppe hinzugefügt werden
-** Sobald eine Ausgabe gibt, kann kein Nutzer hinzugefügt werden
+** Sobald es eine Ausgabe gibt, kann kein Nutzer hinzugefügt werden
 
 * Neue Ausgabe (createAusgabe/{id})
 ** Hier kann jeder Nutzer eine Ausgabe erstellen
