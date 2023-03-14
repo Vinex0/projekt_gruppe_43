@@ -31,8 +31,8 @@ public class Serializer {
 
   public static String ausgabeToJson(Ausgabe ausgabe) {
     return "{\"grund\" : " + "\"" + ausgabe.getTitel() + "\"" + ", \"glaeubiger\" : " + "\""
-        + ausgabe.getGlaeubiger() + "\"" + ", \"cent\" : " + "\"" + ausgabe.getSumme().multiply(100)
-        .getNumber().intValue() + "\"" + ", \"schuldner\" : " + personListToJson(
+        + ausgabe.getGlaeubiger() + "\"" + ", \"cent\" : " + ausgabe.getSumme().multiply(100)
+        .getNumber().intValue() + ", \"schuldner\" : " + personListToJson(
         ausgabe.getSchuldnerListe()) + "}";
   }
 
@@ -74,7 +74,7 @@ public class Serializer {
           builder.append("\", \"an\" : \"");
           builder.append(m.getKey());
           builder.append("\", \"cents\" : ");
-          builder.append(m.getValue().getNumber().doubleValue() * 100);
+          builder.append(m.getValue().multiply(100).getNumber().intValue());
           builder.append("},");
         }
       }
@@ -83,5 +83,24 @@ public class Serializer {
     builder.append("]");
     return builder.toString();
 
+  }
+
+  public static String gruppenByNutzerToJson(List<Gruppe> gruppen) {
+    StringBuilder builder = new StringBuilder();
+    builder.append("[");
+    for (int i = 0; i < gruppen.size(); i++) {
+      builder.append(gruppeByNutzerToJson(gruppen.get(i)));
+      if (!(i == gruppen.size() - 1)) {
+        builder.append(", ");
+      }
+    }
+    builder.append("]");
+    return builder.toString();
+  }
+
+  public static String gruppeByNutzerToJson(Gruppe gruppe) {
+    return "{\"gruppe\" : " + "\"" + gruppe.getId() + "\"" + ", \"name\" : " + "\""
+        + gruppe.getTitel() + "\"" + ", \"personen\" : " + personListToJson(gruppe.getTeilnehmer())
+        + "}";
   }
 }
