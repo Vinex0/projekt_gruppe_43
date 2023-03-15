@@ -1,5 +1,14 @@
 version: '3.1'
 services:
+  postgresapp:
+    image: 'postgres:15.2-alpine'
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: MoneyData
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
   moneymanager:
     container_name: moneymanager
     build:
