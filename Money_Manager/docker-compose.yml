@@ -9,6 +9,8 @@ services:
       - "5432:5432"
     expose:
       - "5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
   moneymanager:
     container_name: moneymanager
     build:

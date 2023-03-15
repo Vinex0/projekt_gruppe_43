@@ -4,6 +4,7 @@ create table if not exists gruppe(
     start_person varchar(100)  ,
     geschlossen boolean
 );
+
 create table if not exists teilnehmer(
     id serial primary key ,
     foreign key (id) references gruppe(id),
