@@ -10,5 +10,5 @@ public interface GruppenRepository {
 
   Optional<Gruppe> findById(int id);
 
-  Gruppe save(Gruppe gruppe);
+  void save(Gruppe gruppe);
 }
