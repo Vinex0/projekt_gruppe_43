@@ -1,5 +1,5 @@
 package com.gruppe43.moneymanager.database;
 
-public class teilnehmerDb {
+public class DataJdbcApplication {
 
 }
