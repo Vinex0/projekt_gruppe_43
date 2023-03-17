@@ -15,12 +15,5 @@ create table if not exists ausgabe(
     schuldner varchar(100)
 );
 
-create table if not exists schulden(
-    id serial primary key,
-    gruppe integer references gruppe(id),
-    glaeubiger varchar(100),
-    schuldner varchar(100),
-    summe double precision
-);
 
 
