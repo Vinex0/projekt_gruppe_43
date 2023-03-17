@@ -33,7 +33,7 @@ public class ApiControllerTest {
 
   @Test
   void gruppeDoesntExistTest() throws Exception {
-    when(gruppenService.getGruppeById("0")).thenReturn(null);
+    when(gruppenService.getGruppeById(0)).thenReturn(null);
     mvc.perform(get("/api/gruppen/0")
             .param("id", "0"))
         .andExpect(status().isNotFound());
@@ -45,7 +45,7 @@ public class ApiControllerTest {
     testGruppe.addTeilnehmer("Jens");
     testGruppe.createAusgabe("Peter",List.of("Jens"), Money.of(10, "EUR"), "TestAusgabe");
     String expectedResponse = "{\"gruppe\" : \"null\", \"name\" : \"TestGruppe\", \"personen\" : [\"Peter\", \"Jens\"], \"geschlossen\" : false, \"ausgaben\" : [{\"grund\" : \"TestAusgabe\", \"glaeubiger\" : \"Peter\", \"cent\" : 1000, \"schuldner\" : [\"Jens\"]}]}";
-    when(gruppenService.getGruppeById("0")).thenReturn(testGruppe);
+    when(gruppenService.getGruppeById(0)).thenReturn(testGruppe);
     mvc.perform(get("/api/gruppen/0")
             .param("id", "0"))
         .andExpect(status().isOk())
@@ -57,7 +57,7 @@ public class ApiControllerTest {
     Gruppe testGruppe = new Gruppe("TestGruppe", "Peter");
     testGruppe.addTeilnehmer("Jens");
     testGruppe.createAusgabe("Peter",List.of("Jens"), Money.of(10, "EUR"), "TestAusgabe");
-    when(gruppenService.getGruppeById("0")).thenReturn(testGruppe);
+    when(gruppenService.getGruppeById(0)).thenReturn(testGruppe);
     String expectedResponse = "[{\"von\" : \"Jens\", \"an\" : \"Peter\", \"cents\" : 1000}]";
     mvc.perform(get("/api/gruppen/0/ausgleich")
             .param("id", "0"))
@@ -89,7 +89,7 @@ public class ApiControllerTest {
   void createGruppeTest() throws Exception {
     String body = "{\"name\" : \"Test Gruppe\", \"personen\" : [\"Peter\", \"Jens\", \"Moritz\"] }";
     when(gruppenService.getGruppeByTitle(anyString())).thenReturn(mock(Gruppe.class));
-    when(gruppenService.getGruppeByTitle(anyString()).getId()).thenReturn("0");
+    when(gruppenService.getGruppeByTitle(anyString()).getId()).thenReturn(0);
     mvc.perform(post("/api/gruppen")
             .content(body))
         .andExpect(status().isCreated())
@@ -100,7 +100,7 @@ public class ApiControllerTest {
   @Test
   void gruppeSchliessenTest() throws Exception{
     Gruppe testGruppe = new Gruppe("TestGruppe", "Peter");
-    when(gruppenService.getGruppeById("0")).thenReturn(testGruppe);
+    when(gruppenService.getGruppeById(0)).thenReturn(testGruppe);
     mvc.perform(post("/api/gruppen/0/schliessen")
             .param("id", "0"))
         .andExpect(status().isOk());
@@ -113,7 +113,7 @@ public class ApiControllerTest {
     String body = "{\"grund\": \"IntelliJ Ultimate Abo\", \"glaeubiger\": \"Peter\", \"cent\" : 5000, \"schuldner\" : [\"Jens\"]}";
     Gruppe testGruppe = new Gruppe("TestGruppe", "Peter");
     testGruppe.addTeilnehmer("Jens");
-    when(gruppenService.getGruppeById("0")).thenReturn(testGruppe);
+    when(gruppenService.getGruppeById(0)).thenReturn(testGruppe);
     mvc.perform(post("/api/gruppen/0/auslagen")
             .param("id", "0")
             .content(body))
