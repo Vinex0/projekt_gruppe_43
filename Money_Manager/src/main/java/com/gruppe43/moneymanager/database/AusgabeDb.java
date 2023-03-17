@@ -7,7 +7,7 @@ import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.data.relational.core.mapping.Table;
 
 //TODO
-@Table("ausgabe")
+
 record AusgabeDb(String titel, Double summe, String glauebiger, List<String> schuldner) {
 
 

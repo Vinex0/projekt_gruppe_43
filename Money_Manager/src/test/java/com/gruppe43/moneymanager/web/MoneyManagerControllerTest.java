@@ -82,24 +82,24 @@ public class MoneyManagerControllerTest {
   @Test
   void gruppenIdGetTest() throws Exception {
     Gruppe testGruppe = new Gruppe("test", "Peter");
-    when(gruppenService.getGruppeById("0")).thenReturn(testGruppe);
+    when(gruppenService.getGruppeById(0)).thenReturn(testGruppe);
     mvc.perform(get("/gruppe/0")
             .sessionAttr("nutzername", "Peter"))
         .andExpect(status().isOk())
         .andExpect(model().attributeExists("gruppe"));
-    verify(gruppenService).getGruppeById("0");
+    verify(gruppenService).getGruppeById(0);
   }
 
 
   @Test
   void addNutzerIdTest() throws Exception {
     Gruppe testGruppe = mock(Gruppe.class);
-    when(gruppenService.getGruppeById("0")).thenReturn(testGruppe);
+    when(gruppenService.getGruppeById(0)).thenReturn(testGruppe);
     mvc.perform(post("/addNutzer/0")
             .param("id", "0")
             .param("nutzername", "Vinex0"))
         .andExpect(status().isFound());
-    verify(gruppenService).getGruppeById("0");
+    verify(gruppenService).getGruppeById(0);
     verify(testGruppe).addTeilnehmer("Vinex0");
   }
   @Test
@@ -108,22 +108,22 @@ public class MoneyManagerControllerTest {
     CheckboxHelper helper = mock(CheckboxHelper.class);
     ArrayList<CheckboxHelper> helpers = new ArrayList<>();
     helpers.add(helper);
-    when(gruppenService.getGruppeById("0")).thenReturn(testGruppe);
-    when(gruppenService.getCheckboxHelper("0")).thenReturn(helpers);
+    when(gruppenService.getGruppeById(0)).thenReturn(testGruppe);
+    when(gruppenService.getCheckboxHelper(0)).thenReturn(helpers);
 
     mvc.perform(get("/createAusgabe/0")
             .param("id", "0"))
         .andExpect(status().isOk())
         .andExpect(model().attributeExists("checkboxHelpers"))
         .andExpect(model().attributeExists("gruppe"));
-    verify(gruppenService).getGruppeById("0");
-    verify(gruppenService).getCheckboxHelper("0");
+    verify(gruppenService).getGruppeById(0);
+    verify(gruppenService).getCheckboxHelper(0);
   }
 
   @Test
   void createAusgabePostTest() throws Exception {
     Gruppe testGruppe = mock(Gruppe.class);
-    when(gruppenService.getGruppeById("0")).thenReturn(testGruppe);
+    when(gruppenService.getGruppeById(0)).thenReturn(testGruppe);
     List<String> schuldenTeilnehmer = new ArrayList<>();
     mvc.perform(post("/createAusgabe/0")
             .param("id", "0")
@@ -139,7 +139,7 @@ public class MoneyManagerControllerTest {
   @Test
   void schliesseGruppeTest() throws Exception {
     Gruppe testGruppe = new Gruppe("Test", "Peter");
-    when(gruppenService.getGruppeById("0")).thenReturn(testGruppe);
+    when(gruppenService.getGruppeById(0)).thenReturn(testGruppe);
     mvc.perform(post("/schliesseGruppe/0").param("id", "0"))
         .andExpect(status().isFound());
     assertThat(testGruppe.isClosed()).isTrue();

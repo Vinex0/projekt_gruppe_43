@@ -26,7 +26,7 @@ public class GruppenRepositoryImpl implements GruppenRepository {
   }
 
   @Override
-  public Optional<Gruppe> findById(String id) {
+  public Optional<Gruppe> findById(int id) {
     return springDataGruppenRepository.findById(id).map(this::toGruppe);
   }
 
@@ -42,15 +42,15 @@ public class GruppenRepositoryImpl implements GruppenRepository {
         .map(a -> new AusgabeDb(a.titel(), a.summe().getNumber().doubleValue(), a.glaeubiger(),
             a.schuldnerListe())).toList();
 
-    return new GruppeDb(Integer.parseInt(gruppe.getId()), gruppe.getTitel(),
+    return new GruppeDb(gruppe.getId(), gruppe.getTitel(),
         gruppe.getStartPerson(),
         gruppe.isClosed(), gruppe.getTeilnehmer(), ausgaben);
   }
 
   private Gruppe toGruppe(GruppeDb gruppeDb) {
-    Gruppe gruppe = new Gruppe(gruppeDb.titel(), gruppeDb.startPerson());
+    Gruppe gruppe = new Gruppe(gruppeDb.titel(), gruppeDb.startPerson(), gruppeDb.id());
     gruppeDb.teilnehmer().forEach(gruppe::addTeilnehmer);
-    gruppeDb.ausgabedbs().forEach(a -> gruppe.createAusgabe(a.glauebiger(), a.schuldner(), Money.of(a.summe(),"EUR"), a.titel()));
+    gruppeDb.ausgaben().forEach(a -> gruppe.createAusgabe(a.glauebiger(), a.schuldner(), Money.of(a.summe(),"EUR"), a.titel()));
     //TODO schulden mappen
     return gruppe;
   }

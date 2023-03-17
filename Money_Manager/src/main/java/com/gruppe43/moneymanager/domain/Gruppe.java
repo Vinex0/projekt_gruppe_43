@@ -23,7 +23,7 @@ import org.springframework.data.annotation.PersistenceCreator;
 @AggregateRoot
 public class Gruppe {
 
-  private final String id;
+  private final Integer id;
   private final String titel;
   private final String startPerson;
   private final List<String> teilnehmer;
@@ -35,7 +35,7 @@ public class Gruppe {
   private boolean closed;
 
   @PersistenceCreator
-  public Gruppe(String id, String titel, String startPerson, List<String> teilnehmer,
+  public Gruppe(Integer id, String titel, String startPerson, List<String> teilnehmer,
       List<Ausgabe> ausgaben, Map<String, Map<String, Money>> schulden,
       Map<String, Schuld> helperMap,
       boolean closed) {
@@ -65,24 +65,8 @@ public class Gruppe {
     }
   }
 
-  public Gruppe(String titel, List<String> personen) {
-    this(null,
-        Objects.requireNonNull(titel),
-        personen.get(0),
-        new ArrayList<>(),
-        new ArrayList<>(),
-        new HashMap<>(),
-        new HashMap<>(),
-        false);
 
-    for (String p : personen) {
-      if (!teilnehmer.contains(p)) {
-        addTeilnehmer(p);
-      }
-    }
-  }
-
-  public Gruppe(String titel, String startPerson, String id) {
+  public Gruppe(String titel, String startPerson, Integer id) {
     this(id, titel, startPerson, new ArrayList<>(), new ArrayList<>(), new HashMap<>(),
         new HashMap<>(), false);
     if (!teilnehmer.contains(startPerson)) {

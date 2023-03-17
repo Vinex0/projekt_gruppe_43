@@ -22,7 +22,7 @@ public class GruppenService {
     return gruppenRepository.findAll().stream().sorted().toList();
   }
 
-  public Gruppe gruppe(String nr) {
+  public Gruppe gruppe(int nr) {
     return gruppenRepository.findById(nr).orElseThrow(NichtVorhandenException::new);
   }
 
@@ -31,7 +31,7 @@ public class GruppenService {
     return gruppenRepository.save(gruppe);
   }
 
-  public void ausgabeHinzufuegen(String id, String name, List<String> schuldenTeilnehmer,
+  public void ausgabeHinzufuegen(int id, String name, List<String> schuldenTeilnehmer,
       Money summe, String ausgabeTitel) {
     Gruppe gruppe = getGruppeById(id);
     gruppe.createAusgabe(name, schuldenTeilnehmer, summe, ausgabeTitel);
@@ -44,9 +44,9 @@ public class GruppenService {
 
   }
 
-  public ArrayList<CheckboxHelper> getCheckboxHelper(String title) {
+  public ArrayList<CheckboxHelper> getCheckboxHelper(int id) {
     ArrayList<CheckboxHelper> checkboxHelpers = new ArrayList<>();
-    Gruppe g = getGruppeById(title);
+    Gruppe g = getGruppeById(id);
     for (String p : g.getTeilnehmer()) {
       CheckboxHelper checkboxHelper = new CheckboxHelper(p, false);
       checkboxHelpers.add(checkboxHelper);
@@ -59,18 +59,18 @@ public class GruppenService {
     return gruppenRepository.findAll().stream().map(Gruppe::getTitel).collect(Collectors.toList());
   }
 
-  public boolean isClosed(String id) {
+  public boolean isClosed(int id) {
     return getGruppeById(id).isClosed();
   }
 
-  public void close(String id) {
+  public void close(int id) {
     Gruppe gruppe = getGruppeById(id);
     gruppe.close();
     gruppenRepository.save(gruppe);
   }
 
 
-  public Gruppe getGruppeById(String id) {
+  public Gruppe getGruppeById(int id) {
     return gruppenRepository.findById(id).orElseThrow(NichtVorhandenException::new);
   }
 
@@ -81,7 +81,7 @@ public class GruppenService {
             Collectors.toList());
   }
 
-  public void teilnehmerHinzufuegen(String id, String nutzername) {
+  public void teilnehmerHinzufuegen(int id, String nutzername) {
     Gruppe gruppe = getGruppeById(id);
     gruppe.addTeilnehmer(nutzername);
     gruppenRepository.save(gruppe);

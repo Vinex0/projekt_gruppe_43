@@ -29,7 +29,7 @@ public class ApiController {
 
   @GetMapping("/api/gruppen/{id}")
   public ResponseEntity<?> getGruppe(@PathVariable("id") String id) {
-    Gruppe gruppe = gruppenService.getGruppeById(id);
+    Gruppe gruppe = gruppenService.getGruppeById(Integer.parseInt(id));
     if (gruppe == null) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
@@ -38,11 +38,11 @@ public class ApiController {
 
   @GetMapping("/api/gruppen/{id}/ausgleich")
   public ResponseEntity<?> getSchulden(@PathVariable("id") String id) {
-    if (gruppenService.getGruppeById(id) == null) {
+    if (gruppenService.getGruppeById(Integer.parseInt(id)) == null) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     return ResponseEntity.status(HttpStatus.OK)
-        .body(SerializerService.schuldenToJson(gruppenService.getGruppeById(id)));
+        .body(SerializerService.schuldenToJson(gruppenService.getGruppeById(Integer.parseInt(id))));
   }
 
   @GetMapping("/api/user/{name}/gruppen")
@@ -83,8 +83,8 @@ public class ApiController {
 
   @PostMapping("/api/gruppen/{id}/schliessen")
   public ResponseEntity<?> closeGruppe(@PathVariable("id") String id) {
-    if (gruppenService.getGruppeById(id) != null) {
-      gruppenService.close(id);
+    if (gruppenService.getGruppeById(Integer.parseInt(id)) != null) {
+      gruppenService.close(Integer.parseInt(id));
       return ResponseEntity.status(HttpStatus.OK).build();
     }
     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -109,13 +109,13 @@ public class ApiController {
       String glaeubiger = obj.getString("glaeubiger");
       int summe = obj.getInt("cent");
 
-      if (gruppenService.getGruppeById(id) == null) {
+      if (gruppenService.getGruppeById(Integer.parseInt(id)) == null) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
       }
-      if (gruppenService.isClosed(id)) {
+      if (gruppenService.isClosed(Integer.parseInt(id))) {
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
       }
-      gruppenService.ausgabeHinzufuegen(id, glaeubiger, schuld, Money.of(summe, "EUR").divide(100),
+      gruppenService.ausgabeHinzufuegen(Integer.parseInt(id), glaeubiger, schuld, Money.of(summe, "EUR").divide(100),
           grund);
       return ResponseEntity.status(HttpStatus.CREATED).build();
     } catch (JSONException e) {

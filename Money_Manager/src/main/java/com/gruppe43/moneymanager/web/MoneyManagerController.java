@@ -61,20 +61,22 @@ public class MoneyManagerController {
     if (name.length() < 1) {
       return "redirect:createGruppe";
     }
-    gruppenService.gruppeHinzufuegen(name, nutzername);
-    return "redirect:gruppenOverview";
+    //TODO check this redirect yolo
+    Gruppe gruppe = gruppenService.gruppeHinzufuegen(name, nutzername);
+    int id = gruppe.getId();
+    return "redirect:/gruppe/" + id;
   }
 
   @GetMapping("/gruppe/{id}")
   public String getGruppe(@ModelAttribute("nutzername") String nutzername,
-      @PathVariable("id") String id, Model model) {
+      @PathVariable("id") int id, Model model) {
     model.addAttribute("curNutzer", nutzername);
     model.addAttribute("gruppe", gruppenService.getGruppeById(id));
     return "gruppe";
   }
 
   @PostMapping("/addNutzer/{id}")
-  public String addNutzer(@PathVariable("id") String id, String nutzername) {
+  public String addNutzer(@PathVariable("id") int id, String nutzername) {
 
     if (gruppenService.isClosed(id)) {
       return "redirect:/gruppe/" + id;
@@ -87,7 +89,7 @@ public class MoneyManagerController {
   }
 
   @GetMapping("/createAusgabe/{id}")
-  public String createAusgabe(@PathVariable("id") String id, Model model) {
+  public String createAusgabe(@PathVariable("id") int id, Model model) {
     Gruppe gruppe = gruppenService.getGruppeById(id);
     ArrayList<CheckboxHelper> checkboxHelpers = gruppenService.getCheckboxHelper(id);
 
@@ -97,7 +99,7 @@ public class MoneyManagerController {
   }
 
   @PostMapping("/createAusgabe/{id}")
-  public String getAusgabe(@PathVariable("id") String id, String ausgabeTitel,
+  public String getAusgabe(@PathVariable("id") int id, String ausgabeTitel,
       String name, @RequestParam("summe") String summe,
       @RequestParam Map<String, String> allParams) {
 
@@ -107,7 +109,7 @@ public class MoneyManagerController {
     allParams.remove("_csrf");
     allParams.remove("summe");
     allParams.remove("ausgabeTitel");
-    //Gruppe gruppe = gruppenService.getGruppeById(id);
+
     List<CheckboxHelper> checkboxHelpers = new ArrayList<>();
     for (Entry<String, String> e : allParams.entrySet()) {
       var a = new CheckboxHelper(e.getKey(), e.getValue().equals("on"));
@@ -127,7 +129,7 @@ public class MoneyManagerController {
 
 
   @PostMapping("/schliesseGruppe/{id}")
-  public String closeGruppe(@PathVariable("id") String id) {
+  public String closeGruppe(@PathVariable("id") int id) {
     gruppenService.close(id);
     return "redirect:/gruppe/" + id;
   }
