@@ -1,6 +1,6 @@
 package com.gruppe43.moneymanager.domain;
 
-import com.gruppe43.moneymanager.stereotypes.AggregateRoot;
+
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;

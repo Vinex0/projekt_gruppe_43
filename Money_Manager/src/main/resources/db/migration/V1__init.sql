@@ -10,8 +10,8 @@ create table if not exists ausgabe(
     id serial primary key ,
     gruppe integer references gruppe(id),
     titel varchar(100),
-    summe double precision
-    glauebiger varchar(100)
+    summe double precision,
+    glauebiger varchar(100),
     schuldner varchar(100)
 );
 

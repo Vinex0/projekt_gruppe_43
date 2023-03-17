@@ -1,5 +1,7 @@
 package com.gruppe43.moneymanager.database;
 
-public class DataJdbcApplication {
+
+//TODO
+public record AusgabeDb() {
 
 }

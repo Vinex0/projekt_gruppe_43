@@ -51,23 +51,16 @@ public class MoneyManagerArchTest {
       .layer("Service").definedBy("..service..")
       .layer("Database").definedBy("..database..")
       .whereLayer("Controller").mayNotBeAccessedByAnyLayer()
-      .whereLayer("Service").mayOnlyBeAccessedByLayers("Controller")
+      .whereLayer("Service").mayOnlyBeAccessedByLayers("Controller", "Database")
       .whereLayer("Database").mayOnlyBeAccessedByLayers("Service");
-
-  /*@ArchTest
-  static final ArchRule onionArchitectureWirdEingehalten = onionArchitecture()
-      .domainModels("..domain..")
-      .domainServices( "..security..")
-      .applicationServices("..services..")
-      .adapter("web", "..controller.."); */
-
 
 
   @ArchTest
   static final ArchRule applicationServicesInServices = classes()
       .that().resideInAPackage("..service..")
       .should().beAnnotatedWith(Service.class)
-      .andShould().haveSimpleNameEndingWith("Service");
+      .andShould().haveSimpleNameEndingWith("Service")
+      .orShould().haveSimpleNameEndingWith("Repository");
 
   @ArchTest
   static final ArchRule controllerShouldBeNamedAsSuch = classes()

@@ -16,12 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 @WebMvcTest
 @ContextConfiguration(classes = ApiController.class)
@@ -91,13 +88,13 @@ public class ApiControllerTest {
   @Test
   void createGruppeTest() throws Exception {
     String body = "{\"name\" : \"Test Gruppe\", \"personen\" : [\"Peter\", \"Jens\", \"Moritz\"] }";
-    when(gruppenService.getGruppe(anyString())).thenReturn(mock(Gruppe.class));
-    when(gruppenService.getGruppe(anyString()).getId()).thenReturn("0");
+    when(gruppenService.getGruppeByTitle(anyString())).thenReturn(mock(Gruppe.class));
+    when(gruppenService.getGruppeByTitle(anyString()).getId()).thenReturn("0");
     mvc.perform(post("/api/gruppen")
             .content(body))
         .andExpect(status().isCreated())
         .andExpect(content().string("0"));
-    verify(gruppenService).addGruppe("Test Gruppe", "Peter");
+    verify(gruppenService).gruppeHinzufuegen("Test Gruppe", "Peter");
   }
 
   @Test

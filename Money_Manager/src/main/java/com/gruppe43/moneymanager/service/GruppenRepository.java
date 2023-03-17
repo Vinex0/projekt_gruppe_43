@@ -8,7 +8,7 @@ public interface GruppenRepository {
 
   List<Gruppe> findAll();
 
-  Optional<Gruppe> findById(int id);
+  Optional<Gruppe> findById(String id);
 
-  void save(Gruppe gruppe);
+  Gruppe save(Gruppe gruppe);
 }

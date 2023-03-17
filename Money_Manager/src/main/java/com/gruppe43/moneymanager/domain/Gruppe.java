@@ -3,8 +3,6 @@ package com.gruppe43.moneymanager.domain;
 import com.gruppe43.moneymanager.domain.dto.AusgabeDto;
 import com.gruppe43.moneymanager.stereotypes.AggregateRoot;
 import com.gruppe43.moneymanager.stereotypes.ClassOnly;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -13,15 +11,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.javamoney.moneta.Money;
+import org.springframework.data.annotation.PersistenceCreator;
 
 @EqualsAndHashCode(of = "id")
 @Getter
-@AllArgsConstructor
 @ToString
 @AggregateRoot
 public class Gruppe {
@@ -33,8 +30,24 @@ public class Gruppe {
   private final List<Ausgabe> ausgaben;
   private final Map<String, Map<String, Money>> schulden;
 
+  private final Map<String, Schuld> helperMap;
 
   private boolean closed;
+
+  @PersistenceCreator
+  public Gruppe(String id, String titel, String startPerson, List<String> teilnehmer,
+      List<Ausgabe> ausgaben, Map<String, Map<String, Money>> schulden,
+      Map<String, Schuld> helperMap,
+      boolean closed) {
+    this.id = id;
+    this.titel = titel;
+    this.startPerson = startPerson;
+    this.teilnehmer = teilnehmer;
+    this.ausgaben = ausgaben;
+    this.schulden = schulden;
+    this.helperMap = helperMap;
+    this.closed = closed;
+  }
 
   public Gruppe(String titel, String startPerson) {
     this(null,
@@ -42,6 +55,7 @@ public class Gruppe {
         Objects.requireNonNull(startPerson),
         new ArrayList<>(),
         new ArrayList<>(),
+        new HashMap<>(),
         new HashMap<>(),
         false);
 
@@ -58,6 +72,7 @@ public class Gruppe {
         new ArrayList<>(),
         new ArrayList<>(),
         new HashMap<>(),
+        new HashMap<>(),
         false);
 
     for (String p : personen) {
@@ -68,7 +83,8 @@ public class Gruppe {
   }
 
   public Gruppe(String titel, String startPerson, String id) {
-    this(id, titel, startPerson, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), false);
+    this(id, titel, startPerson, new ArrayList<>(), new ArrayList<>(), new HashMap<>(),
+        new HashMap<>(), false);
     if (!teilnehmer.contains(startPerson)) {
       teilnehmer.add(startPerson);
       schulden.put(startPerson, new HashMap<>());
@@ -76,7 +92,11 @@ public class Gruppe {
 
   }
 
-  public void addTeilnehmer(@NotBlank String neuerNutzer) {
+  void addSchuld(String person) {
+    helperMap.put(person, Schuld.of(schulden.get(person)));
+  }
+
+  public void addTeilnehmer(String neuerNutzer) {
     if (closed) {
       throw new RuntimeException("Group already closed");
     }
@@ -85,15 +105,15 @@ public class Gruppe {
     }
   }
 
-  public void createAusgabe(@NotNull @NotBlank String glaeubiger, List<String> schuldner,
-      @NotNull Money summe, @NotNull @NotBlank String title) {
+  public void createAusgabe(String glaeubiger, List<String> schuldner,
+      Money summe, String title) {
     if (closed) {
       throw new RuntimeException("Group already closed");
     }
     erstelleAusgabe(glaeubiger, schuldner, summe, title);
   }
 
-  public Map<String, Money> getGlaeubigerFrom(@NotNull String schuldner) {
+  public Map<String, Money> getGlaeubigerFrom(String schuldner) {
     if (schulden.containsKey(schuldner)) {
       return schulden.get(schuldner).entrySet().stream()
           .filter((v) -> v.getValue().isGreaterThan(Money.of(0, "EUR")))
@@ -103,11 +123,11 @@ public class Gruppe {
   }
 
   // Helper Ausgleich von A an B
-  public Money getSchuldenFromTo(@NotNull String schuldner, @NotNull String glauebiger) {
+  public Money getSchuldenFromTo(String schuldner, String glauebiger) {
     return schulden.get(schuldner).get(glauebiger);
   }
 
-  public Money getTotalSchuldenFrom(@NotNull String schuldner) {
+  public Money getTotalSchuldenFrom(String schuldner) {
     double betrag = 0d;
     for (Money m : getGlaeubigerFrom(schuldner).values()) {
       betrag += m.getNumber().doubleValue();

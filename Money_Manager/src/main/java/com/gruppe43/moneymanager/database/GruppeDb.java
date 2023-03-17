@@ -1,5 +1,6 @@
 package com.gruppe43.moneymanager.database;
 
-public class gruppeDb {
+//TODO
+public record GruppeDb() {
 
 }

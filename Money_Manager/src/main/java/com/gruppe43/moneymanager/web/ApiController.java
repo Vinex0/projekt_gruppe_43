@@ -64,14 +64,16 @@ public class ApiController {
       for (int i = 0; i < personen.length(); i++) {
         pers.add(personen.getString(i));
       }
-
-      gruppenService.addGruppe(name, pers.get(0));
-      Gruppe g = gruppenService.getGruppe(name);
+      //TODO check this
+      gruppenService.gruppeHinzufuegen(name, pers.get(0));
+      Gruppe g = gruppenService.getGruppeByTitle(name);
       pers.remove(0);
       for (String p : pers) {
-        g.addTeilnehmer(p);
+        //g.addTeilnehmer(p);
+        gruppenService.teilnehmerHinzufuegen(g.getId(), p);
       }
-      return ResponseEntity.status(HttpStatus.CREATED).body(gruppenService.getGruppe(name).getId());
+      return ResponseEntity.status(HttpStatus.CREATED)
+          .body(gruppenService.getGruppeByTitle(name).getId());
     } catch (JSONException e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
@@ -82,7 +84,7 @@ public class ApiController {
   @PostMapping("/api/gruppen/{id}/schliessen")
   public ResponseEntity<?> closeGruppe(@PathVariable("id") String id) {
     if (gruppenService.getGruppeById(id) != null) {
-      gruppenService.getGruppeById(id).close();
+      gruppenService.close(id);
       return ResponseEntity.status(HttpStatus.OK).build();
     }
     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -94,14 +96,11 @@ public class ApiController {
     try {
       JSONObject obj = new JSONObject(data);
 
-
-
       JSONArray schuldner = obj.getJSONArray("schuldner");
       if (schuldner.length() < 1) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
       }
       List<String> schuld = new ArrayList<>();
-
 
       for (int i = 0; i < schuldner.length(); i++) {
         schuld.add(schuldner.getString(i));
@@ -113,12 +112,11 @@ public class ApiController {
       if (gruppenService.getGruppeById(id) == null) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
       }
-      if (gruppenService.getGruppeById(id).isClosed()) {
+      if (gruppenService.isClosed(id)) {
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
       }
-
-      gruppenService.getGruppeById(id)
-          .createAusgabe(glaeubiger, schuld, Money.of(summe, "EUR").divide(100), grund);
+      gruppenService.ausgabeHinzufuegen(id, glaeubiger, schuld, Money.of(summe, "EUR").divide(100),
+          grund);
       return ResponseEntity.status(HttpStatus.CREATED).build();
     } catch (JSONException e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
