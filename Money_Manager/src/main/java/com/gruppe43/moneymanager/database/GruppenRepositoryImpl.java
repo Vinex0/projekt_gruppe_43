@@ -51,8 +51,11 @@ public class GruppenRepositoryImpl implements GruppenRepository {
   private Gruppe toGruppe(GruppeDb gruppeDb) {
     Gruppe gruppe = new Gruppe(gruppeDb.titel(), gruppeDb.startPerson(), gruppeDb.id());
     gruppeDb.teilnehmer().forEach(gruppe::addTeilnehmer);
+
     gruppeDb.ausgaben().forEach(a -> gruppe.createAusgabe(a.glauebiger(), a.schuldner(), Money.of(a.summe(),"EUR"), a.titel()));
-    //TODO schulden mappen
+    if(gruppeDb.geschlossen()){
+      gruppe.close();
+    }
     return gruppe;
   }
 
