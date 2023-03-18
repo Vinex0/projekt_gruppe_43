@@ -36,7 +36,7 @@ public class MoneyManagerController {
   }
 
   @PostMapping("/")
-  public String add() {
+  public String gruppenPage() {
     return "redirect:/gruppenOverview";
   }
 
@@ -64,7 +64,8 @@ public class MoneyManagerController {
     //TODO check this redirect yolo
     Gruppe gruppe = gruppenService.gruppeHinzufuegen(name, nutzername);
     int id = gruppe.getId();
-    return "redirect:/gruppe/" + id;
+    //return "redirect:/gruppe/" + id;
+    return "redirect:gruppenOverview";
   }
 
   @GetMapping("/gruppe/{id}")

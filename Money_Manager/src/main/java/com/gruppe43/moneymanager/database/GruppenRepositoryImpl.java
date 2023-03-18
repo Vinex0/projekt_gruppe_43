@@ -5,6 +5,7 @@ import com.gruppe43.moneymanager.service.GruppenRepository;
 import java.util.List;
 import java.util.Optional;
 import org.javamoney.moneta.Money;
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.stereotype.Repository;
 
 
@@ -39,7 +40,7 @@ public class GruppenRepositoryImpl implements GruppenRepository {
 
   private GruppeDb fromGruppe(Gruppe gruppe) {
     List<AusgabeDb> ausgaben = gruppe.getAusgabeDto().stream()
-        .map(a -> new AusgabeDb(a.titel(), a.summe().getNumber().doubleValue(), a.glaeubiger(),
+        .map(a -> new AusgabeDb(AggregateReference.to(gruppe.getId()), a.titel(), a.summe().getNumber().doubleValue(), a.glaeubiger(),
             a.schuldnerListe())).toList();
 
     return new GruppeDb(gruppe.getId(), gruppe.getTitel(),

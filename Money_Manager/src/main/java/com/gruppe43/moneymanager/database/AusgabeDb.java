@@ -8,7 +8,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 //TODO
 
-record AusgabeDb(String titel, Double summe, String glauebiger, List<String> schuldner) {
+record AusgabeDb(AggregateReference<GruppeDb, Integer> gruppeDbKey, String titel, Double summe, String glauebiger, List<String> schuldner) {
 
 
 
