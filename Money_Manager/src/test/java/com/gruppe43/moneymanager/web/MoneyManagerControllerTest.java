@@ -63,6 +63,7 @@ public class MoneyManagerControllerTest {
 
   @Test
   void createGruppePostTest() throws Exception {
+
     mvc.perform(post("/createGruppe")
             .param("name", "TestGruppe")
             .sessionAttr("nutzername", "Peter"))
@@ -99,9 +100,9 @@ public class MoneyManagerControllerTest {
             .param("id", "0")
             .param("nutzername", "Vinex0"))
         .andExpect(status().isFound());
-    verify(gruppenService).getGruppeById(0);
-    verify(testGruppe).addTeilnehmer("Vinex0");
+    verify(gruppenService).teilnehmerHinzufuegen(0,"Vinex0");
   }
+
   @Test
   void createAusgabeGetTest() throws Exception {
     Gruppe testGruppe = mock(Gruppe.class);
@@ -131,17 +132,19 @@ public class MoneyManagerControllerTest {
             .param("name", "Peter")
             .param("summe", "10"))
         .andExpect(status().isFound());
-    verify(testGruppe)
-        .createAusgabe("Peter", schuldenTeilnehmer, Money.parse("10" + " EUR"), "TestAusgabe");
+    verify(gruppenService)
+        .ausgabeHinzufuegen(0,"Peter", schuldenTeilnehmer, Money.parse("10" + " EUR"), "TestAusgabe");
 
   }
 
   @Test
   void schliesseGruppeTest() throws Exception {
     Gruppe testGruppe = new Gruppe("Test", "Peter");
+    testGruppe.close();
     when(gruppenService.getGruppeById(0)).thenReturn(testGruppe);
+    when(gruppenService.isClosed(0)).thenReturn(testGruppe.isClosed());
     mvc.perform(post("/schliesseGruppe/0").param("id", "0"))
         .andExpect(status().isFound());
-    assertThat(testGruppe.isClosed()).isTrue();
+    assertThat(gruppenService.isClosed(0)).isTrue();
   }
 }

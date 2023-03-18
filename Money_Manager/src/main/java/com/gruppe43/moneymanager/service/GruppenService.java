@@ -58,6 +58,9 @@ public class GruppenService {
   public List<String> getTitles() {
     return gruppenRepository.findAll().stream().map(Gruppe::getTitel).collect(Collectors.toList());
   }
+  public List<String> alleTeilnehmer(int id) {
+    return getGruppeById(id).getTeilnehmer();
+  }
 
   public boolean isClosed(int id) {
     return getGruppeById(id).isClosed();

@@ -29,15 +29,11 @@ public class Gruppe {
   private final List<String> teilnehmer;
   private final List<Ausgabe> ausgaben;
   private final Map<String, Map<String, Money>> schulden;
-
-  private final Map<String, Schuld> helperMap;
-
   private boolean closed;
 
   @PersistenceCreator
   public Gruppe(Integer id, String titel, String startPerson, List<String> teilnehmer,
       List<Ausgabe> ausgaben, Map<String, Map<String, Money>> schulden,
-      Map<String, Schuld> helperMap,
       boolean closed) {
     this.id = id;
     this.titel = titel;
@@ -45,7 +41,6 @@ public class Gruppe {
     this.teilnehmer = teilnehmer;
     this.ausgaben = ausgaben;
     this.schulden = schulden;
-    this.helperMap = helperMap;
     this.closed = closed;
   }
 
@@ -56,28 +51,16 @@ public class Gruppe {
         new ArrayList<>(),
         new ArrayList<>(),
         new HashMap<>(),
-        new HashMap<>(),
         false);
 
-    if (!teilnehmer.contains(startPerson)) {
-      teilnehmer.add(startPerson);
-      schulden.put(startPerson, new HashMap<>());
-    }
+    initializeSchuldenMap(startPerson);
   }
 
 
   public Gruppe(String titel, String startPerson, Integer id) {
     this(id, titel, startPerson, new ArrayList<>(), new ArrayList<>(), new HashMap<>(),
-        new HashMap<>(), false);
-    if (!teilnehmer.contains(startPerson)) {
-      teilnehmer.add(startPerson);
-      schulden.put(startPerson, new HashMap<>());
-    }
-
-  }
-
-  void addSchuld(String person) {
-    helperMap.put(person, Schuld.of(schulden.get(person)));
+        false);
+    initializeSchuldenMap(startPerson);
   }
 
   public void addTeilnehmer(String neuerNutzer) {
@@ -97,7 +80,7 @@ public class Gruppe {
     erstelleAusgabe(glaeubiger, schuldner, summe, title);
   }
 
-  public Map<String, Money> getGlaeubigerFrom(String schuldner) {
+   Map<String, Money> getGlaeubigerFrom(String schuldner) {
     if (schulden.containsKey(schuldner)) {
       return schulden.get(schuldner).entrySet().stream()
           .filter((v) -> v.getValue().isGreaterThan(Money.of(0, "EUR")))
@@ -106,12 +89,12 @@ public class Gruppe {
     return null;
   }
 
-  // Helper Ausgleich von A an B
-  public Money getSchuldenFromTo(String schuldner, String glauebiger) {
+
+   Money getSchuldenFromTo(String schuldner, String glauebiger) {
     return schulden.get(schuldner).get(glauebiger);
   }
 
-  public Money getTotalSchuldenFrom(String schuldner) {
+   Money getTotalSchuldenFrom(String schuldner) {
     double betrag = 0d;
     for (Money m : getGlaeubigerFrom(schuldner).values()) {
       betrag += m.getNumber().doubleValue();
@@ -140,10 +123,12 @@ public class Gruppe {
       teilnehmer.add(neuerNutzer);
       schulden.put(neuerNutzer, new HashMap<>());
 
-      for (String p : teilnehmer) {
-        if (!p.equals(neuerNutzer)) {
-          schulden.get(neuerNutzer).put(p, Money.of(0, "EUR"));
-          schulden.get(p).put(neuerNutzer, Money.of(0, "EUR"));
+      if (!teilnehmer.isEmpty()) {
+        for (String p : teilnehmer) {
+          if (!p.equals(neuerNutzer)) {
+            schulden.get(neuerNutzer).put(p, Money.of(0, "EUR"));
+            schulden.get(p).put(neuerNutzer, Money.of(0, "EUR"));
+          }
         }
       }
     }

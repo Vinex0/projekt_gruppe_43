@@ -9,7 +9,6 @@ import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.stereotype.Repository;
 
 
-//TODO
 @Repository
 public class GruppenRepositoryImpl implements GruppenRepository {
 
@@ -40,7 +39,8 @@ public class GruppenRepositoryImpl implements GruppenRepository {
 
   private GruppeDb fromGruppe(Gruppe gruppe) {
     List<AusgabeDb> ausgaben = gruppe.getAusgabeDto().stream()
-        .map(a -> new AusgabeDb(AggregateReference.to(gruppe.getId()), a.titel(), a.summe().getNumber().doubleValue(), a.glaeubiger(),
+        .map(a -> new AusgabeDb(AggregateReference.to(gruppe.getId()), a.titel(),
+            a.summe().getNumber().doubleValue(), a.glaeubiger(),
             a.schuldnerListe())).toList();
 
     return new GruppeDb(gruppe.getId(), gruppe.getTitel(),
@@ -52,8 +52,10 @@ public class GruppenRepositoryImpl implements GruppenRepository {
     Gruppe gruppe = new Gruppe(gruppeDb.titel(), gruppeDb.startPerson(), gruppeDb.id());
     gruppeDb.teilnehmer().forEach(gruppe::addTeilnehmer);
 
-    gruppeDb.ausgaben().forEach(a -> gruppe.createAusgabe(a.glauebiger(), a.schuldner(), Money.of(a.summe(),"EUR"), a.titel()));
-    if(gruppeDb.geschlossen()){
+    gruppeDb.ausgaben().forEach(
+        a -> gruppe.createAusgabe(a.glauebiger(), a.schuldner(), Money.of(a.summe(), "EUR"),
+            a.titel()));
+    if (gruppeDb.geschlossen()) {
       gruppe.close();
     }
     return gruppe;

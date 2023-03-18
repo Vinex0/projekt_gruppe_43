@@ -100,7 +100,10 @@ public class ApiControllerTest {
   @Test
   void gruppeSchliessenTest() throws Exception{
     Gruppe testGruppe = new Gruppe("TestGruppe", "Peter");
+    testGruppe.close();
     when(gruppenService.getGruppeById(0)).thenReturn(testGruppe);
+    when(gruppenService.isClosed(0)).thenReturn(testGruppe.isClosed());
+    gruppenService.close(0);
     mvc.perform(post("/api/gruppen/0/schliessen")
             .param("id", "0"))
         .andExpect(status().isOk());

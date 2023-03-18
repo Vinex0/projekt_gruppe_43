@@ -61,10 +61,8 @@ public class MoneyManagerController {
     if (name.length() < 1) {
       return "redirect:createGruppe";
     }
-    //TODO check this redirect yolo
-    Gruppe gruppe = gruppenService.gruppeHinzufuegen(name, nutzername);
-    int id = gruppe.getId();
-    //return "redirect:/gruppe/" + id;
+    gruppenService.gruppeHinzufuegen(name, nutzername);
+
     return "redirect:gruppenOverview";
   }
 
@@ -100,9 +98,8 @@ public class MoneyManagerController {
   }
 
   @PostMapping("/createAusgabe/{id}")
-  public String getAusgabe(@PathVariable("id") int id, String ausgabeTitel,
-      String name, @RequestParam("summe") String summe,
-      @RequestParam Map<String, String> allParams) {
+  public String getAusgabe(@PathVariable("id") int id, String ausgabeTitel, String name,
+      @RequestParam("summe") String summe, @RequestParam Map<String, String> allParams) {
 
     List<String> schuldenTeilnehmer = new ArrayList<>();
 
@@ -121,6 +118,9 @@ public class MoneyManagerController {
       if (helper.checked) {
         schuldenTeilnehmer.add(helper.person);
       }
+    }
+    if (!gruppenService.alleTeilnehmer(id).contains(name)) {
+      return "redirect:/createAusgabe/" +id;
     }
 
     gruppenService.ausgabeHinzufuegen(id, name, schuldenTeilnehmer, Money.parse(summe + " EUR"),
