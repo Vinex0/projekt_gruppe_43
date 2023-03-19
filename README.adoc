@@ -4,6 +4,8 @@
 :source-highlighter: rouge
 :experimental:
 
+IMPORTANT: Die Datenbank funktioniert inzwischen, allerdings leidet unsere Anwendung unter dem [hier beschriebenen Problem](https://github.com/hhu-propra2-ws22/Organisation/discussions/262). Das heißt, dass, um die Datenbank zu testen, die Anwendung über IntelliJ gestartet werden muss. Die Datenbank läuft über die docker compose file. Eine über Docker laufende Version der Anwendung ohne Datenbank ist unter [diesem Commit](https://github.com/hhu-propra2-ws22/projekt_gruppe_43/tree/1402bfe2b8838505d66dec53aef1854e0d18c242) zu finden.
+
 == Konfigurationsguide
 
 1. Github Repository herunterladen.
