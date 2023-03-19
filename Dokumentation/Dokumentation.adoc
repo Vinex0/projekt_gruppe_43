@@ -40,5 +40,9 @@ include::src/06-glossar.adoc[]
 include::src/AnalyseTools.adoc[]
 
 <<<
-// Analyse-Tools
+// Intro
 include::src/doku.adoc[]
+
+<<<
+// Nicht geschafft
+include::src/nichtGeschafft.adoc[]

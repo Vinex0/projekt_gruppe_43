@@ -1,0 +1,21 @@
+== Nicht geschafft
+Folgende Anforderungen konnten nicht mehr vollständig implementiert werden:
+
+* Datenbank Testing
+** Die Servicetests können wir nicht starten
+** Es gbt ein Problem mit dem JSONObject.class, da wir die Serializer per Hand geschrieben haben,
+brauchten wir ein extra JSON import. Die Klasse kommt im Konflikt mit dem Spring data jdbc da wir
+2 JSONObject.class in der jar File haben
+* Transaktionen
+** Nebenläufigen Kontext konnte nicht getestet werden
+** Kein Locking- oder Synchronisierungsverfahren implementiert
+
+Hier wird kurz erklärt, warum nicht alles geschafft wurde und wie
+diese Probleme besser gelöst werden könnten.
+
+In der zweiten Woche des Praktikums haben wir mehr Zeit als notwendig für den Controller verbracht.
+Somit haben wir erst am Mittwoch (Woche 3) mit der Persistenzshicht angefangen.
+Am Freitag (Deadline) haben wir festgestellt, dass unsere Service falsh implementiert wurde.
+Dadurch haben wir viel Zeit damit verbracht, Code zu refactoren und umzustrukturieren.
+
+Wir haben erst den Code für die Persistenz geschrieben, danach erst die Tests.
