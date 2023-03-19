@@ -14,8 +14,9 @@ Hier wird kurz erklärt, warum nicht alles geschafft wurde und wie
 diese Probleme besser gelöst werden könnten.
 
 In der zweiten Woche des Praktikums haben wir mehr Zeit als notwendig für den Controller verbracht.
-Somit haben wir erst am Mittwoch (Woche 3) mit der Persistenzshicht angefangen.
-Am Freitag (Deadline) haben wir festgestellt, dass unsere Service falsh implementiert wurde.
+Somit haben wir erst am Mittwoch (Woche 3) mit der Persistenzschicht angefangen.
+Am Freitag (Deadline) haben wir festgestellt, dass unsere Services falsch implementiert wurden.
 Dadurch haben wir viel Zeit damit verbracht, Code zu refactoren und umzustrukturieren.
+Zusaetzlich hatten wir zu begin unsere SQL implementation mit queueries umgesetzt und wurden, dann im nachhinein informiert, dass dies nicht erlaubt ist.
 
 Wir haben erst den Code für die Persistenz geschrieben, danach erst die Tests.
